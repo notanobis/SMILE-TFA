@@ -3,3 +3,6 @@
 *.xml
 *.png
 Data/FOV_data/01.01.2026-03.01.2026/
+*.yml
+_build/
+__pycache__/
