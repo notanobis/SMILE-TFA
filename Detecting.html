@@ -1,0 +1,655 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Detecting the magnetopause &#8212; SMILE-TFA</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'Detecting';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Previous work: Fitting methods" href="FittingMethods.html" />
+    <link rel="prev" title="Earth’s Magnetopause" href="Magnetopause.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="Abstract.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">SMILE-TFA</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="Abstract.html">
+                    Locating the Earth’s magnetopause through X-ray imaging
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="Introduction.html">Introduction</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="Magnetopause.html">Earth’s Magnetopause</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Detecting the magnetopause</a></li>
+<li class="toctree-l2"><a class="reference internal" href="FittingMethods.html">Previous work: Fitting methods</a></li>
+</ul><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="TangentHypothesis.html">Tangent Hypothesis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Bibliography.html">Bibliography</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/notanobis/SMILE-TFA" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/notanobis/SMILE-TFA/issues/new?title=Issue%20on%20page%20%2FDetecting.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/Detecting.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Detecting the magnetopause</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#in-situ-satellite-measurements">In-situ satellite measurements</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#coordinate-system">Coordinate system</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#empirical-models">Empirical models</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="detecting-the-magnetopause">
+<h1>Detecting the magnetopause<a class="headerlink" href="#detecting-the-magnetopause" title="Link to this heading">#</a></h1>
+<p>Understanding the shape and location of the magnetopause is crucial to explaining the dynamics and processes of geophysical plasmas, and particularly the response of the magnetosphere to the solar wind. How does the subsolar point change with the dynamic and magnetic pressure of the solar wind? How does the IMF affect the position of the cusps, and what can this indicate for the magnetic reconnection that takes place to form them? With which processes can this collisionless plasma interact with obstacles and display fluid like behavior?</p>
+<section id="in-situ-satellite-measurements">
+<h2>In-situ satellite measurements<a class="headerlink" href="#in-situ-satellite-measurements" title="Link to this heading">#</a></h2>
+<p>We have partial answers to these questions through in-situ measurements of satellite crossings. By analyzing the measurements of instruments on board and detecting abrupt changes in parameters such as density, temperature, flow velocity, and magnetic field orientation, we can identify the location and type of discontinuity and correlate it with the position of the satellite. A typical magnetopause crossing from the Cluster 1 spacecraft is shown in \autoref{fig:cluster_measurements}.</p>
+<a class="reference internal image-reference" href="_images/tangential_discontinuity.png" id="fig-tangential-discontinuity"><img alt="_images/tangential_discontinuity.png" id="fig-tangential-discontinuity" src="_images/tangential_discontinuity.png" style="width: 45%;" />
+</a>
+<a class="reference internal image-reference" href="_images/cluster.png" id="fig-cluster-measurements"><img alt="_images/cluster.png" id="fig-cluster-measurements" src="_images/cluster.png" style="width: 45%;" />
+</a>
+<p>In order to derive information about the global behavior of this surface, one must compile a catalog of boundary crossings from multiple in situ data of such missions. This quite a time-consuming task, as well as ambiguous concerning the interpretation of the measurements and the precise definition and automatic detection of the crossings. The ever-growing amount of data collected by the satellites, therefore does not linearly translate to increasing number of catalogs <span id="id1">[<a class="reference internal" href="Bibliography.html#id8">Nguyen <em>et al.</em>, n.d.</a>]</span>. Additionally, the dynamic nature of the response of the magnetopause to the solar wind, make the correlation of local measurements, with the global shape and dynamics of the magnetopause challenging. Nonetheless, various studies have attempted characterizing and parametrizing this shape with \ac{SW} and magnetospheric parameters, building thus empirical models of the surface.</p>
+<section id="coordinate-system">
+<span id="coordinate"></span><h3>Coordinate system<a class="headerlink" href="#coordinate-system" title="Link to this heading">#</a></h3>
+<p>Before moving any further, we shall define our main coordinate systems and frames, for consistency. The most common frame we will be using is the \ac{GSE} system. This has its X-axis pointing from the Earth toward the Sun and its Y-axis is chosen to be in the ecliptic plane pointing towards dusk (thus opposing planetary motion). Its Z-axis is parallel to the ecliptic pole. Relative to an inertial system this system has a yearly rotation.</p>
+<div class="math notranslate nohighlight">
+\[x = r cos\theta\]</div>
+<div class="math notranslate nohighlight">
+\[ y = r sin\theta cos \phi\]</div>
+<div class="math notranslate nohighlight">
+\[z = r sin\theta sin\phi \]</div>
+<a class="reference internal image-reference" href="_images/GSE.png" id="fig-gse"><img alt="_images/GSE.png" id="fig-gse" src="_images/GSE.png" style="width: 45%;" />
+</a>
+<p>We can define a spherical system based on the cartesian GSE, that will help us describe the magnetopause as a parametrized radial function of the spherical angles <span class="math notranslate nohighlight">\(r(\theta,\phi)\)</span>. We follow the convention of previous papers \cite{sun_2020}, where <span class="math notranslate nohighlight">\(\theta\)</span> is the angle between <span class="math notranslate nohighlight">\(\vec{r}\)</span> and the X-axis, and <span class="math notranslate nohighlight">\(\phi\)</span> is the angle between the Y-axis and the projection of <span class="math notranslate nohighlight">\(\vec{r}\)</span> to the YZ plane. The coordinate transformation from spherical to GSE is therefore defined as in the above <a class="reference internal" href="#fig-gse"><span class="std std-ref">figure</span></a>.</p>
+</section>
+<section id="empirical-models">
+<h3>Empirical models<a class="headerlink" href="#empirical-models" title="Link to this heading">#</a></h3>
+<p>Moving back to the study of the magnetopause surface through the statistical analysis of crossings, we will look into the main empirical models that have been proposed.
+The first and simplest empirical model was proposed by <span id="id2">[<a class="reference internal" href="Bibliography.html#id16" title="J.-H. Shue, J. K. Chao, H. C. Fu, C. T. Russell, P. Song, K. K. Khurana, and H. J. Singer. A new functional form to study the solar wind control of the magnetopause size and shape. Journal of Geophysical Research: Space Physics, 102(A5):9497-9511, 1997. URL: https://agupubs.onlinelibrary.wiley.com/doi/abs/10.1029/97JA00196, arXiv:https://agupubs.onlinelibrary.wiley.com/doi/pdf/10.1029/97JA00196, doi:https://doi.org/10.1029/97JA00196.">Shue <em>et al.</em>, 1997</a>]</span> and is described by <a class="reference internal" href="#eq-shue"><span class="std std-ref">equation</span></a>:</p>
+<div class="math notranslate nohighlight" id="eq-shue">
+\[
+    r(\theta) = r_0 \left( \frac{2}{1 + \cos \theta} \right)^\alpha
+\]</div>
+<p>where:\
+<span class="math notranslate nohighlight">\(r(\theta)\)</span> &amp; Radial distance of the magnetopause from the Earth’s center at a\&amp; given polar angle <span class="math notranslate nohighlight">\(\theta\)</span> \
+<span class="math notranslate nohighlight">\(\text{R}_E\)</span> &amp; Earth’s radius (~6371 km) \
+<span class="math notranslate nohighlight">\(\alpha\)</span> &amp; the flaring parameter, given by: \
+&amp; <span class="math notranslate nohighlight">\(\alpha = (0.58 - 0.01 B_z) (1 + 0.01 P_{dyn})\)</span> \
+<span class="math notranslate nohighlight">\(P_{dyn}\)</span> &amp; Dynamic pressure of the solar wind (in nPa)\
+&amp; <span class="math notranslate nohighlight">\(P_{dyn} = 1.15 \cdot n \cdot v_x^2 \cdot 1.67 \times 10^{-6}\)</span> \
+<span class="math notranslate nohighlight">\(r_0\)</span>  &amp; Subsolar standoff distance of the magnetopause,given by:\</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    r_0 = (11.4 + 0.013 B_z) P_{dyn}^{-\frac{1}{6.6}}, \quad \text{for } B_z \geq 0\\
+    r_0 = (11.4 + 0.14 B_z) P_{dyn}^{-\frac{1}{6.6}}, \quad \text{for } B_z &lt; 0
+\end{split}\]</div>
+<p>Here, the relations that are given for <span class="math notranslate nohighlight">\(\alpha\)</span> and <span class="math notranslate nohighlight">\(r_0\)</span> are the parametrization with respect to the solar wind and magnetospheric parameters, derived in the original paper <span id="id3">[<a class="reference internal" href="Bibliography.html#id16" title="J.-H. Shue, J. K. Chao, H. C. Fu, C. T. Russell, P. Song, K. K. Khurana, and H. J. Singer. A new functional form to study the solar wind control of the magnetopause size and shape. Journal of Geophysical Research: Space Physics, 102(A5):9497-9511, 1997. URL: https://agupubs.onlinelibrary.wiley.com/doi/abs/10.1029/97JA00196, arXiv:https://agupubs.onlinelibrary.wiley.com/doi/pdf/10.1029/97JA00196, doi:https://doi.org/10.1029/97JA00196.">Shue <em>et al.</em>, 1997</a>]</span>. The crossings used to construct this model where taken from satellites of equatorial orbit, and thus assumes a rotational symmetry over the X-axis. As expected from the numerical solution of the surface in the equatorial plane, no discontinuity arises, and therefore the Shue model describes a smooth surface with no indentations.</p>
+<p>Later evidence of dipole tilt, indentation in the near-cusp region, and dawn-dusk asymmetry led to the development of more refined models. One such improvement was introduced by <span id="id4">[<a class="reference internal" href="Bibliography.html#id17" title="R. L. Lin, X. X. Zhang, S. Q. Liu, Y. L. Wang, and J. C. Gong. A three-dimensional asymmetric magnetopause model. Journal of Geophysical Research: Space Physics, 115(A4):, 2010. URL: https://agupubs.onlinelibrary.wiley.com/doi/abs/10.1029/2009JA014235, arXiv:https://agupubs.onlinelibrary.wiley.com/doi/pdf/10.1029/2009JA014235, doi:https://doi.org/10.1029/2009JA014235.">Lin <em>et al.</em>, 2010</a>]</span>, who proposed an empirical magnetopause model that included an azimuthal asymmetry induced by the dipole tilt angle and also kept the possibility of a dawn-dusk asymmetry <span id="id5">[<a class="reference internal" href="Bibliography.html#id17" title="R. L. Lin, X. X. Zhang, S. Q. Liu, Y. L. Wang, and J. C. Gong. A three-dimensional asymmetric magnetopause model. Journal of Geophysical Research: Space Physics, 115(A4):, 2010. URL: https://agupubs.onlinelibrary.wiley.com/doi/abs/10.1029/2009JA014235, arXiv:https://agupubs.onlinelibrary.wiley.com/doi/pdf/10.1029/2009JA014235, doi:https://doi.org/10.1029/2009JA014235.">Lin <em>et al.</em>, 2010</a>]</span>. In his paper <span id="id6">[<a class="reference internal" href="Bibliography.html#id18" title="Z.-Q. Liu, J. Y. Lu, C. Wang, K. Kabin, J. S. Zhao, M. Wang, J. P. Han, J. Y. Wang, and M. X. Zhao. A three-dimensional high mach number asymmetric magnetopause model from global mhd simulation. Journal of Geophysical Research: Space Physics, 120(7):5645-5666, 2015. URL: https://agupubs.onlinelibrary.wiley.com/doi/abs/10.1002/2014JA020961, arXiv:https://agupubs.onlinelibrary.wiley.com/doi/pdf/10.1002/2014JA020961, doi:https://doi.org/10.1002/2014JA020961.">Liu <em>et al.</em>, 2015</a>]</span> combined THEMIS data and MHD simulations to derive a more sophisticated geometry and parametrization \cite{liu}. We will describe these models concisely, as expressed by <span id="id7">[<a class="reference internal" href="Bibliography.html#id8">Nguyen <em>et al.</em>, n.d.</a>, <a class="reference internal" href="Bibliography.html#id5">Nguyen <em>et al.</em>, n.d.</a>]</span>, where he defines the general form \autoref{eq:general_magnetopause}.</p>
+<!--
+\begin{eqnarray}
+r = r_0 \left( \frac{2}{1 + \cos\theta} \right)^{\xi} + Q
+\label{eq:general_magnetopause}
+\end{eqnarray}
+where, Q is an additive term that defines the geometry of the cusps, and is different for the two models. For the Lin model, this term is expressed by:
+
+\begin{align*}
+&Q = C \left( e^{d_n \psi_n^{4/5}} + e^{d_s \psi_s^{4/5}} \right) \\
+&C = a_9 (P_{dyn} + P_n)^{a_{10}} \\
+&d_{n,s} = a_{11} \pm a_{12} \gamma + a_{13} \gamma^2 \\
+&\psi_n = \arccos\left( \cos(\theta) \cos(\theta_n) + \sin(\theta) \sin(\theta_n) \cos(\phi) \right) \\
+&\psi_s = \arccos\left( \cos(\theta) \cos(\theta_s) + \sin(\theta) \sin(\theta_s) \cos(\phi - \pi) \right) \\
+&\theta_{n,s} = a_{14} \pm a_{15} \gamma
+\end{align*}
+
+The terms \( \psi_n \) and \( \psi_s \) describe the angular distance from the cusp indentations in the northern and southern hemispheres, respectively. The additive term of the Liu model is described by the following equations:
+\begin{align*}
+&Q = -a_9 C r_0 \left( \frac{2}{1 + \cos\theta} \right)^{\xi} \cos^2\phi\\
+&C = e^{-|\theta - l_n|/w} \left( 1 + \text{sgn}(\cos\phi) \right) + e^{-|\theta - l_s|/w} \left( 1 + \text{sgn}(\cos(-\phi)) \right) \\
+&l_{n,s} = \left( a_{10} + a_{11} \tanh[a_{12}(B_z + a_{13})] \right) (1 \mp a_{14} \gamma) \\
+&w = \left( a_{15} + a_{16} \log(P_{dyn}) \right) (1 + a_{17} \gamma^2)
+\end{align*}
+
+We advise the reader to refer to the corresponding studies for more information on the coefficients \( a_i \) and the way they are determined\cite{nguyen4}. In his paper series, \citeauthor{nguyen4}, re-parametrizes and evaluates this models by analyzing multi-mission data and constructing a representative catalog. Among the many relevant results, is that the Lin model overestimates the indentation of the cusps, while the Liu model seems to be the best description of the selected crossings. We will see later on, that this comes in disagreement with some of our results, depending on how we define the magnetopause, and extra care must be taken to ensure consistent definitions.
+
+## Imaging the magnetopause
+It is evident that we have gained valuable knowledge from these in-situ measurements, however the global dynamics of the magnetopause and its response to the solar wind are still difficult to extract. The capability of remote sensing, or imaging of this boundary, would allow for more dynamic measurements; something that is crucial for understanding the coupling with the solar wind, which can be highly variable in a timescale of minutes. Under this scope, it was proposed that we could utilize the charge exchange phenomenon between the solar wind and the exosphere of the Earth, to achieve this new method of observation.
+### Charge exchange
+
+During its close approach to Earth, extreme ultraviolet and X-ray emission was observed from the comet C/Hyakutake 1996 B2 by the Röntgen X-ray Satellite and Rossi X-ray Timing Explorer\cite{comet}. This emission was later interpreted by \citeauthor{cravens1997} and the charge exchange emission mechanism was proposed. Under this mechanism, the multiply charged heavy ions of the solar wind can charge transfer with cometary neutrals, producing ions which can be highly excited and consequently emit photons in the extreme ultraviolet and x-ray part of the spectrum \cite{cravens1997}. It was later suggested, that the same phenomenon could take place between the solar wind and the geocoronal hydrogen, leading to the terrestrial magnetosheath being luminous in the X-ray regime \cite{robertson2003}. 
+The emission in this case, is generated by charge exchange reactions between multiply charged heavy solar wind ions $(\text{O}^{7+}, \text{C}^{5+},\dots)$\graffito{The geocorona is the outermost region of the Earth's atmosphere, the exosphere, where collisions between particles are considered negligible. The density in this region is generally assumed to drop as $n_H = 25(\frac{10RE}{R})^3 [cm^{-3}]$} and the neutral particles (mostly hydrogen atoms) in the geocorona. The general \ac{SWCX} interaction is given by \autoref{eq:charge_exchange}.
+
+\begin{eqnarray}
+    \label{eq:charge_exchange}
+    \text{X}^{q+} + \text{M} \rightarrow \text{X}^{(q-1)+*} + \text{M}^+,
+\end{eqnarray}
+where the heavy and multiply charged $(q+)$ solar wind ion is noted as $ \text{X}^{q+}$ and the neutral particle is noted as $\text{M}$. Electrons are transferred from neutral particles to a high energy state of ions, imposing these ions into an excited state. When the excited ions de-excite to the lower-energy state, they emit photons in the soft X-ray band $(E \leq 2 keV)$ \cite{qiuyu}:
+\begin{eqnarray}
+    \text{X}^{(q-1)+*} \rightarrow \text{X}^{(q-1)+} + h\nu
+\end{eqnarray}
+
+In their paper, \citeauthor{robertson2003}, simulated this emission as images, opening the discussion about remote sensing of the magnetosheath. Soft X-ray emissivity is expected to be strong in the dayside magnetosheath and cusp regions, where both solar wind ion and neutral particle densities are high. In contrast, the low density of solar wind ions within the magnetosphere and the scarcity of neutral hydrogen in the solar wind result in weak emission in those regions. As a result, a boundary in soft X-ray emission is expected at the magnetopause. This sharp increase in emission can be used to determine the magnetopause location through global soft X-ray imaging from space-based instruments. \cite{sibeck}
+
+### SMILE mission
+\label{SMILE}
+The \ac{SMILE} mission was proposed, in collaboration of \ac{ESA} and \ac{CAS}, as an attempt in capturing this \ac{SWCX} phenomenon in the Earth's magnetosheath. The satellite will be launched in 2026 into a highly elliptical polar orbit, with an apogee of $\approx 20$ \ac{RE}, a perigee of $\approx 1$ \ac{RE}, and an inclination of $73^\circ$. The orbital period is $\approx 50.3$ hours, and a schematic of its orbit is shown in \autoref{fig:orbit}.
+The science payload on-board \ac{SMILE} consists of the \ac{UVI}, the \ac{MAG}, the \ac{LIA} and finally the \ac{SXI}. \ac{SXI} is a wide \ac{FOV} X-ray telescope of $15.5^\circ \times 26.5^\circ$, designed to capture the emission of the magnetosheath, allowing the study of the magnetopause dynamics and its detection with a requirement of $0.5\,RE$ accuracy. \cite{sxi}
+
+\begin{multicols}{2}
+    The preparation for space observations that haven't been performed before is no trivial task. Space missions require meticulous planning and therefore accurate predictions of the expected science data, as well as methods to optimize their return. The deployment of sophisticated simulations is therefore crucial prior to mission launch, both to facilitate operation planning and to develop pipelines for the analysis of the upcoming data. In this light, the \ac{SMILE} \href{https://smile-mwg.com.cn/front}{Modeling Working Group} was formed, in order to produce a simulation catalog for different \ac{SW} conditions, with common input parameters. 
+    \columnbreak
+    \vfil
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.45\textwidth]{gfx/smile_orbit.png}
+        \caption{The SMILE orbit. SXI and UVI Field of View and key regions, credit: ESA}
+        \label{fig:orbit}
+    \end{figure}
+\end{multicols}
+\noindent The group aims to predict and interpret the images the \ac{SXI} will generate, simulate the changes of magnetospheric boundary locations under different solar wind conditions, and extract magnetospheric boundary and cusp positions. To achieve these goals, the Modeling Working Group primarily relies on \ac{MHD} simulations, which treat the plasma as a single fluid and are computationally efficient. \ac{MHD} is well-suited for capturing large-scale dynamics and global structures - even in highly dynamic cases, but it lacks kinetic resolution and cannot distinguish between different ion species. As a result, \ac{MHD}-based X-ray simulations tend to produce smooth, continuous images where the X-ray intensity is strictly proportional to the total proton flux. This leads to two key limitations: the inability to resolve spectroscopic features linked to specific ions, and the artificial production of X-rays within the magnetosphere due to the absence of a distinction between solar wind and magnetospheric plasma. The latter requires the introduction of an artificial mask inside the magnetosphere. 
+
+To address these issues, the LATMOS team developed the \ac{LaTeP} model, a test-particle model that simulates heavy ions kinetically. This intermediate approach introduces ion-specific behavior such as gyroradius effects and charge-exchange cross-section differences, enabling more realistic X-ray spectroscopic predictions and avoiding emission inside the magnetosphere. Since LaTeP does not compute E/B fields self-consistently, it relies on external electromagnetic field inputs provided by MHD codes such as \href{https://ccmc.gsfc.nasa.gov/models/OpenGGCM~5.0/}{OpenGGCM}, justified by the negligible feedback of highly charged ions due to their very low abundance ($10^{-4}$ the proton density) in the solar wind. Through this approach, we can get the X-ray emissivity by following numerical test-particles, representing heavy ions. In this work we will focus on $O^{7+}$ ions, since they are the most important contributors in the spectral energy range of the SXI detectors. Solving their equation of motion as they propagate in the MHD-computed $E$ and $B$ fields, we calculate the probability of them charge exchanging with hydrogen atoms from the Earth's exosphere. From this quantity, we can calculate the volume emissivity of X-ray $Q$ in $eV\, cm^{-3}\, s^{-1}$, as in \autoref{eq:Q}. \cite{qiuyu}
+\begin{eqnarray}
+    \label{eq:Q}
+    Q = n_M \cdot n_{\text{X}^{q+}} \cdot v_{\text{X}^{q+}} \cdot \sigma_{\text{X}^{q+},M} \cdot Y_{\text{X}^{(q-1)+}}
+\end{eqnarray}
+where:
+
+\begin{tabular}{ll}
+    $Q$ & Volume emissivity of soft X-rays (in eV cm$^{-3}$ s$^{-1}$) \\
+    $n_M$ & Neutral particle density (cm$^{-3}$) \\
+    $n_{\text{X}^{q+}}$ & Density of solar wind ions with charge $q+$ (cm$^{-3}$) \\
+    $v_{\text{X}^{q+}}$ & Plasma (ion) velocity (cm s$^{-1}$) \\
+    $\sigma_{\text{X}^{q+},M}$ & Cross-section for charge exchange between $\text{X}^{q+}$ and $M$ (cm$^2$) \\
+    $Y_{\text{X}^{(q-1)+}}$ & Energy of emitted line weighted by its emission probability (eV) \\
+\end{tabular}\\
+
+We can integrate this emissivity along a specific \ac{LOS} to obtain the intensity of each looking direction in $eV cm^{-2} s^{-1} sr^{-1}$. We also assume isotropic emission and divide by $4\pi$ to get the emissivity in a particular direction.
+\begin{eqnarray}
+    I = \frac{1}{4\pi} \int_{LOS} Q\,ds
+\end{eqnarray}
+Calculating this quantity for each pixel's \ac{LOS} of the imager, we can construct a synthetic image of the expected \ac{SXI} data. This does not take into account the contribution from background sources nor the response of the instrument.
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="Magnetopause.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Earth’s Magnetopause</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="FittingMethods.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Previous work: Fitting methods</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#in-situ-satellite-measurements">In-situ satellite measurements</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#coordinate-system">Coordinate system</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#empirical-models">Empirical models</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Panayota Boskou
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
