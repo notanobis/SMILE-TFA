@@ -8,3 +8,5 @@ _build/
 __pycache__/
 *.bib
 images/
+*.md
+!README.md
