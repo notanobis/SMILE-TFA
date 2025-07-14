@@ -397,18 +397,28 @@ document.write(`
 [\mathbf{B}_t] &amp;\neq 0 \quad \text{(tangential magnetic field can change)}
 \end{split}\]</div>
 <p>We can visualize these jumps, through the typical changes in plasma moments across a tangential discontinuity, in \autoref{fig:tangential_discontinuity}. The continuity of the total pressure across the discontinuity defines a surface of total pressure balance between the two contacting plasmas with no mass or magnetic flux crossing the discontinuity from either side, while all other quantities can experience arbitrary changes. This implies, that as a tangential discontinuity the magnetopause is a surface of total pressure equilibrium between the solar wind magnetosheath plasma and the geomagnetic field confined in the magnetosphere. The \ac{IMF} is quite weak near the Earth and the magnetopsheric plasma thermal and dynamic pressures can be neglected compared with the pressure of the geomagnetic field. We can therefore, request pressure equilibrium between the dynamic pressure of the solar wind and magnetic pressure of the magnetosphere, as a first approximation.</p>
-<div class="math notranslate nohighlight" id="pressure-eq">
-\[
+<div class="math notranslate nohighlight" id="equation-pressure-eq">
+<span class="eqno">(1)<a class="headerlink" href="#equation-pressure-eq" title="Link to this equation">#</a></span>\[
     2 \mu_0 \kappa n_{sw} m_i \left( \frac{\nabla S_{mp}}{|\nabla S_{mp}|} \cdot \mathbf{v}_{sw} \right)^2 
 = \left( \frac{\nabla S_{mp}}{|\nabla S_{mp}|} \times \mathbf{B} \right)^2
 \]</div>
-<p><a class="reference internal" href="#pressure-eq"><span class="std std-ref">Equation 1</span></a> contains the complicated structure of the magnetospheric magnetic field, as well as the three-dimensional derivatives of the unknown magnetopause surface <span class="math notranslate nohighlight">\(S_{mp}\)</span>. It is a second-order three-dimensional nonlinear partial differential equation, and is therefore solvable only with numerical methods. Solving for the surface in the meridional plane, we get no continuous solution connecting the dayside magnetopause to the nightside magnetopause, while in the equatorial plane the magnetopause is a smooth curve extending from the dayside into
-an open tail. This point of discontinuity is defined as the polar cusp. A schematic of this solution can be found in the <a class="reference internal" href="#magnetopause-equation"><span class="std std-ref">figure below</span></a>.</p>
-<a class="reference internal image-reference" href="_images/pressure_eq.png" id="magnetopause-equation"><img alt="_images/pressure_eq.png" id="magnetopause-equation" src="_images/pressure_eq.png" style="width: 45%;" />
+<figure class="align-left" id="magnetopause-equation">
+<a class="reference internal image-reference" href="_images/pressure_eq.png"><img alt="_images/pressure_eq.png" src="_images/pressure_eq.png" style="width: 274.8px; height: 238.2px;" />
 </a>
-<a class="reference internal image-reference" href="_images/current_sheet.png" id="current-sheet"><img alt="_images/current_sheet.png" id="current-sheet" src="_images/current_sheet.png" style="width: 45%;" />
+<figcaption>
+<p><span class="caption-number">Fig. 3 </span><span class="caption-text">Numerical solution for magnetopause.</span><a class="headerlink" href="#magnetopause-equation" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
+<p>Equation <a class="reference internal" href="#equation-pressure-eq">(1)</a> contains the complicated structure of the magnetospheric magnetic field, as well as the three-dimensional derivatives of the unknown magnetopause surface <span class="math notranslate nohighlight">\(S_{mp}\)</span>. It is a second-order three-dimensional nonlinear partial differential equation, and is therefore solvable only with numerical methods. Solving for the surface in the meridional plane, we get no continuous solution connecting the dayside magnetopause to the nightside magnetopause, while in the equatorial plane the magnetopause is a smooth curve extending from the dayside into
+an open tail. This point of discontinuity is defined as the polar cusp. A schematic of this solution can be found in <a class="reference internal" href="#magnetopause-equation"><span class="std std-numref">Fig. 3</span></a>.</p>
+<figure class="align-right" id="current-sheet">
+<a class="reference internal image-reference" href="_images/current_sheet.png"><img alt="_images/current_sheet.png" src="_images/current_sheet.png" style="width: 309.0px; height: 254.39999999999998px;" />
 </a>
-<p>The ions and electrons that are reflected at the boundary, perform partial gyro-orbits within the magnetospheric field. Their opposite gyration directions generate a net current localized near the magnetopause, with a thickness on the order of the ion gyroradius. This diamagnetic current enhances the internal magnetic field and cancels the external one, maintaining pressure balance across the boundary. We refer to this as the magnetopause current sheet, and a schematic of its structure is shown in the above <a class="reference internal" href="#current-sheet"><span class="std std-ref">figure</span></a>. <span id="id1">[<a class="reference internal" href="Bibliography.html#id9" title="Wolfganf Baumjohann and Rudolf A. Treumann. Basic space plasma physics. Imperial College Press, reprinted edition, 2006. ISBN 978-1-86094-079-8.">Baumjohann and Treumann, 2006</a>]</span></p>
+<figcaption>
+<p><span class="caption-number">Fig. 4 </span><span class="caption-text">Magnetopause current sheet.</span><a class="headerlink" href="#current-sheet" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
+<p>The ions and electrons that are reflected at the boundary, perform partial gyro-orbits within the magnetospheric field. Their opposite gyration directions generate a net current localized near the magnetopause, with a thickness on the order of the ion gyroradius. This diamagnetic current enhances the internal magnetic field and cancels the external one, maintaining pressure balance across the boundary. We refer to this as the magnetopause current sheet, and a schematic of its structure is shown in <a class="reference internal" href="#current-sheet"><span class="std std-numref">Fig. 4</span></a>. <span id="id1">[<a class="reference internal" href="Bibliography.html#id9" title="Wolfganf Baumjohann and Rudolf A. Treumann. Basic space plasma physics. Imperial College Press, reprinted edition, 2006. ISBN 978-1-86094-079-8.">Baumjohann and Treumann, 2006</a>]</span></p>
 </section>
 
     <script type="text/x-thebe-config">

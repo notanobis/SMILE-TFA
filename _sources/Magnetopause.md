@@ -17,24 +17,30 @@ $$
 
 We can visualize these jumps, through the typical changes in plasma moments across a tangential discontinuity, in \autoref{fig:tangential_discontinuity}. The continuity of the total pressure across the discontinuity defines a surface of total pressure balance between the two contacting plasmas with no mass or magnetic flux crossing the discontinuity from either side, while all other quantities can experience arbitrary changes. This implies, that as a tangential discontinuity the magnetopause is a surface of total pressure equilibrium between the solar wind magnetosheath plasma and the geomagnetic field confined in the magnetosphere. The \ac{IMF} is quite weak near the Earth and the magnetopsheric plasma thermal and dynamic pressures can be neglected compared with the pressure of the geomagnetic field. We can therefore, request pressure equilibrium between the dynamic pressure of the solar wind and magnetic pressure of the magnetosphere, as a first approximation.
 
-(pressure_eq)=
 $$
     2 \mu_0 \kappa n_{sw} m_i \left( \frac{\nabla S_{mp}}{|\nabla S_{mp}|} \cdot \mathbf{v}_{sw} \right)^2 
 = \left( \frac{\nabla S_{mp}}{|\nabla S_{mp}|} \times \mathbf{B} \right)^2
-$$
+$$(pressure_eq)
 
-[Equation 1](pressure_eq) contains the complicated structure of the magnetospheric magnetic field, as well as the three-dimensional derivatives of the unknown magnetopause surface $S_{mp}$. It is a second-order three-dimensional nonlinear partial differential equation, and is therefore solvable only with numerical methods. Solving for the surface in the meridional plane, we get no continuous solution connecting the dayside magnetopause to the nightside magnetopause, while in the equatorial plane the magnetopause is a smooth curve extending from the dayside into
-an open tail. This point of discontinuity is defined as the polar cusp. A schematic of this solution can be found in the [figure below](magnetopause_equation).
 
-```{image} ./images/pressure_eq.png
-:width: 45%
+```{figure} ./images/pressure_eq.png
+:scale: 30%
 :name: magnetopause_equation
+:align: left
+Numerical solution for magnetopause.
 ```
 
-```{image} ./images/current_sheet.png
-:width: 45%
+Equation {eq}`pressure_eq` contains the complicated structure of the magnetospheric magnetic field, as well as the three-dimensional derivatives of the unknown magnetopause surface $S_{mp}$. It is a second-order three-dimensional nonlinear partial differential equation, and is therefore solvable only with numerical methods. Solving for the surface in the meridional plane, we get no continuous solution connecting the dayside magnetopause to the nightside magnetopause, while in the equatorial plane the magnetopause is a smooth curve extending from the dayside into
+an open tail. This point of discontinuity is defined as the polar cusp. A schematic of this solution can be found in {numref}`magnetopause_equation`.
+
+
+
+```{figure} ./images/current_sheet.png
+:scale: 30%
 :name: current_sheet
+:align: right
+Magnetopause current sheet.
 ```
 
 
-The ions and electrons that are reflected at the boundary, perform partial gyro-orbits within the magnetospheric field. Their opposite gyration directions generate a net current localized near the magnetopause, with a thickness on the order of the ion gyroradius. This diamagnetic current enhances the internal magnetic field and cancels the external one, maintaining pressure balance across the boundary. We refer to this as the magnetopause current sheet, and a schematic of its structure is shown in the above [figure](current_sheet). {cite}`basic_space_plasmas`
+The ions and electrons that are reflected at the boundary, perform partial gyro-orbits within the magnetospheric field. Their opposite gyration directions generate a net current localized near the magnetopause, with a thickness on the order of the ion gyroradius. This diamagnetic current enhances the internal magnetic field and cancels the external one, maintaining pressure balance across the boundary. We refer to this as the magnetopause current sheet, and a schematic of its structure is shown in {numref}`current_sheet`. {cite}`basic_space_plasmas`
