@@ -189,7 +189,6 @@
 </details></li>
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="Chapter02.html">The tangent hypothesis</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="MagSurface.html">Extracting the magnetopause surface from the simulation</a></li>
-
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">Extracting the maximum intensity curve from the image</a></li>
 <li class="toctree-l2"><a class="reference internal" href="TangentHypothesis.html">Characterizing the tangent hypothesis</a></li>
 </ul><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary>
@@ -367,7 +366,9 @@ document.write(`
   </button>
 `);
 </script>
-
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
 </div></div>
       
     </div>
@@ -383,6 +384,15 @@ document.write(`
     <div id="print-main-content">
         <div id="jb-print-toc">
             
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#constructing-the-images">Constructing the images</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#image-processing">Image processing</a></li>
+</ul>
+            </nav>
         </div>
     </div>
 </div>
@@ -394,6 +404,22 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="extracting-the-maximum-intensity-curve-from-the-image">
 <h1>Extracting the maximum intensity curve from the image<a class="headerlink" href="#extracting-the-maximum-intensity-curve-from-the-image" title="Link to this heading">#</a></h1>
+<p>As suspected from \autoref{fig:lines} the extraction of the maximum intensity arc is not as trivial as in the smooth-gradient MHD case. This will not change when introducing the \ac{SXI} \ac{FOV} and the satellite’s \ac{POV}, but it will improve since the instrument never points directly to the cusps, while image processing techniques can also be applied to extract continuous arcs.</p>
+<section id="constructing-the-images">
+<h2>Constructing the images<a class="headerlink" href="#constructing-the-images" title="Link to this heading">#</a></h2>
+<p>To construct the synthetic images of the \ac{SXI} instrument, we use the \href{<a class="reference external" href="https://3dview.irap.omp.eu/">https://3dview.irap.omp.eu/</a>}{3DView}  open-source tool developed by CDPP \cite{3DView}. Through this tool we can simulate the orbit and attitude of the satellite for a specified interval, as well as the orientation and characteristics of the imaging system in relation to the satellite. We can directly import the emissivity cubes of the simulations, introduce the satellite and the \ac{FOV} of the imager, and compute the integrated flux over each pixel’s \ac{LOS}. We therefore get the integrated images from each \ac{POV} of the orbit, according to the \ac{FOV} and resolution of the imager, as shown in \autoref{3DView}. No simulated noise has been added to account for the detection system of the instrument or the background contribution. A typical synthetic image of the magnetopause, generated through this method, is shown in \autoref{fig:typical_image}.</p>
+<figure class="align-default" id="dview">
+<img alt="_images/3DView.png" src="_images/3DView.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 11 </span><span class="caption-text">3D View CDPP software</span><a class="headerlink" href="#dview" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
+<p>Along with the images, we can export XML files that contain information about the position and orientation of the satellite, for each time-step. This will be particularly useful in \autoref{section: tangent_hypothesis}.</p>
+</section>
+<section id="image-processing">
+<span id="max-int-arc"></span><h2>Image processing<a class="headerlink" href="#image-processing" title="Link to this heading">#</a></h2>
+<p>Looking at the images, we notice that two arcs seem to form, the outer one being less distinct. We will refer to that as the second maxima arc, as this second peak is observed consistently when tracing the intensity evolution over the azimuth angles for each row as seen in \autoref{fig:intensity_azimuth}. This shall not be confused with the second emissivity maximum described in the previous section, where we were referring to the 3D structures of the emissivity.</p>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -450,6 +476,22 @@ document.write(`
             </div>
             
             
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#constructing-the-images">Constructing the images</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#image-processing">Image processing</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>
