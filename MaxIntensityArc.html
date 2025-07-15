@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Introduction &#8212; SMILE-TFA</title>
+    <title>Extracting the maximum intensity curve from the image &#8212; SMILE-TFA</title>
   
   
   
@@ -57,13 +57,11 @@
     <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
-    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
-    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'Introduction';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'MaxIntensityArc';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Earth’s Magnetopause" href="Magnetopause.html" />
-    <link rel="prev" title="Locating the Earth’s magnetopause through X-ray imaging" href="Abstract.html" />
+    <link rel="next" title="Characterizing the tangent hypothesis" href="TangentHypothesis.html" />
+    <link rel="prev" title="Extracting the magnetopause surface from the simulation" href="MagSurface.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -183,18 +181,18 @@
         </ul>
         <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="Abstract.html">Locating the Earth’s magnetopause through X-ray imaging</a></li>
-<li class="toctree-l1 current active has-children"><a class="current reference internal" href="#">Introduction</a><ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="Introduction.html">Introduction</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="Magnetopause.html">Earth’s Magnetopause</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Detecting.html">Detecting the magnetopause</a></li>
 <li class="toctree-l2"><a class="reference internal" href="FittingMethods.html">Previous work: Fitting methods</a></li>
-</ul><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary>
+</ul><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary>
 </details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="Chapter02.html">The tangent hypothesis</a><ul>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="Chapter02.html">The tangent hypothesis</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="MagSurface.html">Extracting the magnetopause surface from the simulation</a></li>
 
-<li class="toctree-l2"><a class="reference internal" href="MaxIntensityArc.html">Extracting the maximum intensity curve from the image</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Extracting the maximum intensity curve from the image</a></li>
 <li class="toctree-l2"><a class="reference internal" href="TangentHypothesis.html">Characterizing the tangent hypothesis</a></li>
-</ul><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary>
+</ul><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary>
 </details></li>
 <li class="toctree-l1"><a class="reference internal" href="Bibliography.html">Bibliography</a></li>
 </ul>
@@ -268,7 +266,7 @@
       
       
       
-      <li><a href="https://github.com/notanobis/SMILE-TFA/issues/new?title=Issue%20on%20page%20%2FIntroduction.html&body=Your%20issue%20content%20here." target="_blank"
+      <li><a href="https://github.com/notanobis/SMILE-TFA/issues/new?title=Issue%20on%20page%20%2FMaxIntensityArc.html&body=Your%20issue%20content%20here." target="_blank"
    class="btn btn-sm btn-source-issues-button dropdown-item"
    title="Open an issue"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -298,7 +296,7 @@
       
       
       
-      <li><a href="_sources/Introduction.md" target="_blank"
+      <li><a href="_sources/MaxIntensityArc.ipynb" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Download source file"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -308,7 +306,7 @@
 <span class="btn__icon-container">
   <i class="fas fa-file"></i>
   </span>
-<span class="btn__text-container">.md</span>
+<span class="btn__text-container">.ipynb</span>
 </a>
 </li>
       
@@ -369,9 +367,7 @@ document.write(`
   </button>
 `);
 </script>
-<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <span class="fa-solid fa-list"></span>
-</button>
+
 </div></div>
       
     </div>
@@ -382,19 +378,11 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Introduction</h1>
+    <h1>Extracting the maximum intensity curve from the image</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
             
-            <div>
-                <h2> Contents </h2>
-            </div>
-            <nav aria-label="Page">
-                <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#earth-s-space-environment">Earth’s Space Environment</a></li>
-</ul>
-            </nav>
         </div>
     </div>
 </div>
@@ -404,33 +392,8 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="introduction">
-<span id="ch-introduction"></span><h1>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">#</a></h1>
-<p>Although the matter we encounter daily on Earth’s surface predominantly exists in solid, liquid, or gaseous states, the vast majority of baryonic matter in the universe exists in a fourth state: plasma. This state of matter displays complex behaviors that have not been completely understood due to the lack of proximity to naturally occurring plasmas as well as their vast diversity in density and temperature. The closest natural laboratory to study these plasmas is the Earth itself, particularly in the region above approximately 100 km altitude, where the phenomena that take place are dominated by electromagnetic interactions and should be treated using plasma physical methods. A key point of interest is the interaction and coupling of the Sun - Earth system, also known as space weather. We will attempt to study this connection and the physics between the interaction of the Sun’s emitted particles and the terrestrial space environment.</p>
-<section id="earth-s-space-environment">
-<h2>Earth’s Space Environment<a class="headerlink" href="#earth-s-space-environment" title="Link to this heading">#</a></h2>
-<p>We characterize this region as the Earth’s space environment, consisting of the magnetosphere and its neighboring plasma regions, that display strong coupling, as well as a plethora of different phenomena. To understand this environment we shall start from its driving forces:</p>
-<p>The Sun emits magnetized supersonic plasma with typical speeds of 300 to 800 km/s. This is known as the Solar Wind (SW), consisting mainly of electrons, protons and alpha particles, as well as traces of atomic nuclei and heavy ions found in the solar corona, such as carbon, nitrogen, oxygen, neon, magnesium, silicon, sulfur, and iron. The solar wind plasma is highly conductive meaning the magnetic field lines and the plasma flows are “frozen” together and the coronal magnetic field is dragged out by the solar wind to form the Interplanetary Magnetic Field (IMF).</p>
-<figure class="align-right" id="fig-spiral">
-<a class="reference internal image-reference" href="_images/imf.png"><img alt="Parker spiral of Interplanetary Magnetic Field" src="_images/imf.png" style="width: 346.40000000000003px; height: 252.0px;" />
-</a>
-<figcaption>
-<p><span class="caption-number">Fig. 1 </span><span class="caption-text">Parker spiral of Interplanetary Magnetic Field</span><a class="headerlink" href="#fig-spiral" title="Link to this image">#</a></p>
-</figcaption>
-</figure>
-<p>This takes the shape of an Archimedean spiral pattern due the combination of the outward motion of the solar wind and the Sun’s rotation, known as the Parker spiral <span id="id1">[<a class="reference internal" href="Bibliography.html#id15" title="E. N. Parker. Dynamics of the interplanetary gas and magnetic fields. The Astrophysical Journal, 128:664, 1958. URL: http://adsabs.harvard.edu/doi/10.1086/146579 (visited on 2025-06-09), doi:10.1086/146579.">Parker, 1958</a>]</span> and shown schematically in <a class="reference internal" href="#fig-spiral"><span class="std std-numref">Fig. 1</span></a>. Near the Earth, the IMF can be expressed as a three-dimensional vector <span class="math notranslate nohighlight">\(\vec{B} = B_x \vec{x}+B_y \vec{y}+B_z \vec{z}\)</span>. Its coupling to the Earth’s magnetic field is correlated with its local orientation. We can parametrize this through the ‘clock angle’ <span class="math notranslate nohighlight">\(\Omega\)</span>, which describes the orientation of the magnetic field in the Y-Z plane of the Geocentric Solar Magnetospheric (GSM) coordinate system. A clock angle of <span class="math notranslate nohighlight">\(0^\circ\)</span> means the IMF points northward, parallel to Earth’s magnetic dipole, while a clock angle of <span class="math notranslate nohighlight">\(180^\circ\)</span> means the IMF points southward.</p>
-<figure class="align-left" id="id3">
-<a class="reference internal image-reference" href="_images/mgnsphere.png"><img alt="Plasma regions of the near-Earth environment" src="_images/mgnsphere.png" style="width: 392.8px; height: 284.0px;" />
-</a>
-<figcaption>
-<p><span class="caption-number">Fig. 2 </span><span class="caption-text">Plasma regions of the near-Earth environment</span><a class="headerlink" href="#id3" title="Link to this image">#</a></p>
-</figcaption>
-</figure>
-<p>The Earth generates its own magnetic field as well, owing its existence to the currents induced by the convective motion in its core. Due to its supersonic velocity, when the solar wind encounters an obstacle, like the Earth’s magnetic field, it is decelerated and deflected, forming a bow shock where the kinetic energy of the supersonic plasma is partially converted to thermal energy. Shocks are discontinuities that are characterized by non-vanishing normal fluxes <span class="math notranslate nohighlight">\(n v_n \neq 0\)</span>, meaning the solar wind plasma can penetrate further towards the Earth. The region downstream of the bow shock, called the magnetosheath, contains this thermalized and dense plasma with a stronger magnetic field compared to the undisturbed solar wind. <span id="id2">[<a class="reference internal" href="Bibliography.html#id9" title="Wolfganf Baumjohann and Rudolf A. Treumann. Basic space plasma physics. Imperial College Press, reprinted edition, 2006. ISBN 978-1-86094-079-8.">Baumjohann and Treumann, 2006</a>]</span></p>
-<p>The frozen-in interplanetary magnetic field lines prevent penetration of the solar wind into the magnetosphere, the region where the magnetic field lines of the Earth dominate. The boundary separating these regions is the magnetopause, enclosing the magnetosphere—the cavity formed by the terrestrial magnetic field, compressed on the day-side and elongated into a magnetotail on the night-side by solar wind pressure.</p>
-</section>
-<div class="toctree-wrapper compound">
-</div>
+  <section class="tex2jax_ignore mathjax_ignore" id="extracting-the-maximum-intensity-curve-from-the-image">
+<h1>Extracting the maximum intensity curve from the image<a class="headerlink" href="#extracting-the-maximum-intensity-curve-from-the-image" title="Link to this heading">#</a></h1>
 </section>
 
     <script type="text/x-thebe-config">
@@ -464,20 +427,20 @@ document.write(`
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="Abstract.html"
+       href="MagSurface.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Locating the Earth’s magnetopause through X-ray imaging</p>
+        <p class="prev-next-title">Extracting the magnetopause surface from the simulation</p>
       </div>
     </a>
     <a class="right-next"
-       href="Magnetopause.html"
+       href="TangentHypothesis.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Earth’s Magnetopause</p>
+        <p class="prev-next-title">Characterizing the tangent hypothesis</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -487,21 +450,6 @@ document.write(`
             </div>
             
             
-              
-                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
-
-
-  <div class="sidebar-secondary-item">
-  <div class="page-toc tocsection onthispage">
-    <i class="fa-solid fa-list"></i> Contents
-  </div>
-  <nav class="bd-toc-nav page-toc">
-    <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#earth-s-space-environment">Earth’s Space Environment</a></li>
-</ul>
-  </nav></div>
-
-</div></div>
               
             
           </div>

@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Tangent Hypothesis &#8212; SMILE-TFA</title>
+    <title>Characterizing the tangent hypothesis &#8212; SMILE-TFA</title>
   
   
   
@@ -57,13 +57,11 @@
     <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
-    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
-    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'TangentHypothesis';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Bibliography" href="Bibliography.html" />
-    <link rel="prev" title="Previous work: Fitting methods" href="FittingMethods.html" />
+    <link rel="prev" title="Extracting the maximum intensity curve from the image" href="MaxIntensityArc.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -150,8 +148,14 @@
   
   
   
+    
+    
+      
+    
+    
+    <img src="_static/ESA_SMILE_missionlogo_patch.png" class="logo__image only-light" alt="SMILE-TFA - Home"/>
+    <script>document.write(`<img src="_static/ESA_SMILE_missionlogo_patch.png" class="logo__image only-dark" alt="SMILE-TFA - Home"/>`);</script>
   
-    <p class="title logo__title">SMILE-TFA</p>
   
 </a></div>
         <div class="sidebar-primary-item">
@@ -183,7 +187,13 @@
 <li class="toctree-l2"><a class="reference internal" href="FittingMethods.html">Previous work: Fitting methods</a></li>
 </ul><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary>
 </details></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Tangent Hypothesis</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="Chapter02.html">The tangent hypothesis</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="MagSurface.html">Extracting the magnetopause surface from the simulation</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="MaxIntensityArc.html">Extracting the maximum intensity curve from the image</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Characterizing the tangent hypothesis</a></li>
+</ul><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary>
+</details></li>
 <li class="toctree-l1"><a class="reference internal" href="Bibliography.html">Bibliography</a></li>
 </ul>
 
@@ -357,9 +367,7 @@ document.write(`
   </button>
 `);
 </script>
-<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <span class="fa-solid fa-list"></span>
-</button>
+
 </div></div>
       
     </div>
@@ -370,23 +378,11 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Tangent Hypothesis</h1>
+    <h1>Characterizing the tangent hypothesis</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
             
-            <div>
-                <h2> Contents </h2>
-            </div>
-            <nav aria-label="Page">
-                <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#extracting-the-magnetopause-surface">Extracting the Magnetopause surface</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fitting-shue-model-to-zero-emissivity-contour">Fitting Shue model to zero-emissivity contour</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#building-full-surface-from-radial-profiles">Building full surface from radial profiles</a></li>
-</ul>
-</li>
-</ul>
-            </nav>
         </div>
     </div>
 </div>
@@ -396,375 +392,8 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">scipy.optimize</span><span class="w"> </span><span class="kn">import</span> <span class="n">curve_fit</span>
-
-<span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s1">&#39;dark_background&#39;</span><span class="p">)</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">pypalettes</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_cmap</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
-<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="ne">DeprecationWarning</span><span class="p">)</span> 
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cmap</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s1">&#39;Pastel1&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s1">&#39;Pastel1&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_html"><div style="vertical-align: middle;"><strong>Pastel1</strong> </div><div class="cmap"><img alt="Pastel1 colormap" title="Pastel1" style="border: 1px solid #555;" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAgAAAABACAYAAABsv8+/AAAAFnRFWHRUaXRsZQBQYXN0ZWwxIGNvbG9ybWFwOfPodwAAABx0RVh0RGVzY3JpcHRpb24AUGFzdGVsMSBjb2xvcm1hcJ7dWQ4AAAAxdEVYdEF1dGhvcgBNYXRwbG90bGliIHYzLjEwLjMsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmeGenhVAAAAM3RFWHRTb2Z0d2FyZQBNYXRwbG90bGliIHYzLjEwLjMsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcjXmuhAAABbElEQVR4nO3WIVICYBgAUSEYDSYoYqKauLbJYOYWNMdAN5gMeorfb4Z97wQbd/Pz9vp7d+Pe96fphOX2T5/TCcs9fhymE5Z7fjhPJyy1OR6nE5a7Xr6mE5bbbV+mE5b73t1PJyy3nQ4AAP6fAQCAIAMAAEEGAACCDAAABBkAAAgyAAAQZAAAIMgAAECQAQCAIAMAAEEGAACCDAAABBkAAAgyAAAQZAAAIMgAAECQAQCAIAMAAEEGAACCDAAABBkAAAgyAAAQZAAAIMgAAECQAQCAIAMAAEEGAACCDAAABBkAAAgyAAAQZAAAIMgAAECQAQCAIAMAAEEGAACCDAAABBkAAAgyAAAQZAAAIMgAAECQAQCAIAMAAEEGAACCDAAABBkAAAgyAAAQZAAAIMgAAECQAQCAIAMAAEEGAACCDAAABBkAAAgyAAAQZAAAIMgAAECQAQCAIAMAAEEGAACCDAAABBkAAAgyAAAQ9Ac14gxVBJOUZAAAAABJRU5ErkJggg=="></div><div style="vertical-align: middle; max-width: 514px; display: flex; justify-content: space-between;"><div style="float: left;"><div title="#fbb4aeff" style="display: inline-block; width: 1em; height: 1em; margin: 0; vertical-align: middle; border: 1px solid #555; background-color: #fbb4aeff;"></div> under</div><div style="margin: 0 auto; display: inline-block;">bad <div title="#00000000" style="display: inline-block; width: 1em; height: 1em; margin: 0; vertical-align: middle; border: 1px solid #555; background-color: #00000000;"></div></div><div style="float: right;">over <div title="#f2f2f2ff" style="display: inline-block; width: 1em; height: 1em; margin: 0; vertical-align: middle; border: 1px solid #555; background-color: #f2f2f2ff;"></div></div></div></div></div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s1">&#39;hot&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_html"><div style="vertical-align: middle;"><strong>hot</strong> </div><div class="cmap"><img alt="hot colormap" title="hot" style="border: 1px solid #555;" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAgAAAABACAYAAABsv8+/AAAAEnRFWHRUaXRsZQBob3QgY29sb3JtYXBMLchKAAAAGHRFWHREZXNjcmlwdGlvbgBob3QgY29sb3JtYXBABboQAAAAMXRFWHRBdXRob3IATWF0cGxvdGxpYiB2My4xMC4zLCBodHRwczovL21hdHBsb3RsaWIub3Jnhnp4VQAAADN0RVh0U29mdHdhcmUATWF0cGxvdGxpYiB2My4xMC4zLCBodHRwczovL21hdHBsb3RsaWIub3JnI15roQAAAVpJREFUeJzt1rkOggAQANFFrPz//9XCo6BRCyNk3ms2ISxHAsksl5nrzMw6d6fHXDdze/zT8+zb39P+8u5CR32x2v5RnnOv+68f4fynuX55vvv/Yj6/AgAgRAAAQJAAAIAgAQAAQQIAAIIEAAAECQAACBIAABAkAAAgSAAAQJAAAIAgAQAAQQIAAIIEAAAECQAACBIAABAkAAAgSAAAQJAAAIAgAQAAQQIAAIIEAAAECQAACBIAABAkAAAgSAAAQJAAAIAgAQAAQQIAAIIEAAAECQAACBIAABAkAAAgSAAAQJAAAIAgAQAAQQIAAIIEAAAECQAACBIAABAkAAAgSAAAQJAAAIAgAQAAQQIAAIIEAAAECQAACBIAABAkAAAgSAAAQJAAAIAgAQAAQQIAAIIEAAAECQAACBIAABAkAAAgSAAAQJAAAIAgAQAAQQIAAIIEAAAECQAACLoBuWQEfJaIM1oAAAAASUVORK5CYII="></div><div style="vertical-align: middle; max-width: 514px; display: flex; justify-content: space-between;"><div style="float: left;"><div title="#0b0000ff" style="display: inline-block; width: 1em; height: 1em; margin: 0; vertical-align: middle; border: 1px solid #555; background-color: #0b0000ff;"></div> under</div><div style="margin: 0 auto; display: inline-block;">bad <div title="#00000000" style="display: inline-block; width: 1em; height: 1em; margin: 0; vertical-align: middle; border: 1px solid #555; background-color: #00000000;"></div></div><div style="float: right;">over <div title="#ffffffff" style="display: inline-block; width: 1em; height: 1em; margin: 0; vertical-align: middle; border: 1px solid #555; background-color: #ffffffff;"></div></div></div></div></div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">palette</span> <span class="o">=</span> <span class="n">load_cmap</span><span class="p">(</span><span class="s1">&#39;Alexandrite&#39;</span><span class="p">)</span>
-<span class="n">palette</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_html"><div style="vertical-align: middle;"><strong>Alexandrite</strong> </div><div class="cmap"><img alt="Alexandrite colormap" title="Alexandrite" style="border: 1px solid #555;" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAgAAAABACAYAAABsv8+/AAAAGnRFWHRUaXRsZQBBbGV4YW5kcml0ZSBjb2xvcm1hcO/pykYAAAAgdEVYdERlc2NyaXB0aW9uAEFsZXhhbmRyaXRlIGNvbG9ybWFwfveOEAAAADF0RVh0QXV0aG9yAE1hdHBsb3RsaWIgdjMuMTAuMywgaHR0cHM6Ly9tYXRwbG90bGliLm9yZ4Z6eFUAAAAzdEVYdFNvZnR3YXJlAE1hdHBsb3RsaWIgdjMuMTAuMywgaHR0cHM6Ly9tYXRwbG90bGliLm9yZyNea6EAAAFrSURBVHic7dYxbYIBGADR/hWAg25NCAsJEiqEmaESMIAGEjYSRjw0tdEKYaEu+g33noIbb3lf7Z4vYbf9ZTph1PHtezph1PbzYzph1LI5TyeMOl0f0wmj7r+H6YRRX+uf6YRRr9MBAMD/MwAAEGQAACDIAABAkAEAgCADAABBBgAAggwAAAQZAAAIMgAAEGQAACDIAABAkAEAgCADAABBBgAAggwAAAQZAAAIMgAAEGQAACDIAABAkAEAgCADAABBBgAAggwAAAQZAAAIMgAAEGQAACDIAABAkAEAgCADAABBBgAAggwAAAQZAAAIMgAAEGQAACDIAABAkAEAgCADAABBBgAAggwAAAQZAAAIMgAAEGQAACDIAABAkAEAgCADAABBBgAAggwAAAQZAAAIMgAAEGQAACDIAABAkAEAgCADAABBBgAAggwAAAQZAAAIMgAAEGQAACDIAABAkAEAgCADAABBBgAAgv4AfqgMXfX1kQ0AAAAASUVORK5CYII="></div><div style="vertical-align: middle; max-width: 514px; display: flex; justify-content: space-between;"><div style="float: left;"><div title="#240e31ff" style="display: inline-block; width: 1em; height: 1em; margin: 0; vertical-align: middle; border: 1px solid #555; background-color: #240e31ff;"></div> under</div><div style="margin: 0 auto; display: inline-block;">bad <div title="#00000000" style="display: inline-block; width: 1em; height: 1em; margin: 0; vertical-align: middle; border: 1px solid #555; background-color: #00000000;"></div></div><div style="float: right;">over <div title="#6ec5abff" style="display: inline-block; width: 1em; height: 1em; margin: 0; vertical-align: middle; border: 1px solid #555; background-color: #6ec5abff;"></div></div></div></div></div>
-</div>
-<section class="tex2jax_ignore mathjax_ignore" id="tangent-hypothesis">
-<h1>Tangent Hypothesis<a class="headerlink" href="#tangent-hypothesis" title="Link to this heading">#</a></h1>
-<p>The Tangent Fitting Approach is based on the hypothesis that the maximum intensity arc of the SXI images, correspond to the tangent direction of the magnetopause surface. To verify this claim, we will:</p>
-<ol class="arabic simple">
-<li><p>Extract the magnetopause surface directly from the emissivity cubes.</p></li>
-<li><p>Project its tangent points to the SXI imager’s FOV.</p></li>
-<li><p>Extract the maximum intensity arc and compare it to the projection.</p></li>
-</ol>
-<p>To do this, we will work with the output emissivity cubes of the LaTeP simulation, which are in NetCDF file format. The <code class="docutils literal notranslate"><span class="pre">Cube</span></code> class has been defined to read this format, convert it to physical quantities in the GSE frame, and provide functions to transform to other frames (ex. spherical).</p>
-<p>Here we load the emissivity cube and transform it to the GSE frame:</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">ReadCube</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">readcube</span>
-<span class="n">cube</span> <span class="o">=</span> <span class="n">readcube</span><span class="o">.</span><span class="n">Cube</span><span class="p">(</span><span class="s2">&quot;LaTeP_OpenGGCM&quot;</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span>
-<span class="n">Q_GSE</span> <span class="o">=</span> <span class="n">cube</span><span class="o">.</span><span class="n">Q_GSE</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;frozen importlib._bootstrap&gt;:241: RuntimeWarning: numpy.ndarray size changed, may indicate binary incompatibility. Expected 16 from C header, got 96 from PyObject
-</pre></div>
-</div>
-</div>
-</div>
-<p>We can also visualize what an observer at infinity would see, along the z and y axis.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">y_integration</span> <span class="o">=</span> <span class="n">cube</span><span class="o">.</span><span class="n">get_intengration</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">z_integration</span> <span class="o">=</span> <span class="n">cube</span><span class="o">.</span><span class="n">get_intengration</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-
-<span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
-<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">pcolormesh</span><span class="p">(</span><span class="n">cube</span><span class="o">.</span><span class="n">x_GSE</span><span class="p">,</span> <span class="n">cube</span><span class="o">.</span><span class="n">z_GSE</span><span class="p">,</span><span class="n">y_integration</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;hot&#39;</span><span class="p">,</span><span class="n">vmax</span> <span class="o">=</span><span class="mf">5e4</span><span class="p">)</span>
-<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Integrated $O^{+7}$ emissivity over Y-axis&quot;</span><span class="p">)</span>
-<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;X (Re)&quot;</span><span class="p">)</span>
-<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Z (Re)&quot;</span><span class="p">)</span>
-<span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">pcolormesh</span><span class="p">(</span><span class="n">cube</span><span class="o">.</span><span class="n">x_GSE</span><span class="p">,</span> <span class="n">cube</span><span class="o">.</span><span class="n">y_GSE</span><span class="p">,</span><span class="n">z_integration</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;hot&#39;</span><span class="p">,</span><span class="n">vmax</span> <span class="o">=</span><span class="mf">5e4</span><span class="p">)</span>
-<span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Integrated $O^{+7}$ emissivity over Z-axis&quot;</span><span class="p">)</span>
-<span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;X (Re)&quot;</span><span class="p">)</span>
-<span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Y (Re)&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<img alt="_images/b90c96230b9e820404fcbecddb5ca83fc03f8b9c199319db183fed156e6c2d07.png" src="_images/b90c96230b9e820404fcbecddb5ca83fc03f8b9c199319db183fed156e6c2d07.png" />
-</div>
-</div>
-<section id="extracting-the-magnetopause-surface">
-<h2>Extracting the Magnetopause surface<a class="headerlink" href="#extracting-the-magnetopause-surface" title="Link to this heading">#</a></h2>
-<section id="fitting-shue-model-to-zero-emissivity-contour">
-<h3>Fitting Shue model to zero-emissivity contour<a class="headerlink" href="#fitting-shue-model-to-zero-emissivity-contour" title="Link to this heading">#</a></h3>
-<p>We can get a first proxy of the cube’s magnetopause by taking the zero-emissivity contour of some central slices, since the magnetosphere has almost zero emission. We can fit a Shue model to these contours since it is rotationally symmetric, and get its geometric parameters that best describe the contours.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
-
-<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">pcolormesh</span><span class="p">(</span><span class="n">cube</span><span class="o">.</span><span class="n">x_GSE</span><span class="p">,</span> <span class="n">cube</span><span class="o">.</span><span class="n">z_GSE</span><span class="p">,</span><span class="n">Q_GSE</span><span class="p">[:,</span><span class="mi">200</span><span class="p">,:]</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;hot&#39;</span><span class="p">,</span><span class="n">vmax</span> <span class="o">=</span><span class="mf">1e-4</span><span class="p">)</span>
-<span class="n">cs</span> <span class="o">=</span> <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">contour</span><span class="p">(</span><span class="n">cube</span><span class="o">.</span><span class="n">x_GSE</span><span class="p">,</span><span class="n">cube</span><span class="o">.</span><span class="n">z_GSE</span><span class="p">,</span><span class="n">Q_GSE</span><span class="p">[:,</span><span class="mi">200</span><span class="p">,:]</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">levels</span><span class="o">=</span><span class="p">[</span><span class="mf">1E-6</span><span class="p">],</span> <span class="n">colors</span><span class="o">=</span> <span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">linewidths</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-<span class="n">contour</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">allsegs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-<span class="n">x_zerocontour_xz</span> <span class="o">=</span> <span class="n">contour</span><span class="p">[</span><span class="mi">0</span><span class="p">][:,</span><span class="mi">0</span><span class="p">][</span><span class="mi">2150</span><span class="p">:]</span>
-<span class="n">z_zerocontour_xz</span> <span class="o">=</span> <span class="n">contour</span><span class="p">[</span><span class="mi">0</span><span class="p">][:,</span><span class="mi">1</span><span class="p">][</span><span class="mi">2150</span><span class="p">:]</span>
-<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_zerocontour_xz</span><span class="p">,</span><span class="n">z_zerocontour_xz</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">cmap</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span><span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;Segment of interest&#39;</span><span class="p">)</span>
-<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Integrated $O^{+7}$ emissivity over Y-axis&quot;</span><span class="p">)</span>
-<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;X (Re)&quot;</span><span class="p">)</span>
-<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Z (Re)&quot;</span><span class="p">)</span>
-
-<span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">pcolormesh</span><span class="p">(</span><span class="n">cube</span><span class="o">.</span><span class="n">x_GSE</span><span class="p">,</span> <span class="n">cube</span><span class="o">.</span><span class="n">y_GSE</span><span class="p">,</span><span class="n">Q_GSE</span><span class="p">[:,:,</span><span class="mi">200</span><span class="p">]</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;hot&#39;</span><span class="p">,</span><span class="n">vmax</span> <span class="o">=</span><span class="mf">1e-4</span><span class="p">)</span>
-<span class="n">cs</span> <span class="o">=</span> <span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">contour</span><span class="p">(</span><span class="n">cube</span><span class="o">.</span><span class="n">x_GSE</span><span class="p">,</span><span class="n">cube</span><span class="o">.</span><span class="n">y_GSE</span><span class="p">,</span><span class="n">Q_GSE</span><span class="p">[:,:,</span><span class="mi">200</span><span class="p">]</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">levels</span><span class="o">=</span><span class="p">[</span><span class="mf">1E-6</span><span class="p">],</span> <span class="n">colors</span><span class="o">=</span> <span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">linewidths</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-<span class="n">contour</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">allsegs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-<span class="n">x_zerocontour_xy</span> <span class="o">=</span> <span class="n">contour</span><span class="p">[</span><span class="mi">0</span><span class="p">][:,</span><span class="mi">0</span><span class="p">][</span><span class="mi">2480</span><span class="p">:]</span>
-<span class="n">y_zerocontour_xy</span> <span class="o">=</span> <span class="n">contour</span><span class="p">[</span><span class="mi">0</span><span class="p">][:,</span><span class="mi">1</span><span class="p">][</span><span class="mi">2480</span><span class="p">:]</span>
-<span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_zerocontour_xy</span><span class="p">,</span><span class="n">y_zerocontour_xy</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">cmap</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span><span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;Segment of interest&#39;</span><span class="p">)</span>
-<span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Integrated $O^{+7}$ emissivity over Z-axis&quot;</span><span class="p">)</span>
-<span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;X (Re)&quot;</span><span class="p">)</span>
-<span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Y (Re)&quot;</span><span class="p">)</span>
-
-<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<img alt="_images/3a907be9d40d399d3470513c028c3b555fc7d69ba855279b0600fc11207f3d2b.png" src="_images/3a907be9d40d399d3470513c028c3b555fc7d69ba855279b0600fc11207f3d2b.png" />
-</div>
-</div>
-<p>Empirical models are typically expressed in spherical coordinates as defined in Section 1.3.1.1. In order to fit the Shue model to the zero contours we transform them this spherical system, and use the <code class="docutils literal notranslate"><span class="pre">curve_fit</span></code> function of <code class="docutils literal notranslate"><span class="pre">SciPy</span></code> to estimate <span class="math notranslate nohighlight">\(r_0\)</span> and <span class="math notranslate nohighlight">\(\alpha\)</span>.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">shue</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="n">r0</span><span class="p">,</span> <span class="n">alpha</span> <span class="p">):</span>
-    <span class="k">return</span> <span class="n">r0</span> <span class="o">*</span> <span class="p">(</span><span class="mi">2</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta</span><span class="p">)))</span><span class="o">**</span><span class="n">alpha</span>
-
-<span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">subplot_kw</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;projection&#39;</span><span class="p">:</span> <span class="s1">&#39;polar&#39;</span><span class="p">})</span>
-
-<span class="c1"># XZ plane</span>
-<span class="n">r_xz</span><span class="p">,</span> <span class="n">theta_xz</span> <span class="o">=</span> <span class="n">cube</span><span class="o">.</span><span class="n">cart2pol</span><span class="p">(</span><span class="n">x_zerocontour_xz</span><span class="p">,</span><span class="n">z_zerocontour_xz</span><span class="p">)</span>
-<span class="n">popt</span><span class="p">,</span> <span class="n">pcov</span> <span class="o">=</span> <span class="n">curve_fit</span><span class="p">(</span><span class="n">shue</span><span class="p">,</span> <span class="n">theta_xz</span><span class="p">,</span> <span class="n">r_xz</span><span class="p">,</span> <span class="n">p0</span><span class="o">=</span><span class="p">[</span><span class="mi">8</span><span class="p">,</span><span class="mf">0.5</span><span class="p">])</span>  <span class="c1"># Initial guess: r0=8, alpha=0.5</span>
-<span class="n">r0_xz</span><span class="p">,</span> <span class="n">alpha_xz</span> <span class="o">=</span> <span class="n">popt</span>  <span class="c1"># Best-fit parameters</span>
-<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">theta_xz</span><span class="p">,</span><span class="n">r_xz</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Zero contour&#39;</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">palette</span><span class="p">(</span><span class="mi">6</span><span class="p">))</span>
-<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;XZ plane: $φ = 90^o$, $θ \in [-π/2,π/2]$&quot;</span><span class="p">)</span>
-<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">theta_xz</span><span class="p">,</span><span class="n">shue</span><span class="p">(</span><span class="n">theta_xz</span><span class="p">,</span><span class="n">r0_xz</span><span class="p">,</span><span class="n">alpha_xz</span><span class="p">),</span><span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">palette</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;Fitted Shue Model&#39;</span><span class="p">)</span>
-
-<span class="c1"># XY plane</span>
-<span class="n">r_xy</span><span class="p">,</span> <span class="n">theta_xy</span> <span class="o">=</span> <span class="n">cube</span><span class="o">.</span><span class="n">cart2pol</span><span class="p">(</span><span class="n">x_zerocontour_xy</span><span class="p">,</span><span class="n">y_zerocontour_xy</span><span class="p">)</span>
-<span class="n">popt</span><span class="p">,</span> <span class="n">pcov</span> <span class="o">=</span> <span class="n">curve_fit</span><span class="p">(</span><span class="n">shue</span><span class="p">,</span> <span class="n">theta_xy</span><span class="p">,</span> <span class="n">r_xy</span><span class="p">,</span> <span class="n">p0</span><span class="o">=</span><span class="p">[</span><span class="mi">8</span><span class="p">,</span><span class="mf">0.5</span><span class="p">])</span>  <span class="c1"># Initial guess: r0=8, alpha=0.5</span>
-<span class="n">r0_xy</span><span class="p">,</span> <span class="n">alpha_xy</span> <span class="o">=</span> <span class="n">popt</span>  <span class="c1"># Best-fit parameters</span>
-<span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">theta_xy</span><span class="p">,</span><span class="n">r_xy</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Zero Contour&#39;</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span> <span class="n">palette</span><span class="p">(</span><span class="mi">6</span><span class="p">))</span>
-<span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;XY plane: $φ= 0^o$, $θ \in [-π/2,π/2]$&quot;</span><span class="p">)</span>
-<span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">theta_xy</span><span class="p">,</span><span class="n">shue</span><span class="p">(</span><span class="n">theta_xy</span><span class="p">,</span><span class="n">r0_xy</span><span class="p">,</span><span class="n">alpha_xy</span><span class="p">),</span><span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">palette</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Fitted Shue Model&#39;</span><span class="p">)</span>
-
-<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Estimated values from equatorial plane: </span><span class="se">\n</span><span class="s2"> Subsolar distance: r0 = </span><span class="si">{</span><span class="n">r0_xy</span><span class="si">}</span><span class="s2"> RE </span><span class="se">\n</span><span class="s2"> Flaring: a = </span><span class="si">{</span><span class="n">alpha_xy</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<img alt="_images/b0bf752cd5e98ac6bee2f59febd84ec28df9ae548c041cb19370b8823a0ae483.png" src="_images/b0bf752cd5e98ac6bee2f59febd84ec28df9ae548c041cb19370b8823a0ae483.png" />
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Estimated values from equatorial plane: 
- Subsolar distance: r0 = 7.690695963489819 RE 
- Flaring: a = 0.4412905155362411
-</pre></div>
-</div>
-</div>
-</div>
-<p>The equatorial plane is giving a good estimation of where the magnetopause is, while the XZ plane cannot be described by such a simplistic model. The flaring parameter is trying to capture the cusps instead of the outer boundary.</p>
-<p>Building the full surface just by using the contour points is challenging due to the unpredictable nature of the contour output of <code class="docutils literal notranslate"><span class="pre">matplot</span></code>. We can always choose the longest contour, but we still have keep only the section of interest in an arbitrary manner.</p>
-</section>
-<section id="building-full-surface-from-radial-profiles">
-<h3>Building full surface from radial profiles<a class="headerlink" href="#building-full-surface-from-radial-profiles" title="Link to this heading">#</a></h3>
-<p>To make a full surface we move to a more robust method: transforming the emissivity cube into spherical coordinates, extracting the radial profiles for each θ and φ, and keeping the maximum emissivity points.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">R</span><span class="p">,</span> <span class="n">Theta</span><span class="p">,</span> <span class="n">Phi</span><span class="p">,</span> <span class="n">Q_sph</span> <span class="o">=</span> <span class="n">cube</span><span class="o">.</span><span class="n">cartesian_to_spherical</span><span class="p">(</span><span class="n">rmax</span> <span class="o">=</span> <span class="mi">15</span><span class="p">,</span> <span class="n">dtheta</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">dphi</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">subplot_kw</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;projection&#39;</span><span class="p">:</span> <span class="s1">&#39;polar&#39;</span><span class="p">})</span>
-
-<span class="n">phi_index</span> <span class="o">=</span> <span class="mi">180</span>
-<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">pcolormesh</span><span class="p">(</span><span class="n">Theta</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">phi_index</span><span class="p">],</span> <span class="n">R</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">phi_index</span><span class="p">],</span> <span class="n">Q_sph</span><span class="p">[:,:,</span><span class="n">phi_index</span><span class="p">],</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;hot&#39;</span><span class="p">,</span><span class="n">vmax</span><span class="o">=</span><span class="mf">1e-4</span><span class="p">)</span>
-<span class="n">theta_lines</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="mi">33</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="mi">55</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="mi">65</span><span class="p">)]</span>
-<span class="n">c</span> <span class="o">=</span> <span class="mi">0</span>
-<span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">theta_lines</span><span class="p">:</span>
-    <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">t</span><span class="p">,</span> <span class="n">t</span><span class="p">],</span> <span class="p">[</span><span class="n">R</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">phi_index</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">R</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">phi_index</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()],</span> <span class="n">color</span><span class="o">=</span><span class="n">cmap</span><span class="p">(</span><span class="n">c</span><span class="p">),</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-    <span class="n">c</span><span class="o">+=</span><span class="mi">1</span>
-<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;LaTeP emission slice at φ = </span><span class="si">{:.2f}</span><span class="s2"> deg&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">degrees</span><span class="p">(</span><span class="n">Phi</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">phi_index</span><span class="p">])))</span>
-<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s1">&#39;major&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
-
-<span class="n">phi_index</span> <span class="o">=</span> <span class="mi">0</span>
-<span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">pcolormesh</span><span class="p">(</span><span class="n">Theta</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">phi_index</span><span class="p">],</span> <span class="n">R</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">phi_index</span><span class="p">],</span> <span class="n">Q_sph</span><span class="p">[:,:,</span><span class="n">phi_index</span><span class="p">],</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;hot&#39;</span><span class="p">,</span><span class="n">vmax</span><span class="o">=</span><span class="mf">1e-4</span><span class="p">)</span>
-<span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;LaTeP emission slice at φ = </span><span class="si">{:.2f}</span><span class="s2"> deg&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">degrees</span><span class="p">(</span><span class="n">Phi</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">phi_index</span><span class="p">])))</span>
-<span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s1">&#39;major&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
-
-
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<img alt="_images/9399314d583b1da1dcfcde65c60cb5644c43b80df0c14764392ae2311abc7cc2.png" src="_images/9399314d583b1da1dcfcde65c60cb5644c43b80df0c14764392ae2311abc7cc2.png" />
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
-
-<span class="n">ph</span> <span class="o">=</span> <span class="mi">180</span>
-<span class="n">th</span> <span class="o">=</span> <span class="mi">180</span>
-<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">R</span><span class="p">[</span><span class="n">th</span><span class="p">,</span><span class="mi">10</span><span class="p">:,</span><span class="n">ph</span><span class="p">],</span><span class="n">Q_sph</span><span class="p">[</span><span class="n">th</span><span class="p">,</span><span class="mi">10</span><span class="p">:,</span><span class="n">ph</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;θ = </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">degrees</span><span class="p">(</span><span class="n">Theta</span><span class="p">[</span><span class="n">th</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">ph</span><span class="p">])</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> deg&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">cmap</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
-<span class="n">th</span> <span class="o">=</span> <span class="o">-</span><span class="mi">90</span>
-<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">R</span><span class="p">[</span><span class="n">th</span><span class="p">,</span><span class="mi">10</span><span class="p">:,</span><span class="n">ph</span><span class="p">],</span><span class="n">Q_sph</span><span class="p">[</span><span class="n">th</span><span class="p">,</span><span class="mi">10</span><span class="p">:,</span><span class="n">ph</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;θ = </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">degrees</span><span class="p">(</span><span class="n">Theta</span><span class="p">[</span><span class="n">th</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">ph</span><span class="p">])</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> deg&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">cmap</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
-<span class="n">th</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
-<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">R</span><span class="p">[</span><span class="n">th</span><span class="p">,</span><span class="mi">10</span><span class="p">:,</span><span class="n">ph</span><span class="p">],</span><span class="n">Q_sph</span><span class="p">[</span><span class="n">th</span><span class="p">,</span><span class="mi">10</span><span class="p">:,</span><span class="n">ph</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;θ = </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">degrees</span><span class="p">(</span><span class="n">Theta</span><span class="p">[</span><span class="n">th</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">ph</span><span class="p">])</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> deg&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">cmap</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span>
-<span class="n">th</span> <span class="o">=</span> <span class="o">-</span><span class="mi">30</span>
-<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">R</span><span class="p">[</span><span class="n">th</span><span class="p">,</span><span class="mi">10</span><span class="p">:,</span><span class="n">ph</span><span class="p">],</span><span class="n">Q_sph</span><span class="p">[</span><span class="n">th</span><span class="p">,</span><span class="mi">10</span><span class="p">:,</span><span class="n">ph</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;θ = </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">degrees</span><span class="p">(</span><span class="n">Theta</span><span class="p">[</span><span class="n">th</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">ph</span><span class="p">])</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> deg&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">cmap</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
-<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Cusp radial profile at φ = </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">degrees</span><span class="p">(</span><span class="n">Phi</span><span class="p">[</span><span class="n">th</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">ph</span><span class="p">])</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> deg&quot;</span><span class="p">)</span>
-<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;R [RE]&quot;</span><span class="p">)</span>
-<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Emissivity [$eV/cm^3/s/sr$]&quot;</span><span class="p">)</span>
-<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
-
-<span class="n">th</span> <span class="o">=</span> <span class="mi">180</span>
-<span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">R</span><span class="p">[</span><span class="n">th</span><span class="p">,</span><span class="mi">10</span><span class="p">:,</span><span class="n">ph</span><span class="p">],</span><span class="n">Q_sph</span><span class="p">[</span><span class="n">th</span><span class="p">,</span><span class="mi">10</span><span class="p">:,</span><span class="n">ph</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;θ = </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">degrees</span><span class="p">(</span><span class="n">Theta</span><span class="p">[</span><span class="n">th</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">ph</span><span class="p">])</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> deg&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">cmap</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
-<span class="n">th</span> <span class="o">=</span> <span class="o">-</span><span class="mi">90</span>
-<span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">R</span><span class="p">[</span><span class="n">th</span><span class="p">,</span><span class="mi">10</span><span class="p">:,</span><span class="n">ph</span><span class="p">],</span><span class="n">Q_sph</span><span class="p">[</span><span class="n">th</span><span class="p">,</span><span class="mi">10</span><span class="p">:,</span><span class="n">ph</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;θ = </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">degrees</span><span class="p">(</span><span class="n">Theta</span><span class="p">[</span><span class="n">th</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">ph</span><span class="p">])</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> deg&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">cmap</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
-<span class="n">th</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
-<span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">R</span><span class="p">[</span><span class="n">th</span><span class="p">,</span><span class="mi">10</span><span class="p">:,</span><span class="n">ph</span><span class="p">],</span><span class="n">Q_sph</span><span class="p">[</span><span class="n">th</span><span class="p">,</span><span class="mi">10</span><span class="p">:,</span><span class="n">ph</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;θ = </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">degrees</span><span class="p">(</span><span class="n">Theta</span><span class="p">[</span><span class="n">th</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">ph</span><span class="p">])</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> deg&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">cmap</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span>
-<span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Radial profiles at φ = </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">degrees</span><span class="p">(</span><span class="n">Phi</span><span class="p">[</span><span class="n">th</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">ph</span><span class="p">])</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> deg&quot;</span><span class="p">)</span>
-<span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;R [RE]&quot;</span><span class="p">)</span>
-<span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Emissivity [$eV/cm^3/s/sr$]&quot;</span><span class="p">)</span>
-<span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
-
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<img alt="_images/da7ba9c73d150bd0ccdf039ce81c41320bf46e3eb6095c6a7f1f05de416c322c.png" src="_images/da7ba9c73d150bd0ccdf039ce81c41320bf46e3eb6095c6a7f1f05de416c322c.png" />
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cube_MHD</span> <span class="o">=</span> <span class="n">readcube</span><span class="o">.</span><span class="n">Cube</span><span class="p">(</span><span class="s2">&quot;MHD_OpenGGCM&quot;</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span>
-<span class="n">Q_MHD_GSE</span> <span class="o">=</span> <span class="n">cube_MHD</span><span class="o">.</span><span class="n">Q_GSE</span><span class="p">()</span>
-<span class="n">R</span><span class="p">,</span> <span class="n">Theta</span><span class="p">,</span> <span class="n">Phi</span><span class="p">,</span> <span class="n">Q_MHD_sph</span> <span class="o">=</span> <span class="n">cube_MHD</span><span class="o">.</span><span class="n">cartesian_to_spherical</span><span class="p">(</span><span class="n">rmax</span> <span class="o">=</span> <span class="mi">15</span><span class="p">,</span> <span class="n">dtheta</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">dphi</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">KeyboardInterrupt</span><span class="g g-Whitespace">                         </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">12</span><span class="p">],</span> <span class="n">line</span> <span class="mi">3</span>
-<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="n">cube_MHD</span> <span class="o">=</span> <span class="n">readcube</span><span class="o">.</span><span class="n">Cube</span><span class="p">(</span><span class="s2">&quot;MHD_OpenGGCM&quot;</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="n">Q_MHD_GSE</span> <span class="o">=</span> <span class="n">cube_MHD</span><span class="o">.</span><span class="n">Q_GSE</span><span class="p">()</span>
-<span class="ne">----&gt; </span><span class="mi">3</span> <span class="n">R</span><span class="p">,</span> <span class="n">Theta</span><span class="p">,</span> <span class="n">Phi</span><span class="p">,</span> <span class="n">Q_MHD_sph</span> <span class="o">=</span> <span class="n">cube_MHD</span><span class="o">.</span><span class="n">cartesian_to_spherical</span><span class="p">(</span><span class="n">rmax</span> <span class="o">=</span> <span class="mi">15</span><span class="p">,</span> <span class="n">dtheta</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">dphi</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">)</span>
-
-<span class="nn">File ~/Documents/MSc Observatoire/LATMOS/SMILE-TFA/ReadCube.py:95,</span> in <span class="ni">Cube.cartesian_to_spherical</span><span class="nt">(self, rmax, dr, dtheta, dphi)</span>
-<span class="g g-Whitespace">     </span><span class="mi">92</span> <span class="n">new_points</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">X_sph</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Y_sph</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Z_sph</span><span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">94</span> <span class="c1">#Calculate the emissivity on the resampled grid. </span>
-<span class="ne">---&gt; </span><span class="mi">95</span> <span class="bp">self</span><span class="o">.</span><span class="n">eta_sph</span> <span class="o">=</span> <span class="n">interpn</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">points_original</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Q_GSE</span><span class="p">,</span> <span class="n">new_points</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span> <span class="n">bounds_error</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">fill_value</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">R</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">97</span> <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">R</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">THETA</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">PHI</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">eta_sph</span>
-
-<span class="nn">File ~/anaconda3/lib/python3.10/site-packages/scipy/interpolate/_rgi.py:655,</span> in <span class="ni">interpn</span><span class="nt">(points, values, xi, method, bounds_error, fill_value)</span>
-<span class="g g-Whitespace">    </span><span class="mi">651</span> <span class="k">if</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;linear&quot;</span><span class="p">,</span> <span class="s2">&quot;nearest&quot;</span><span class="p">,</span> <span class="s2">&quot;slinear&quot;</span><span class="p">,</span> <span class="s2">&quot;cubic&quot;</span><span class="p">,</span> <span class="s2">&quot;quintic&quot;</span><span class="p">,</span> <span class="s2">&quot;pchip&quot;</span><span class="p">]:</span>
-<span class="g g-Whitespace">    </span><span class="mi">652</span>     <span class="n">interp</span> <span class="o">=</span> <span class="n">RegularGridInterpolator</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">653</span>                                      <span class="n">bounds_error</span><span class="o">=</span><span class="n">bounds_error</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">654</span>                                      <span class="n">fill_value</span><span class="o">=</span><span class="n">fill_value</span><span class="p">)</span>
-<span class="ne">--&gt; </span><span class="mi">655</span>     <span class="k">return</span> <span class="n">interp</span><span class="p">(</span><span class="n">xi</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">656</span> <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;splinef2d&quot;</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">657</span>     <span class="n">xi_shape</span> <span class="o">=</span> <span class="n">xi</span><span class="o">.</span><span class="n">shape</span>
-
-<span class="nn">File ~/anaconda3/lib/python3.10/site-packages/scipy/interpolate/_rgi.py:347,</span> in <span class="ni">RegularGridInterpolator.__call__</span><span class="nt">(self, xi, method)</span>
-<span class="g g-Whitespace">    </span><span class="mi">341</span>         <span class="n">result</span> <span class="o">=</span> <span class="n">evaluate_linear_2d</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">values</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">342</span>                                     <span class="n">indices</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">343</span>                                     <span class="n">norm_distances</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">344</span>                                     <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">345</span>                                     <span class="n">out</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">346</span>     <span class="k">else</span><span class="p">:</span>
-<span class="ne">--&gt; </span><span class="mi">347</span>         <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_evaluate_linear</span><span class="p">(</span><span class="n">indices</span><span class="p">,</span> <span class="n">norm_distances</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">348</span> <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;nearest&quot;</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">349</span>     <span class="n">indices</span><span class="p">,</span> <span class="n">norm_distances</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_find_indices</span><span class="p">(</span><span class="n">xi</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
-
-<span class="nn">File ~/anaconda3/lib/python3.10/site-packages/scipy/interpolate/_rgi.py:418,</span> in <span class="ni">RegularGridInterpolator._evaluate_linear</span><span class="nt">(self, indices, norm_distances)</span>
-<span class="g g-Whitespace">    </span><span class="mi">416</span>     <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">weights</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">417</span>         <span class="n">weight</span> <span class="o">=</span> <span class="n">weight</span> <span class="o">*</span> <span class="n">w</span>
-<span class="ne">--&gt; </span><span class="mi">418</span>     <span class="n">term</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">edge_indices</span><span class="p">])</span> <span class="o">*</span> <span class="n">weight</span><span class="p">[</span><span class="n">vslice</span><span class="p">]</span>
-<span class="g g-Whitespace">    </span><span class="mi">419</span>     <span class="n">value</span> <span class="o">=</span> <span class="n">value</span> <span class="o">+</span> <span class="n">term</span>   <span class="c1"># cannot use += because broadcasting</span>
-<span class="g g-Whitespace">    </span><span class="mi">420</span> <span class="k">return</span> <span class="n">value</span>
-
-<span class="ne">KeyboardInterrupt</span>: 
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">subplot_kw</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;projection&#39;</span><span class="p">:</span> <span class="s1">&#39;polar&#39;</span><span class="p">})</span>
-
-<span class="n">phi_index</span> <span class="o">=</span> <span class="mi">180</span>
-<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">pcolormesh</span><span class="p">(</span><span class="n">Theta</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">phi_index</span><span class="p">],</span> <span class="n">R</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">phi_index</span><span class="p">],</span> <span class="n">Q_MHD_sph</span><span class="p">[:,:,</span><span class="n">phi_index</span><span class="p">],</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;hot&#39;</span><span class="p">,</span><span class="n">vmax</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">)</span>
-<span class="n">theta_lines</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="mi">33</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="mi">55</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="mi">65</span><span class="p">)]</span>
-<span class="n">c</span> <span class="o">=</span> <span class="mi">0</span>
-<span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">theta_lines</span><span class="p">:</span>
-    <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">t</span><span class="p">,</span> <span class="n">t</span><span class="p">],</span> <span class="p">[</span><span class="n">R</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">phi_index</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">R</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">phi_index</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()],</span> <span class="n">color</span><span class="o">=</span><span class="n">cmap</span><span class="p">(</span><span class="n">c</span><span class="p">),</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-    <span class="n">c</span><span class="o">+=</span><span class="mi">1</span>
-<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;LaTeP emission slice at φ = </span><span class="si">{:.2f}</span><span class="s2"> deg&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">degrees</span><span class="p">(</span><span class="n">Phi</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">phi_index</span><span class="p">])))</span>
-<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s1">&#39;major&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
-
-<span class="n">phi_index</span> <span class="o">=</span> <span class="mi">0</span>
-<span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">pcolormesh</span><span class="p">(</span><span class="n">Theta</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">phi_index</span><span class="p">],</span> <span class="n">R</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">phi_index</span><span class="p">],</span> <span class="n">Q_MHD_sph</span><span class="p">[:,:,</span><span class="n">phi_index</span><span class="p">],</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;hot&#39;</span><span class="p">,</span><span class="n">vmax</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">)</span>
-<span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;LaTeP emission slice at φ = </span><span class="si">{:.2f}</span><span class="s2"> deg&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">degrees</span><span class="p">(</span><span class="n">Phi</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">phi_index</span><span class="p">])))</span>
-<span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s1">&#39;major&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
-
-
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<img alt="_images/344c43482a690c33070b5e4268ebfee48d07f7b6d25af63696b2acc2e396705b.png" src="_images/344c43482a690c33070b5e4268ebfee48d07f7b6d25af63696b2acc2e396705b.png" />
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
-
-<span class="n">ph</span> <span class="o">=</span> <span class="mi">180</span>
-<span class="n">th</span> <span class="o">=</span> <span class="mi">180</span>
-<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">R</span><span class="p">[</span><span class="n">th</span><span class="p">,</span><span class="mi">10</span><span class="p">:,</span><span class="n">ph</span><span class="p">],</span><span class="n">Q_MHD_sph</span><span class="p">[</span><span class="n">th</span><span class="p">,</span><span class="mi">10</span><span class="p">:,</span><span class="n">ph</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;θ = </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">degrees</span><span class="p">(</span><span class="n">Theta</span><span class="p">[</span><span class="n">th</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">ph</span><span class="p">])</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> deg&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">cmap</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
-<span class="n">th</span> <span class="o">=</span> <span class="o">-</span><span class="mi">90</span>
-<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">R</span><span class="p">[</span><span class="n">th</span><span class="p">,</span><span class="mi">10</span><span class="p">:,</span><span class="n">ph</span><span class="p">],</span><span class="n">Q_MHD_sph</span><span class="p">[</span><span class="n">th</span><span class="p">,</span><span class="mi">10</span><span class="p">:,</span><span class="n">ph</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;θ = </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">degrees</span><span class="p">(</span><span class="n">Theta</span><span class="p">[</span><span class="n">th</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">ph</span><span class="p">])</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> deg&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">cmap</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
-<span class="n">th</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
-<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">R</span><span class="p">[</span><span class="n">th</span><span class="p">,</span><span class="mi">10</span><span class="p">:,</span><span class="n">ph</span><span class="p">],</span><span class="n">Q_MHD_sph</span><span class="p">[</span><span class="n">th</span><span class="p">,</span><span class="mi">10</span><span class="p">:,</span><span class="n">ph</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;θ = </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">degrees</span><span class="p">(</span><span class="n">Theta</span><span class="p">[</span><span class="n">th</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">ph</span><span class="p">])</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> deg&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">cmap</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span>
-<span class="n">th</span> <span class="o">=</span> <span class="o">-</span><span class="mi">30</span>
-<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">R</span><span class="p">[</span><span class="n">th</span><span class="p">,</span><span class="mi">10</span><span class="p">:,</span><span class="n">ph</span><span class="p">],</span><span class="n">Q_MHD_sph</span><span class="p">[</span><span class="n">th</span><span class="p">,</span><span class="mi">10</span><span class="p">:,</span><span class="n">ph</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;θ = </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">degrees</span><span class="p">(</span><span class="n">Theta</span><span class="p">[</span><span class="n">th</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">ph</span><span class="p">])</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> deg&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">cmap</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
-<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Cusp radial profile at φ = </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">degrees</span><span class="p">(</span><span class="n">Phi</span><span class="p">[</span><span class="n">th</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">ph</span><span class="p">])</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> deg&quot;</span><span class="p">)</span>
-<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;R [RE]&quot;</span><span class="p">)</span>
-<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Emissivity [$eV/cm^3/s/sr$]&quot;</span><span class="p">)</span>
-<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
-
-<span class="n">th</span> <span class="o">=</span> <span class="mi">180</span>
-<span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">R</span><span class="p">[</span><span class="n">th</span><span class="p">,</span><span class="mi">10</span><span class="p">:,</span><span class="n">ph</span><span class="p">],</span><span class="n">Q_MHD_sph</span><span class="p">[</span><span class="n">th</span><span class="p">,</span><span class="mi">10</span><span class="p">:,</span><span class="n">ph</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;θ = </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">degrees</span><span class="p">(</span><span class="n">Theta</span><span class="p">[</span><span class="n">th</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">ph</span><span class="p">])</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> deg&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">cmap</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
-<span class="n">th</span> <span class="o">=</span> <span class="o">-</span><span class="mi">90</span>
-<span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">R</span><span class="p">[</span><span class="n">th</span><span class="p">,</span><span class="mi">10</span><span class="p">:,</span><span class="n">ph</span><span class="p">],</span><span class="n">Q_MHD_sph</span><span class="p">[</span><span class="n">th</span><span class="p">,</span><span class="mi">10</span><span class="p">:,</span><span class="n">ph</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;θ = </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">degrees</span><span class="p">(</span><span class="n">Theta</span><span class="p">[</span><span class="n">th</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">ph</span><span class="p">])</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> deg&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">cmap</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
-<span class="n">th</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
-<span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">R</span><span class="p">[</span><span class="n">th</span><span class="p">,</span><span class="mi">10</span><span class="p">:,</span><span class="n">ph</span><span class="p">],</span><span class="n">Q_MHD_sph</span><span class="p">[</span><span class="n">th</span><span class="p">,</span><span class="mi">10</span><span class="p">:,</span><span class="n">ph</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;θ = </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">degrees</span><span class="p">(</span><span class="n">Theta</span><span class="p">[</span><span class="n">th</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">ph</span><span class="p">])</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> deg&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">cmap</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span>
-<span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Radial profiles at φ = </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">degrees</span><span class="p">(</span><span class="n">Phi</span><span class="p">[</span><span class="n">th</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">ph</span><span class="p">])</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> deg&quot;</span><span class="p">)</span>
-<span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;R [RE]&quot;</span><span class="p">)</span>
-<span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Emissivity [$eV/cm^3/s/sr$]&quot;</span><span class="p">)</span>
-<span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
-
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<img alt="_images/c7415962e12d9fcf4035a480ac3e08a2ba9b4f4901879960a497ac9732912710.png" src="_images/c7415962e12d9fcf4035a480ac3e08a2ba9b4f4901879960a497ac9732912710.png" />
-</div>
-</div>
-</section>
-</section>
+  <section class="tex2jax_ignore mathjax_ignore" id="characterizing-the-tangent-hypothesis">
+<h1>Characterizing the tangent hypothesis<a class="headerlink" href="#characterizing-the-tangent-hypothesis" title="Link to this heading">#</a></h1>
 </section>
 
     <script type="text/x-thebe-config">
@@ -798,12 +427,12 @@ document.write(`
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="FittingMethods.html"
+       href="MaxIntensityArc.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Previous work: Fitting methods</p>
+        <p class="prev-next-title">Extracting the maximum intensity curve from the image</p>
       </div>
     </a>
     <a class="right-next"
@@ -821,25 +450,6 @@ document.write(`
             </div>
             
             
-              
-                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
-
-
-  <div class="sidebar-secondary-item">
-  <div class="page-toc tocsection onthispage">
-    <i class="fa-solid fa-list"></i> Contents
-  </div>
-  <nav class="bd-toc-nav page-toc">
-    <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#extracting-the-magnetopause-surface">Extracting the Magnetopause surface</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fitting-shue-model-to-zero-emissivity-contour">Fitting Shue model to zero-emissivity contour</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#building-full-surface-from-radial-profiles">Building full surface from radial profiles</a></li>
-</ul>
-</li>
-</ul>
-  </nav></div>
-
-</div></div>
               
             
           </div>

@@ -150,8 +150,14 @@
   
   
   
+    
+    
+      
+    
+    
+    <img src="_static/ESA_SMILE_missionlogo_patch.png" class="logo__image only-light" alt="SMILE-TFA - Home"/>
+    <script>document.write(`<img src="_static/ESA_SMILE_missionlogo_patch.png" class="logo__image only-dark" alt="SMILE-TFA - Home"/>`);</script>
   
-    <p class="title logo__title">SMILE-TFA</p>
   
 </a></div>
         <div class="sidebar-primary-item">
@@ -183,7 +189,13 @@
 <li class="toctree-l2"><a class="reference internal" href="FittingMethods.html">Previous work: Fitting methods</a></li>
 </ul><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary>
 </details></li>
-<li class="toctree-l1"><a class="reference internal" href="TangentHypothesis.html">Tangent Hypothesis</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="Chapter02.html">The tangent hypothesis</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="MagSurface.html">Extracting the magnetopause surface from the simulation</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="MaxIntensityArc.html">Extracting the maximum intensity curve from the image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="TangentHypothesis.html">Characterizing the tangent hypothesis</a></li>
+</ul><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary>
+</details></li>
 <li class="toctree-l1"><a class="reference internal" href="Bibliography.html">Bibliography</a></li>
 </ul>
 
@@ -385,6 +397,11 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#empirical-models">Empirical models</a></li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#imaging-the-magnetopause">Imaging the magnetopause</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#charge-exchange">Charge exchange</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#smile-mission">SMILE mission</a></li>
+</ul>
+</li>
 </ul>
             </nav>
         </div>
@@ -401,131 +418,200 @@ document.write(`
 <p>Understanding the shape and location of the magnetopause is crucial to explaining the dynamics and processes of geophysical plasmas, and particularly the response of the magnetosphere to the solar wind. How does the subsolar point change with the dynamic and magnetic pressure of the solar wind? How does the IMF affect the position of the cusps, and what can this indicate for the magnetic reconnection that takes place to form them? With which processes can this collisionless plasma interact with obstacles and display fluid like behavior?</p>
 <section id="in-situ-satellite-measurements">
 <h2>In-situ satellite measurements<a class="headerlink" href="#in-situ-satellite-measurements" title="Link to this heading">#</a></h2>
-<p>We have partial answers to these questions through in-situ measurements of satellite crossings. By analyzing the measurements of instruments on board and detecting abrupt changes in parameters such as density, temperature, flow velocity, and magnetic field orientation, we can identify the location and type of discontinuity and correlate it with the position of the satellite. A typical magnetopause crossing from the Cluster 1 spacecraft is shown in \autoref{fig:cluster_measurements}.</p>
-<a class="reference internal image-reference" href="_images/tangential_discontinuity.png" id="fig-tangential-discontinuity"><img alt="_images/tangential_discontinuity.png" id="fig-tangential-discontinuity" src="_images/tangential_discontinuity.png" style="width: 45%;" />
+<figure class="margin align-right" id="fig-tangential-discontinuity">
+<a class="reference internal image-reference" href="_images/tangential_discontinuity.png"><img alt="_images/tangential_discontinuity.png" src="_images/tangential_discontinuity.png" style="width: 220.0px; height: 236.8px;" />
 </a>
-<a class="reference internal image-reference" href="_images/cluster.png" id="fig-cluster-measurements"><img alt="_images/cluster.png" id="fig-cluster-measurements" src="_images/cluster.png" style="width: 45%;" />
+<figcaption>
+<p><span class="caption-number">Fig. 5 </span><span class="caption-text">Typical behavior of plasma moments along a tangential discontinuity <span id="id1">[<a class="reference internal" href="Bibliography.html#id9" title="Wolfganf Baumjohann and Rudolf A. Treumann. Basic space plasma physics. Imperial College Press, reprinted edition, 2006. ISBN 978-1-86094-079-8.">Baumjohann and Treumann, 2006</a>]</span>.</span><a class="headerlink" href="#fig-tangential-discontinuity" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
+<p>We have partial answers to these questions through in-situ measurements of satellite crossings. By analyzing the measurements of instruments on board and detecting abrupt changes in parameters such as density, temperature, flow velocity, and magnetic field orientation, we can identify the location and type of discontinuity and correlate it with the position of the satellite. A typical magnetopause crossing from the Cluster 1 spacecraft is shown in <a class="reference internal" href="#fig-cluster-measurements"><span class="std std-numref">Fig. 6</span></a>.</p>
+<figure class="align-left" id="fig-cluster-measurements">
+<a class="reference internal image-reference" href="_images/cluster.png"><img alt="_images/cluster.png" src="_images/cluster.png" style="width: 413.6px; height: 336.8px;" />
 </a>
-<p>In order to derive information about the global behavior of this surface, one must compile a catalog of boundary crossings from multiple in situ data of such missions. This quite a time-consuming task, as well as ambiguous concerning the interpretation of the measurements and the precise definition and automatic detection of the crossings. The ever-growing amount of data collected by the satellites, therefore does not linearly translate to increasing number of catalogs <span id="id1">[<a class="reference internal" href="Bibliography.html#id8">Nguyen <em>et al.</em>, n.d.</a>]</span>. Additionally, the dynamic nature of the response of the magnetopause to the solar wind, make the correlation of local measurements, with the global shape and dynamics of the magnetopause challenging. Nonetheless, various studies have attempted characterizing and parametrizing this shape with \ac{SW} and magnetospheric parameters, building thus empirical models of the surface.</p>
+<figcaption>
+<p><span class="caption-number">Fig. 6 </span><span class="caption-text">Cluster 1 spacecraft measurements while crossing from the solar wind to the magnetosheath to the magnetosphere <span id="id2">[<a class="reference internal" href="Bibliography.html#id8" title="G. Nguyen, N. Aunai, B. Michotte De Welle, A. Jeandet, B. Lavraud, and D. Fontaine. Massive multi‐mission statistical study and analytical modeling of the earth's magnetopause: 1. a gradient boosting based automatic detection of near‐earth regions. Journal of Geophysical Research: Space Physics, 2022. doi:10.1029/2021ja029773.">Nguyen <em>et al.</em>, 2022</a>]</span>.</span><a class="headerlink" href="#fig-cluster-measurements" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
+<p>In order to derive information about the global behavior of this surface, one must compile a catalog of boundary crossings from multiple in situ data of such missions. This quite a time-consuming task, as well as ambiguous concerning the interpretation of the measurements and the precise definition and automatic detection of the crossings. The ever-growing amount of data collected by the satellites, therefore does not linearly translate to increasing number of catalogs <span id="id3">[<a class="reference internal" href="Bibliography.html#id8" title="G. Nguyen, N. Aunai, B. Michotte De Welle, A. Jeandet, B. Lavraud, and D. Fontaine. Massive multi‐mission statistical study and analytical modeling of the earth's magnetopause: 1. a gradient boosting based automatic detection of near‐earth regions. Journal of Geophysical Research: Space Physics, 2022. doi:10.1029/2021ja029773.">Nguyen <em>et al.</em>, 2022</a>]</span>. Additionally, the dynamic nature of the response of the magnetopause to the solar wind, make the correlation of local measurements, with the global shape and dynamics of the magnetopause challenging. Nonetheless, various studies have attempted characterizing and parametrizing this shape with \ac{SW} and magnetospheric parameters, building thus empirical models of the surface.</p>
 <section id="coordinate-system">
 <span id="coordinate"></span><h3>Coordinate system<a class="headerlink" href="#coordinate-system" title="Link to this heading">#</a></h3>
-<p>Before moving any further, we shall define our main coordinate systems and frames, for consistency. The most common frame we will be using is the \ac{GSE} system. This has its X-axis pointing from the Earth toward the Sun and its Y-axis is chosen to be in the ecliptic plane pointing towards dusk (thus opposing planetary motion). Its Z-axis is parallel to the ecliptic pole. Relative to an inertial system this system has a yearly rotation.</p>
+<p>Before moving any further, we shall define our main coordinate systems and frames, for consistency. The most common frame we will be using is the Geocentric Solar Ecliptic (GSE) system. This has its X-axis pointing from the Earth toward the Sun and its Y-axis is chosen to be in the ecliptic plane pointing towards dusk (thus opposing planetary motion). Its Z-axis is parallel to the ecliptic pole. Relative to an inertial system this system has a yearly rotation.</p>
+<figure class="align-right" id="fig-gse">
+<a class="reference internal image-reference" href="_images/GSE.png"><img alt="_images/GSE.png" src="_images/GSE.png" style="width: 254.39999999999998px; height: 230.39999999999998px;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Fig. 7 </span><span class="caption-text">GSE and spherical coordinates.</span><a class="headerlink" href="#fig-gse" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
 <div class="math notranslate nohighlight">
 \[x = r cos\theta\]</div>
 <div class="math notranslate nohighlight">
 \[ y = r sin\theta cos \phi\]</div>
 <div class="math notranslate nohighlight">
 \[z = r sin\theta sin\phi \]</div>
-<a class="reference internal image-reference" href="_images/GSE.png" id="fig-gse"><img alt="_images/GSE.png" id="fig-gse" src="_images/GSE.png" style="width: 45%;" />
-</a>
-<p>We can define a spherical system based on the cartesian GSE, that will help us describe the magnetopause as a parametrized radial function of the spherical angles <span class="math notranslate nohighlight">\(r(\theta,\phi)\)</span>. We follow the convention of previous papers \cite{sun_2020}, where <span class="math notranslate nohighlight">\(\theta\)</span> is the angle between <span class="math notranslate nohighlight">\(\vec{r}\)</span> and the X-axis, and <span class="math notranslate nohighlight">\(\phi\)</span> is the angle between the Y-axis and the projection of <span class="math notranslate nohighlight">\(\vec{r}\)</span> to the YZ plane. The coordinate transformation from spherical to GSE is therefore defined as in the above <a class="reference internal" href="#fig-gse"><span class="std std-ref">figure</span></a>.</p>
+<p>We can define a spherical system based on the cartesian GSE, that will help us describe the magnetopause as a parametrized radial function of the spherical angles <span class="math notranslate nohighlight">\(r(\theta,\phi)\)</span>. We follow the convention of previous papers <span id="id4">[<a class="reference internal" href="Bibliography.html#id11" title="Tianran Sun, Chi Wang, Hyunju K. Connor, Anders M. Jorgensen, and Steven Sembay. Deriving the magnetopause position from the soft x-ray image by using the tangent fitting approach. Journal of Geophysical Research: Space Physics, 125(9):e2020JA028169, 2020. doi:10.1029/2020JA028169.">Sun <em>et al.</em>, 2020</a>]</span>, where <span class="math notranslate nohighlight">\(\theta\)</span> is the angle between <span class="math notranslate nohighlight">\(\vec{r}\)</span> and the X-axis, and <span class="math notranslate nohighlight">\(\phi\)</span> is the angle between the Y-axis and the projection of <span class="math notranslate nohighlight">\(\vec{r}\)</span> to the YZ plane. The coordinate transformation from spherical to GSE is therefore defined as in <a class="reference internal" href="#fig-gse"><span class="std std-numref">Fig. 7</span></a>.</p>
 </section>
 <section id="empirical-models">
 <h3>Empirical models<a class="headerlink" href="#empirical-models" title="Link to this heading">#</a></h3>
 <p>Moving back to the study of the magnetopause surface through the statistical analysis of crossings, we will look into the main empirical models that have been proposed.
-The first and simplest empirical model was proposed by <span id="id2">[<a class="reference internal" href="Bibliography.html#id16" title="J.-H. Shue, J. K. Chao, H. C. Fu, C. T. Russell, P. Song, K. K. Khurana, and H. J. Singer. A new functional form to study the solar wind control of the magnetopause size and shape. Journal of Geophysical Research: Space Physics, 102(A5):9497-9511, 1997. URL: https://agupubs.onlinelibrary.wiley.com/doi/abs/10.1029/97JA00196, arXiv:https://agupubs.onlinelibrary.wiley.com/doi/pdf/10.1029/97JA00196, doi:https://doi.org/10.1029/97JA00196.">Shue <em>et al.</em>, 1997</a>]</span> and is described by <a class="reference internal" href="#eq-shue"><span class="std std-ref">equation</span></a>:</p>
-<div class="math notranslate nohighlight" id="eq-shue">
-\[
+The first and simplest empirical model was proposed by <span id="id5">[<a class="reference internal" href="Bibliography.html#id16" title="J.-H. Shue, J. K. Chao, H. C. Fu, C. T. Russell, P. Song, K. K. Khurana, and H. J. Singer. A new functional form to study the solar wind control of the magnetopause size and shape. Journal of Geophysical Research: Space Physics, 102(A5):9497-9511, 1997. URL: https://agupubs.onlinelibrary.wiley.com/doi/abs/10.1029/97JA00196, arXiv:https://agupubs.onlinelibrary.wiley.com/doi/pdf/10.1029/97JA00196, doi:https://doi.org/10.1029/97JA00196.">Shue <em>et al.</em>, 1997</a>]</span> and is described by Equation <a class="reference internal" href="#equation-eq-shue">(2)</a>.</p>
+<div class="math notranslate nohighlight" id="equation-eq-shue">
+<span class="eqno">(2)<a class="headerlink" href="#equation-eq-shue" title="Link to this equation">#</a></span>\[
     r(\theta) = r_0 \left( \frac{2}{1 + \cos \theta} \right)^\alpha
 \]</div>
-<p>where:\
-<span class="math notranslate nohighlight">\(r(\theta)\)</span> &amp; Radial distance of the magnetopause from the Earth’s center at a\&amp; given polar angle <span class="math notranslate nohighlight">\(\theta\)</span> \
-<span class="math notranslate nohighlight">\(\text{R}_E\)</span> &amp; Earth’s radius (~6371 km) \
-<span class="math notranslate nohighlight">\(\alpha\)</span> &amp; the flaring parameter, given by: \
-&amp; <span class="math notranslate nohighlight">\(\alpha = (0.58 - 0.01 B_z) (1 + 0.01 P_{dyn})\)</span> \
-<span class="math notranslate nohighlight">\(P_{dyn}\)</span> &amp; Dynamic pressure of the solar wind (in nPa)\
-&amp; <span class="math notranslate nohighlight">\(P_{dyn} = 1.15 \cdot n \cdot v_x^2 \cdot 1.67 \times 10^{-6}\)</span> \
-<span class="math notranslate nohighlight">\(r_0\)</span>  &amp; Subsolar standoff distance of the magnetopause,given by:\</p>
+<p>where:</p>
+<div class="sd-container-fluid sd-sphinx-override sd-mb-4 docutils">
+<div class="sd-row docutils">
+<div class="sd-col sd-d-flex-column sd-col-3 sd-col-xs-3 sd-col-sm-3 sd-col-md-3 sd-col-lg-3 docutils">
+<p><span class="math notranslate nohighlight">\(r(\theta)\)</span></p>
+</div>
+<div class="sd-col sd-d-flex-column sd-col-9 sd-col-xs-9 sd-col-sm-9 sd-col-md-9 sd-col-lg-9 docutils">
+<p>Radial distance of the magnetopause from the Earth’s center at a given polar angle <span class="math notranslate nohighlight">\(\theta\)</span></p>
+</div>
+<div class="sd-col sd-d-flex-column sd-col-3 sd-col-xs-3 sd-col-sm-3 sd-col-md-3 sd-col-lg-3 docutils">
+<p><span class="math notranslate nohighlight">\(\text{R}_E\)</span></p>
+</div>
+<div class="sd-col sd-d-flex-column sd-col-9 sd-col-xs-9 sd-col-sm-9 sd-col-md-9 sd-col-lg-9 docutils">
+<p>Earth’s radius (~6371 km)</p>
+</div>
+<div class="sd-col sd-d-flex-column sd-col-3 sd-col-xs-3 sd-col-sm-3 sd-col-md-3 sd-col-lg-3 docutils">
+<p><span class="math notranslate nohighlight">\(\alpha\)</span></p>
+</div>
+<div class="sd-col sd-d-flex-column sd-col-9 sd-col-xs-9 sd-col-sm-9 sd-col-md-9 sd-col-lg-9 docutils">
+<p>the flaring parameter, given by: <span class="math notranslate nohighlight">\(\alpha = (0.58 - 0.01 B_z) (1 + 0.01 P_{dyn})\)</span></p>
+</div>
+<div class="sd-col sd-d-flex-column sd-col-3 sd-col-xs-3 sd-col-sm-3 sd-col-md-3 sd-col-lg-3 docutils">
+<p><span class="math notranslate nohighlight">\(P_{dyn}\)</span></p>
+</div>
+<div class="sd-col sd-d-flex-column sd-col-9 sd-col-xs-9 sd-col-sm-9 sd-col-md-9 sd-col-lg-9 docutils">
+<p>Dynamic pressure of the solar wind (in nPa): <span class="math notranslate nohighlight">\(P_{dyn} = 1.15 \cdot n \cdot v_x^2 \cdot 1.67 \times 10^{-6}\)</span></p>
+</div>
+<div class="sd-col sd-d-flex-column sd-col-3 sd-col-xs-3 sd-col-sm-3 sd-col-md-3 sd-col-lg-3 docutils">
+<p><span class="math notranslate nohighlight">\(r_0\)</span></p>
+</div>
+<div class="sd-col sd-d-flex-column sd-col-9 sd-col-xs-9 sd-col-sm-9 sd-col-md-9 sd-col-lg-9 docutils">
+<p>Subsolar standoff distance of the magnetopause,given by:
+<span class="math notranslate nohighlight">\(r_0 = (11.4 + 0.013 B_z) P_{dyn}^{-\frac{1}{6.6}}, \quad \text{for } B_z \geq 0\)</span>
+<span class="math notranslate nohighlight">\(r_0 = (11.4 + 0.14 B_z) P_{dyn}^{-\frac{1}{6.6}}, \quad \text{for } B_z &lt; 0\)</span></p>
+</div>
+</div>
+</div>
+<p>Here, the relations that are given for <span class="math notranslate nohighlight">\(\alpha\)</span> and <span class="math notranslate nohighlight">\(r_0\)</span> are the parametrization with respect to the solar wind and magnetospheric parameters, derived in the original paper <span id="id6">[<a class="reference internal" href="Bibliography.html#id16" title="J.-H. Shue, J. K. Chao, H. C. Fu, C. T. Russell, P. Song, K. K. Khurana, and H. J. Singer. A new functional form to study the solar wind control of the magnetopause size and shape. Journal of Geophysical Research: Space Physics, 102(A5):9497-9511, 1997. URL: https://agupubs.onlinelibrary.wiley.com/doi/abs/10.1029/97JA00196, arXiv:https://agupubs.onlinelibrary.wiley.com/doi/pdf/10.1029/97JA00196, doi:https://doi.org/10.1029/97JA00196.">Shue <em>et al.</em>, 1997</a>]</span>. The crossings used to construct this model where taken from satellites of equatorial orbit, and thus assumes a rotational symmetry over the X-axis. As expected from the numerical solution of the surface in the equatorial plane, no discontinuity arises, and therefore the Shue model describes a smooth surface with no indentations.</p>
+<p>Later evidence of dipole tilt, indentation in the near-cusp region, and dawn-dusk asymmetry led to the development of more refined models. One such improvement was introduced by <span id="id7">[<a class="reference internal" href="Bibliography.html#id17" title="R. L. Lin, X. X. Zhang, S. Q. Liu, Y. L. Wang, and J. C. Gong. A three-dimensional asymmetric magnetopause model. Journal of Geophysical Research: Space Physics, 115(A4):, 2010. URL: https://agupubs.onlinelibrary.wiley.com/doi/abs/10.1029/2009JA014235, arXiv:https://agupubs.onlinelibrary.wiley.com/doi/pdf/10.1029/2009JA014235, doi:https://doi.org/10.1029/2009JA014235.">Lin <em>et al.</em>, 2010</a>]</span>, who proposed an empirical magnetopause model that included an azimuthal asymmetry induced by the dipole tilt angle and also kept the possibility of a dawn-dusk asymmetry <span id="id8">[<a class="reference internal" href="Bibliography.html#id17" title="R. L. Lin, X. X. Zhang, S. Q. Liu, Y. L. Wang, and J. C. Gong. A three-dimensional asymmetric magnetopause model. Journal of Geophysical Research: Space Physics, 115(A4):, 2010. URL: https://agupubs.onlinelibrary.wiley.com/doi/abs/10.1029/2009JA014235, arXiv:https://agupubs.onlinelibrary.wiley.com/doi/pdf/10.1029/2009JA014235, doi:https://doi.org/10.1029/2009JA014235.">Lin <em>et al.</em>, 2010</a>]</span>. In his paper <span id="id9">[<a class="reference internal" href="Bibliography.html#id18" title="Z.-Q. Liu, J. Y. Lu, C. Wang, K. Kabin, J. S. Zhao, M. Wang, J. P. Han, J. Y. Wang, and M. X. Zhao. A three-dimensional high mach number asymmetric magnetopause model from global mhd simulation. Journal of Geophysical Research: Space Physics, 120(7):5645-5666, 2015. URL: https://agupubs.onlinelibrary.wiley.com/doi/abs/10.1002/2014JA020961, arXiv:https://agupubs.onlinelibrary.wiley.com/doi/pdf/10.1002/2014JA020961, doi:https://doi.org/10.1002/2014JA020961.">Liu <em>et al.</em>, 2015</a>]</span> combined THEMIS data and MHD simulations to derive a more sophisticated geometry and parametrization \cite{liu}. We will describe these models concisely, as expressed by <span id="id10">[<a class="reference internal" href="Bibliography.html#id8" title="G. Nguyen, N. Aunai, B. Michotte De Welle, A. Jeandet, B. Lavraud, and D. Fontaine. Massive multi‐mission statistical study and analytical modeling of the earth's magnetopause: 1. a gradient boosting based automatic detection of near‐earth regions. Journal of Geophysical Research: Space Physics, 2022. doi:10.1029/2021ja029773.">Nguyen <em>et al.</em>, 2022</a>, <a class="reference internal" href="Bibliography.html#id5" title="G. Nguyen, N. Aunai, B. Michotte De Welle, A. Jeandet, B. Lavraud, and D. Fontaine. Massive multi‐mission statistical study and analytical modeling of the earth's magnetopause: 4. on the near‐cusp magnetopause indentation. Journal of Geophysical Research: Space Physics, 2022. doi:10.1029/2021ja029776.">Nguyen <em>et al.</em>, 2022</a>]</span>, where he defines the general form Equation <a class="reference internal" href="#equation-eq-general-magnetopause">(3)</a>.</p>
+<div class="math notranslate nohighlight" id="equation-eq-general-magnetopause">
+<span class="eqno">(3)<a class="headerlink" href="#equation-eq-general-magnetopause" title="Link to this equation">#</a></span>\[
+r = r_0 \left( \frac{2}{1 + \cos\theta} \right)^{\xi} + Q
+\]</div>
+<p>where, Q is an additive term that defines the geometry of the cusps, and is different for the two models. For the Lin model, this term is expressed by:</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
-    r_0 = (11.4 + 0.013 B_z) P_{dyn}^{-\frac{1}{6.6}}, \quad \text{for } B_z \geq 0\\
-    r_0 = (11.4 + 0.14 B_z) P_{dyn}^{-\frac{1}{6.6}}, \quad \text{for } B_z &lt; 0
+&amp;Q = C \left( e^{d_n \psi_n^{4/5}} + e^{d_s \psi_s^{4/5}} \right) \\
+&amp;C = a_9 (P_{dyn} + P_n)^{a_{10}} \\
+&amp;d_{n,s} = a_{11} \pm a_{12} \gamma + a_{13} \gamma^2 \\
+&amp;\psi_n = \arccos\left( \cos(\theta) \cos(\theta_n) + \sin(\theta) \sin(\theta_n) \cos(\phi) \right) \\
+&amp;\psi_s = \arccos\left( \cos(\theta) \cos(\theta_s) + \sin(\theta) \sin(\theta_s) \cos(\phi - \pi) \right) \\
+&amp;\theta_{n,s} = a_{14} \pm a_{15} \gamma
 \end{split}\]</div>
-<p>Here, the relations that are given for <span class="math notranslate nohighlight">\(\alpha\)</span> and <span class="math notranslate nohighlight">\(r_0\)</span> are the parametrization with respect to the solar wind and magnetospheric parameters, derived in the original paper <span id="id3">[<a class="reference internal" href="Bibliography.html#id16" title="J.-H. Shue, J. K. Chao, H. C. Fu, C. T. Russell, P. Song, K. K. Khurana, and H. J. Singer. A new functional form to study the solar wind control of the magnetopause size and shape. Journal of Geophysical Research: Space Physics, 102(A5):9497-9511, 1997. URL: https://agupubs.onlinelibrary.wiley.com/doi/abs/10.1029/97JA00196, arXiv:https://agupubs.onlinelibrary.wiley.com/doi/pdf/10.1029/97JA00196, doi:https://doi.org/10.1029/97JA00196.">Shue <em>et al.</em>, 1997</a>]</span>. The crossings used to construct this model where taken from satellites of equatorial orbit, and thus assumes a rotational symmetry over the X-axis. As expected from the numerical solution of the surface in the equatorial plane, no discontinuity arises, and therefore the Shue model describes a smooth surface with no indentations.</p>
-<p>Later evidence of dipole tilt, indentation in the near-cusp region, and dawn-dusk asymmetry led to the development of more refined models. One such improvement was introduced by <span id="id4">[<a class="reference internal" href="Bibliography.html#id17" title="R. L. Lin, X. X. Zhang, S. Q. Liu, Y. L. Wang, and J. C. Gong. A three-dimensional asymmetric magnetopause model. Journal of Geophysical Research: Space Physics, 115(A4):, 2010. URL: https://agupubs.onlinelibrary.wiley.com/doi/abs/10.1029/2009JA014235, arXiv:https://agupubs.onlinelibrary.wiley.com/doi/pdf/10.1029/2009JA014235, doi:https://doi.org/10.1029/2009JA014235.">Lin <em>et al.</em>, 2010</a>]</span>, who proposed an empirical magnetopause model that included an azimuthal asymmetry induced by the dipole tilt angle and also kept the possibility of a dawn-dusk asymmetry <span id="id5">[<a class="reference internal" href="Bibliography.html#id17" title="R. L. Lin, X. X. Zhang, S. Q. Liu, Y. L. Wang, and J. C. Gong. A three-dimensional asymmetric magnetopause model. Journal of Geophysical Research: Space Physics, 115(A4):, 2010. URL: https://agupubs.onlinelibrary.wiley.com/doi/abs/10.1029/2009JA014235, arXiv:https://agupubs.onlinelibrary.wiley.com/doi/pdf/10.1029/2009JA014235, doi:https://doi.org/10.1029/2009JA014235.">Lin <em>et al.</em>, 2010</a>]</span>. In his paper <span id="id6">[<a class="reference internal" href="Bibliography.html#id18" title="Z.-Q. Liu, J. Y. Lu, C. Wang, K. Kabin, J. S. Zhao, M. Wang, J. P. Han, J. Y. Wang, and M. X. Zhao. A three-dimensional high mach number asymmetric magnetopause model from global mhd simulation. Journal of Geophysical Research: Space Physics, 120(7):5645-5666, 2015. URL: https://agupubs.onlinelibrary.wiley.com/doi/abs/10.1002/2014JA020961, arXiv:https://agupubs.onlinelibrary.wiley.com/doi/pdf/10.1002/2014JA020961, doi:https://doi.org/10.1002/2014JA020961.">Liu <em>et al.</em>, 2015</a>]</span> combined THEMIS data and MHD simulations to derive a more sophisticated geometry and parametrization \cite{liu}. We will describe these models concisely, as expressed by <span id="id7">[<a class="reference internal" href="Bibliography.html#id8">Nguyen <em>et al.</em>, n.d.</a>, <a class="reference internal" href="Bibliography.html#id5">Nguyen <em>et al.</em>, n.d.</a>]</span>, where he defines the general form \autoref{eq:general_magnetopause}.</p>
-<!--
-\begin{eqnarray}
-r = r_0 \left( \frac{2}{1 + \cos\theta} \right)^{\xi} + Q
-\label{eq:general_magnetopause}
-\end{eqnarray}
-where, Q is an additive term that defines the geometry of the cusps, and is different for the two models. For the Lin model, this term is expressed by:
-
-\begin{align*}
-&Q = C \left( e^{d_n \psi_n^{4/5}} + e^{d_s \psi_s^{4/5}} \right) \\
-&C = a_9 (P_{dyn} + P_n)^{a_{10}} \\
-&d_{n,s} = a_{11} \pm a_{12} \gamma + a_{13} \gamma^2 \\
-&\psi_n = \arccos\left( \cos(\theta) \cos(\theta_n) + \sin(\theta) \sin(\theta_n) \cos(\phi) \right) \\
-&\psi_s = \arccos\left( \cos(\theta) \cos(\theta_s) + \sin(\theta) \sin(\theta_s) \cos(\phi - \pi) \right) \\
-&\theta_{n,s} = a_{14} \pm a_{15} \gamma
-\end{align*}
-
-The terms \( \psi_n \) and \( \psi_s \) describe the angular distance from the cusp indentations in the northern and southern hemispheres, respectively. The additive term of the Liu model is described by the following equations:
-\begin{align*}
-&Q = -a_9 C r_0 \left( \frac{2}{1 + \cos\theta} \right)^{\xi} \cos^2\phi\\
-&C = e^{-|\theta - l_n|/w} \left( 1 + \text{sgn}(\cos\phi) \right) + e^{-|\theta - l_s|/w} \left( 1 + \text{sgn}(\cos(-\phi)) \right) \\
-&l_{n,s} = \left( a_{10} + a_{11} \tanh[a_{12}(B_z + a_{13})] \right) (1 \mp a_{14} \gamma) \\
-&w = \left( a_{15} + a_{16} \log(P_{dyn}) \right) (1 + a_{17} \gamma^2)
-\end{align*}
-
-We advise the reader to refer to the corresponding studies for more information on the coefficients \( a_i \) and the way they are determined\cite{nguyen4}. In his paper series, \citeauthor{nguyen4}, re-parametrizes and evaluates this models by analyzing multi-mission data and constructing a representative catalog. Among the many relevant results, is that the Lin model overestimates the indentation of the cusps, while the Liu model seems to be the best description of the selected crossings. We will see later on, that this comes in disagreement with some of our results, depending on how we define the magnetopause, and extra care must be taken to ensure consistent definitions.
-
-## Imaging the magnetopause
-It is evident that we have gained valuable knowledge from these in-situ measurements, however the global dynamics of the magnetopause and its response to the solar wind are still difficult to extract. The capability of remote sensing, or imaging of this boundary, would allow for more dynamic measurements; something that is crucial for understanding the coupling with the solar wind, which can be highly variable in a timescale of minutes. Under this scope, it was proposed that we could utilize the charge exchange phenomenon between the solar wind and the exosphere of the Earth, to achieve this new method of observation.
-### Charge exchange
-
-During its close approach to Earth, extreme ultraviolet and X-ray emission was observed from the comet C/Hyakutake 1996 B2 by the Röntgen X-ray Satellite and Rossi X-ray Timing Explorer\cite{comet}. This emission was later interpreted by \citeauthor{cravens1997} and the charge exchange emission mechanism was proposed. Under this mechanism, the multiply charged heavy ions of the solar wind can charge transfer with cometary neutrals, producing ions which can be highly excited and consequently emit photons in the extreme ultraviolet and x-ray part of the spectrum \cite{cravens1997}. It was later suggested, that the same phenomenon could take place between the solar wind and the geocoronal hydrogen, leading to the terrestrial magnetosheath being luminous in the X-ray regime \cite{robertson2003}. 
-The emission in this case, is generated by charge exchange reactions between multiply charged heavy solar wind ions $(\text{O}^{7+}, \text{C}^{5+},\dots)$\graffito{The geocorona is the outermost region of the Earth's atmosphere, the exosphere, where collisions between particles are considered negligible. The density in this region is generally assumed to drop as $n_H = 25(\frac{10RE}{R})^3 [cm^{-3}]$} and the neutral particles (mostly hydrogen atoms) in the geocorona. The general \ac{SWCX} interaction is given by \autoref{eq:charge_exchange}.
-
-\begin{eqnarray}
-    \label{eq:charge_exchange}
-    \text{X}^{q+} + \text{M} \rightarrow \text{X}^{(q-1)+*} + \text{M}^+,
-\end{eqnarray}
-where the heavy and multiply charged $(q+)$ solar wind ion is noted as $ \text{X}^{q+}$ and the neutral particle is noted as $\text{M}$. Electrons are transferred from neutral particles to a high energy state of ions, imposing these ions into an excited state. When the excited ions de-excite to the lower-energy state, they emit photons in the soft X-ray band $(E \leq 2 keV)$ \cite{qiuyu}:
-\begin{eqnarray}
+<p>The terms <span class="math notranslate nohighlight">\(\psi_n\)</span> and <span class="math notranslate nohighlight">\(\psi_s\)</span> describe the angular distance from the cusp indentations in the northern and southern hemispheres, respectively. The additive term of the Liu model is described by the following equations:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+&amp;Q = -a_9 C r_0 \left( \frac{2}{1 + \cos\theta} \right)^{\xi} \cos^2\phi\\
+&amp;C = e^{-|\theta - l_n|/w} \left( 1 + \text{sgn}(\cos\phi) \right) + e^{-|\theta - l_s|/w} \left( 1 + \text{sgn}(\cos(-\phi)) \right) \\
+&amp;l_{n,s} = \left( a_{10} + a_{11} \tanh[a_{12}(B_z + a_{13})] \right) (1 \mp a_{14} \gamma) \\
+&amp;w = \left( a_{15} + a_{16} \log(P_{dyn}) \right) (1 + a_{17} \gamma^2)
+\end{split}\]</div>
+<p>We advise the reader to refer to the corresponding studies for more information on the coefficients <span class="math notranslate nohighlight">\(a_i\)</span> and the way they are determined\cite{nguyen4}. In his paper series, <span id="id11">[<a class="reference internal" href="Bibliography.html#id5" title="G. Nguyen, N. Aunai, B. Michotte De Welle, A. Jeandet, B. Lavraud, and D. Fontaine. Massive multi‐mission statistical study and analytical modeling of the earth's magnetopause: 4. on the near‐cusp magnetopause indentation. Journal of Geophysical Research: Space Physics, 2022. doi:10.1029/2021ja029776.">Nguyen <em>et al.</em>, 2022</a>]</span>, re-parametrizes and evaluates this models by analyzing multi-mission data and constructing a representative catalog. Among the many relevant results, is that the Lin model overestimates the indentation of the cusps, while the Liu model seems to be the best description of the selected crossings. We will see later on, that this comes in disagreement with some of our results, depending on how we define the magnetopause, and extra care must be taken to ensure consistent definitions.</p>
+</section>
+</section>
+<section id="imaging-the-magnetopause">
+<h2>Imaging the magnetopause<a class="headerlink" href="#imaging-the-magnetopause" title="Link to this heading">#</a></h2>
+<p>It is evident that we have gained valuable knowledge from these in-situ measurements, however the global dynamics of the magnetopause and its response to the solar wind are still difficult to extract. The capability of remote sensing, or imaging of this boundary, would allow for more dynamic measurements; something that is crucial for understanding the coupling with the solar wind, which can be highly variable in a timescale of minutes. Under this scope, it was proposed that we could utilize the charge exchange phenomenon between the solar wind and the exosphere of the Earth, to achieve this new method of observation.</p>
+<section id="charge-exchange">
+<h3>Charge exchange<a class="headerlink" href="#charge-exchange" title="Link to this heading">#</a></h3>
+<aside class="margin sidebar">
+<p class="sidebar-title"></p>
+<p>The geocorona is the outermost region of the Earth’s atmosphere, the exosphere, where collisions between particles are considered negligible. The density in this region is generally assumed to drop as <span class="math notranslate nohighlight">\(n_H = 25(\frac{10RE}{R})^3 [cm^{-3}]\)</span>}</p>
+</aside>
+<p>During its close approach to Earth, extreme ultraviolet and X-ray emission was observed from the comet C/Hyakutake 1996 B2 by the Röntgen X-ray Satellite and Rossi X-ray Timing Explorer <span id="id12">[<a class="reference internal" href="Bibliography.html#id20" title="C. M. Lisse, K. Dennerl, J. Englhauser, M. Harden, F. E. Marshall, M. J. Mumma, R. Petre, J. P. Pye, M. J. Ricketts, J. Schmitt, J. Trümper, and R. G. West. Discovery of x-ray and extreme ultraviolet emission from comet c/hyakutake 1996 b2. Science, 274(5285):205-209, 1996. URL: https://www.science.org/doi/abs/10.1126/science.274.5285.205, arXiv:https://www.science.org/doi/pdf/10.1126/science.274.5285.205, doi:10.1126/science.274.5285.205.">Lisse <em>et al.</em>, 1996</a>]</span>. This emission was later interpreted by <span id="id13">[<a class="reference internal" href="Bibliography.html#id2" title="T. E. Cravens. Comet hyakutake x-ray source: charge transfer of solar wind heavy ions. Geophysical Research Letters, 24(1):105-108, 1997. doi:https://doi.org/10.1029/96GL03780.">Cravens, 1997</a>]</span> and the charge exchange emission mechanism was proposed. Under this mechanism, the multiply charged heavy ions of the solar wind can charge transfer with cometary neutrals, producing ions which can be highly excited and consequently emit photons in the extreme ultraviolet and x-ray part of the spectrum <span id="id14">[<a class="reference internal" href="Bibliography.html#id2" title="T. E. Cravens. Comet hyakutake x-ray source: charge transfer of solar wind heavy ions. Geophysical Research Letters, 24(1):105-108, 1997. doi:https://doi.org/10.1029/96GL03780.">Cravens, 1997</a>]</span>. It was later suggested, that the same phenomenon could take place between the solar wind and the geocoronal hydrogen, leading to the terrestrial magnetosheath being luminous in the X-ray regime <span id="id15">[<a class="reference internal" href="Bibliography.html#id3" title="I. P. Robertson and T. E. Cravens. X-ray emission from the terrestrial magnetosheath. Geophysical Research Letters, 30(8):, 2003. doi:https://doi.org/10.1029/2002GL016740.">Robertson and Cravens, 2003</a>]</span>.
+The emission in this case, is generated by charge exchange reactions between multiply charged heavy solar wind ions <span class="math notranslate nohighlight">\((\text{O}^{7+}, \text{C}^{5+},\dots)\)</span> and the neutral particles (mostly hydrogen atoms) in the geocorona. The general SWCX interaction is given by Equation <a class="reference internal" href="#equation-eq-charge-exchange">(4)</a>.</p>
+<div class="math notranslate nohighlight" id="equation-eq-charge-exchange">
+<span class="eqno">(4)<a class="headerlink" href="#equation-eq-charge-exchange" title="Link to this equation">#</a></span>\[
+\text{X}^{q+} + \text{M} \rightarrow \text{X}^{(q-1)+*} + \text{M}^+,
+\]</div>
+<p>where the heavy and multiply charged <span class="math notranslate nohighlight">\((q+)\)</span> solar wind ion is noted as <span class="math notranslate nohighlight">\( \text{X}^{q+}\)</span> and the neutral particle is noted as <span class="math notranslate nohighlight">\(\text{M}\)</span>. Electrons are transferred from neutral particles to a high energy state of ions, imposing these ions into an excited state. When the excited ions de-excite to the lower-energy state, they emit photons in the soft X-ray band <span class="math notranslate nohighlight">\((E \leq 2 keV)\)</span> <span id="id16">[<a class="reference internal" href="Bibliography.html#id21" title="Qiuyu Xu, Dimitra Koutroumpa, Ronan Modolo, Tianran Sun, Hyunju Connor, Steve Sembay, and Yevhen Tkachenko. Modeling soft x‐ray emissions at the dayside magnetopause. Journal of Geophysical Research: Space Physics, 129(8):e2024JA032687, 2024. URL: https://agupubs.onlinelibrary.wiley.com/doi/10.1029/2024JA032687 (visited on 2025-06-11), doi:10.1029/2024JA032687.">Xu <em>et al.</em>, 2024</a>]</span>:</p>
+<div class="math notranslate nohighlight">
+\[
     \text{X}^{(q-1)+*} \rightarrow \text{X}^{(q-1)+} + h\nu
-\end{eqnarray}
-
-In their paper, \citeauthor{robertson2003}, simulated this emission as images, opening the discussion about remote sensing of the magnetosheath. Soft X-ray emissivity is expected to be strong in the dayside magnetosheath and cusp regions, where both solar wind ion and neutral particle densities are high. In contrast, the low density of solar wind ions within the magnetosphere and the scarcity of neutral hydrogen in the solar wind result in weak emission in those regions. As a result, a boundary in soft X-ray emission is expected at the magnetopause. This sharp increase in emission can be used to determine the magnetopause location through global soft X-ray imaging from space-based instruments. \cite{sibeck}
-
-### SMILE mission
-\label{SMILE}
-The \ac{SMILE} mission was proposed, in collaboration of \ac{ESA} and \ac{CAS}, as an attempt in capturing this \ac{SWCX} phenomenon in the Earth's magnetosheath. The satellite will be launched in 2026 into a highly elliptical polar orbit, with an apogee of $\approx 20$ \ac{RE}, a perigee of $\approx 1$ \ac{RE}, and an inclination of $73^\circ$. The orbital period is $\approx 50.3$ hours, and a schematic of its orbit is shown in \autoref{fig:orbit}.
-The science payload on-board \ac{SMILE} consists of the \ac{UVI}, the \ac{MAG}, the \ac{LIA} and finally the \ac{SXI}. \ac{SXI} is a wide \ac{FOV} X-ray telescope of $15.5^\circ \times 26.5^\circ$, designed to capture the emission of the magnetosheath, allowing the study of the magnetopause dynamics and its detection with a requirement of $0.5\,RE$ accuracy. \cite{sxi}
-
-\begin{multicols}{2}
-    The preparation for space observations that haven't been performed before is no trivial task. Space missions require meticulous planning and therefore accurate predictions of the expected science data, as well as methods to optimize their return. The deployment of sophisticated simulations is therefore crucial prior to mission launch, both to facilitate operation planning and to develop pipelines for the analysis of the upcoming data. In this light, the \ac{SMILE} \href{https://smile-mwg.com.cn/front}{Modeling Working Group} was formed, in order to produce a simulation catalog for different \ac{SW} conditions, with common input parameters. 
-    \columnbreak
-    \vfil
-    \begin{figure}[H]
-        \centering
-        \includegraphics[width=0.45\textwidth]{gfx/smile_orbit.png}
-        \caption{The SMILE orbit. SXI and UVI Field of View and key regions, credit: ESA}
-        \label{fig:orbit}
-    \end{figure}
-\end{multicols}
-\noindent The group aims to predict and interpret the images the \ac{SXI} will generate, simulate the changes of magnetospheric boundary locations under different solar wind conditions, and extract magnetospheric boundary and cusp positions. To achieve these goals, the Modeling Working Group primarily relies on \ac{MHD} simulations, which treat the plasma as a single fluid and are computationally efficient. \ac{MHD} is well-suited for capturing large-scale dynamics and global structures - even in highly dynamic cases, but it lacks kinetic resolution and cannot distinguish between different ion species. As a result, \ac{MHD}-based X-ray simulations tend to produce smooth, continuous images where the X-ray intensity is strictly proportional to the total proton flux. This leads to two key limitations: the inability to resolve spectroscopic features linked to specific ions, and the artificial production of X-rays within the magnetosphere due to the absence of a distinction between solar wind and magnetospheric plasma. The latter requires the introduction of an artificial mask inside the magnetosphere. 
-
-To address these issues, the LATMOS team developed the \ac{LaTeP} model, a test-particle model that simulates heavy ions kinetically. This intermediate approach introduces ion-specific behavior such as gyroradius effects and charge-exchange cross-section differences, enabling more realistic X-ray spectroscopic predictions and avoiding emission inside the magnetosphere. Since LaTeP does not compute E/B fields self-consistently, it relies on external electromagnetic field inputs provided by MHD codes such as \href{https://ccmc.gsfc.nasa.gov/models/OpenGGCM~5.0/}{OpenGGCM}, justified by the negligible feedback of highly charged ions due to their very low abundance ($10^{-4}$ the proton density) in the solar wind. Through this approach, we can get the X-ray emissivity by following numerical test-particles, representing heavy ions. In this work we will focus on $O^{7+}$ ions, since they are the most important contributors in the spectral energy range of the SXI detectors. Solving their equation of motion as they propagate in the MHD-computed $E$ and $B$ fields, we calculate the probability of them charge exchanging with hydrogen atoms from the Earth's exosphere. From this quantity, we can calculate the volume emissivity of X-ray $Q$ in $eV\, cm^{-3}\, s^{-1}$, as in \autoref{eq:Q}. \cite{qiuyu}
-\begin{eqnarray}
-    \label{eq:Q}
+\]</div>
+<p>In their paper, <span id="id17">[<a class="reference internal" href="Bibliography.html#id3" title="I. P. Robertson and T. E. Cravens. X-ray emission from the terrestrial magnetosheath. Geophysical Research Letters, 30(8):, 2003. doi:https://doi.org/10.1029/2002GL016740.">Robertson and Cravens, 2003</a>]</span>, simulated this emission as images, opening the discussion about remote sensing of the magnetosheath. Soft X-ray emissivity is expected to be strong in the dayside magnetosheath and cusp regions, where both solar wind ion and neutral particle densities are high. In contrast, the low density of solar wind ions within the magnetosphere and the scarcity of neutral hydrogen in the solar wind result in weak emission in those regions. As a result, a boundary in soft X-ray emission is expected at the magnetopause. This sharp increase in emission can be used to determine the magnetopause location through global soft X-ray imaging from space-based instruments. <span id="id18">[<a class="reference internal" href="Bibliography.html#id24" title="David Sibeck, Robert Allen, Homayon Aryan, D. Bodewits, P. Brandt, G. Branduardi-Raymont, G. Brown, Ju Carter, Y. Collado-Vega, Michael Collier, H. Connor, Thomas Cravens, Y. Ezoe, Mei-Ching Fok, Mauro Galeazzi, Olga Gutynska, M. Holmström, Syau-Yun Hsieh, K. Ishikawa, and S. Wing. Imaging plasma density structures in the soft x-rays generated by solar wind charge exchange with neutrals. Space Science Reviews, 214:, 06 2018. doi:10.1007/s11214-018-0504-7.">Sibeck <em>et al.</em>, 2018</a>]</span></p>
+</section>
+<section id="smile-mission">
+<span id="smile"></span><h3>SMILE mission<a class="headerlink" href="#smile-mission" title="Link to this heading">#</a></h3>
+<p>The SMILE mission was proposed, in collaboration of \European Space Agency (ESA) and Chinese Academy of Sciences (CAS), as an attempt in capturing this Solar Wind Charge Exchange (SWCX) phenomenon in the Earth’s magnetosheath. The satellite will be launched in 2026 into a highly elliptical polar orbit, with an apogee of <span class="math notranslate nohighlight">\(\approx 20\)</span> Earth Radii (RE), a perigee of <span class="math notranslate nohighlight">\(\approx 1\)</span> RE, and an inclination of <span class="math notranslate nohighlight">\(73^\circ\)</span>. The orbital period is <span class="math notranslate nohighlight">\(\approx 50.3\)</span> hours, and a schematic of its orbit is shown in \autoref{fig:orbit}.
+The science payload on-board SMILE consists of the UltraViolet Imager (UVI), the MAGnetometer (MAG), the Light Ion Analyser (LIA) and finally the Soft X-ray Imager (SXI). SXI is a wide FOV X-ray telescope of <span class="math notranslate nohighlight">\(15.5^\circ \times 26.5^\circ\)</span>, designed to capture the emission of the magnetosheath, allowing the study of the magnetopause dynamics and its detection with a requirement of <span class="math notranslate nohighlight">\(0.5\,RE\)</span> accuracy. <span id="id19">[<a class="reference internal" href="Bibliography.html#id12" title="S. Sembay, A. L. Alme, D. Agnolon, T. Arnold, A. Beardmore, A. Belén Balado Margeli, C. Bicknell, C. Bouldin, G. Branduardi-Raymont, T. Crawford, J. P. Breuer, T. Buggey, G. Butcher, R. Canchal, J. A. Carter, A. Cheney, Y. Collado-Vega, H. Connor, T. Crawford, N. Eaton, C. Feldman, C. Forsyth, T. Frantzen, G. Galgóczi, J. Garcia, G. Y. Genov, C. Gordillo, H-P. Gröbelbauer, M. Guedel, Y. Guo, M. Hailey, D. Hall, R. Hampson, J. Hasiba, O. Hetherington, A. Holland, S-Y. Hsieh, M. W. J. Hubbard, H. Jeszenszky, M. Jones, T. Kennedy, K. Koch-Mehrin, S. Kögl, S. Krucker, K. D. Kuntz, G. Laky, O. Lylund, A. Martindale, J. Miguel Mas Hesse, R. Nakamura, K. Oksavik, N. Østgaard, H. Ottacher, R. Ottensamer, C. Pagani, S. Parsons, P. Patel, J. Pearson, G. Peikert, F. S. Porter, T. Pouliantis, B. H. Qureshi, W. Raab, G. Randall, A. M. Read, N. M. M. Roque, M. E. Rostad, C. Runciman, S. Sachdev, A. Samsonov, M. Soman, D. Sibeck, S. Smit, J. Søndergaard, R. Speight, S. Stavland, M. Steller, TianRan Sun, J. Thornhill, W. Thomas, K. Ullaland, B. Walsh, D. Walton, C. Wang, S. Yang, School of Physics and Astronomy, University of Leicester, Leicester, LE1 7RH, UK, Space Park Leicester, University of Leicester, Leicester, LE1 7RH, UK, Mullard Space Science Laboratory, University College London, Dorking, RH5 6NT, UK, Centre for Electronic Imaging, Open University, Milton Keynes, MK7 6 AA, UK, Birkeland Centre for Space Science, Department of Physics and Technology, Univ. of Bergen, N-5007 Bergen, Norway, University of Vienna, A-1010 Vienna, Austria, Space Research Institute, Austrian Academy of Sciences, A-8042 Graz, Austria, National Institute of Aerospace Technology, Madrid, Spain, ESTEC, European Space Agency, 2201 AZ Noordwijk, Netherlands, State Key Laboratory of Space Weather, National Space Science Centre, Beijing 100190, China, University of Applied Sciences and Arts Northwestern Switzerland, CH-5210 Windisch, Switzerland, Koegl Space GmbH, CH-8157 Dielsdorf, Switzerland, Space Acoustics GmbH, CH-8157 Dielsdorf, Switzerland, Zurich University of Applied Sciences, 8400 Winterhur, Switzerland, Genov Solutions, N-5172 Loddefjord, Norway, STM Engineering, N-5165 Laksevag, Norway, John Hopkins University Applied Physics Laboratory, MD 20723, USA, NASA/Goddard Space Flight Centre, MD 20771, USA, Center for Space Physics, Boston University, Boston, MA 02215, USA, Department of Theoretical Physics and Astrophysics, Masaryk University, 601 77 Brno, Czech Republic, Institute of Physics, E¨otvo¨s Lor´and University, 1053 Budapest, Hungary, Aerospace Information Research Institute, Chinese Academy of Sciences, Beijing 100045, China, and Centro de Astrobiologia (CAB), CSIC-INTA, Madrid, Spain. The soft x-ray imager (SXI) on the SMILE mission. Earth and Planetary Physics, 8(1):5–14, 2024. doi:10.26464/epp2023067.">Sembay <em>et al.</em>, 2024</a>]</span></p>
+<p>The preparation for space observations that haven’t been performed before is no trivial task. Space missions require meticulous planning and therefore accurate predictions of the expected science data, as well as methods to optimize their return. The deployment of sophisticated simulations is therefore crucial prior to mission launch, both to facilitate operation planning and to develop pipelines for the analysis of the upcoming data. In this light, the SMILE <a class="reference external" href="https://smile-mwg.com.cn/front">Modeling Working Group</a> was formed, in order to produce a simulation catalog for different SW conditions, with common input parameters.</p>
+<figure class="align-left" id="fig-orbit">
+<a class="reference internal image-reference" href="_images/smile_orbit.png"><img alt="_images/smile_orbit.png" src="_images/smile_orbit.png" style="width: 273.59999999999997px; height: 289.8px;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Fig. 8 </span><span class="caption-text">The SMILE orbit.
+SXI and UVI Field of View and key regions, credit: ESA</span><a class="headerlink" href="#fig-orbit" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
+<p>The group aims to predict and interpret the images the SXI will generate, simulate the changes of magnetospheric boundary locations under different solar wind conditions, and extract magnetospheric boundary and cusp positions. To achieve these goals, the Modeling Working Group primarily relies on MHD simulations, which treat the plasma as a single fluid and are computationally efficient. MHD is well-suited for capturing large-scale dynamics and global structures - even in highly dynamic cases, but it lacks kinetic resolution and cannot distinguish between different ion species. As a result, MHD-based X-ray simulations tend to produce smooth, continuous images where the X-ray intensity is strictly proportional to the total proton flux. This leads to two key limitations: the inability to resolve spectroscopic features linked to specific ions, and the artificial production of X-rays within the magnetosphere due to the absence of a distinction between solar wind and magnetospheric plasma. The latter requires the introduction of an artificial mask inside the magnetosphere.</p>
+<p>To address these issues, the LATMOS team developed the LATMOS Test Particle (LaTeP) model, a test-particle model that simulates heavy ions kinetically. This intermediate approach introduces ion-specific behavior such as gyroradius effects and charge-exchange cross-section differences, enabling more realistic X-ray spectroscopic predictions and avoiding emission inside the magnetosphere. Since LaTeP does not compute E/B fields self-consistently, it relies on external electromagnetic field inputs provided by MHD codes such as <a class="reference external" href="https://ccmc.gsfc.nasa.gov/models/OpenGGCM~5.0/">OpenGGCM</a>, justified by the negligible feedback of highly charged ions due to their very low abundance (<span class="math notranslate nohighlight">\(10^{-4}\)</span> the proton density) in the solar wind. Through this approach, we can get the X-ray emissivity by following numerical test-particles, representing heavy ions. In this work we will focus on <span class="math notranslate nohighlight">\(O^{7+}\)</span> ions, since they are the most important contributors in the spectral energy range of the SXI detectors. Solving their equation of motion as they propagate in the MHD-computed <span class="math notranslate nohighlight">\(E\)</span> and <span class="math notranslate nohighlight">\(B\)</span> fields, we calculate the probability of them charge exchanging with hydrogen atoms from the Earth’s exosphere. From this quantity, we can calculate the volume emissivity of X-ray <span class="math notranslate nohighlight">\(Q\)</span> in <span class="math notranslate nohighlight">\(eV\, cm^{-3}\, s^{-1}\)</span>, as in <a class="reference internal" href="#equation-eq-q">(5)</a>. <span id="id20">[<a class="reference internal" href="Bibliography.html#id21" title="Qiuyu Xu, Dimitra Koutroumpa, Ronan Modolo, Tianran Sun, Hyunju Connor, Steve Sembay, and Yevhen Tkachenko. Modeling soft x‐ray emissions at the dayside magnetopause. Journal of Geophysical Research: Space Physics, 129(8):e2024JA032687, 2024. URL: https://agupubs.onlinelibrary.wiley.com/doi/10.1029/2024JA032687 (visited on 2025-06-11), doi:10.1029/2024JA032687.">Xu <em>et al.</em>, 2024</a>]</span></p>
+<div class="math notranslate nohighlight" id="equation-eq-q">
+<span class="eqno">(5)<a class="headerlink" href="#equation-eq-q" title="Link to this equation">#</a></span>\[
     Q = n_M \cdot n_{\text{X}^{q+}} \cdot v_{\text{X}^{q+}} \cdot \sigma_{\text{X}^{q+},M} \cdot Y_{\text{X}^{(q-1)+}}
-\end{eqnarray}
-where:
-
-\begin{tabular}{ll}
-    $Q$ & Volume emissivity of soft X-rays (in eV cm$^{-3}$ s$^{-1}$) \\
-    $n_M$ & Neutral particle density (cm$^{-3}$) \\
-    $n_{\text{X}^{q+}}$ & Density of solar wind ions with charge $q+$ (cm$^{-3}$) \\
-    $v_{\text{X}^{q+}}$ & Plasma (ion) velocity (cm s$^{-1}$) \\
-    $\sigma_{\text{X}^{q+},M}$ & Cross-section for charge exchange between $\text{X}^{q+}$ and $M$ (cm$^2$) \\
-    $Y_{\text{X}^{(q-1)+}}$ & Energy of emitted line weighted by its emission probability (eV) \\
-\end{tabular}\\
-
-We can integrate this emissivity along a specific \ac{LOS} to obtain the intensity of each looking direction in $eV cm^{-2} s^{-1} sr^{-1}$. We also assume isotropic emission and divide by $4\pi$ to get the emissivity in a particular direction.
-\begin{eqnarray}
+\]</div>
+<p>where:</p>
+<div class="sd-container-fluid sd-sphinx-override sd-mb-4 docutils">
+<div class="sd-row docutils">
+<div class="sd-col sd-d-flex-column sd-col-3 sd-col-xs-3 sd-col-sm-3 sd-col-md-3 sd-col-lg-3 docutils">
+<p><span class="math notranslate nohighlight">\(Q\)</span></p>
+</div>
+<div class="sd-col sd-d-flex-column sd-col-9 sd-col-xs-9 sd-col-sm-9 sd-col-md-9 sd-col-lg-9 docutils">
+<p>Volume emissivity of soft X-rays (in eV cm<span class="math notranslate nohighlight">\(^{-3}\)</span> s<span class="math notranslate nohighlight">\(^{-1}\)</span>)</p>
+</div>
+<div class="sd-col sd-d-flex-column sd-col-3 sd-col-xs-3 sd-col-sm-3 sd-col-md-3 sd-col-lg-3 docutils">
+<p><span class="math notranslate nohighlight">\(n_M\)</span></p>
+</div>
+<div class="sd-col sd-d-flex-column sd-col-9 sd-col-xs-9 sd-col-sm-9 sd-col-md-9 sd-col-lg-9 docutils">
+<p>Neutral particle density (cm<span class="math notranslate nohighlight">\(^{-3}\)</span>)</p>
+</div>
+<div class="sd-col sd-d-flex-column sd-col-3 sd-col-xs-3 sd-col-sm-3 sd-col-md-3 sd-col-lg-3 docutils">
+<p><span class="math notranslate nohighlight">\(n_{\text{X}^{q+}}\)</span></p>
+</div>
+<div class="sd-col sd-d-flex-column sd-col-9 sd-col-xs-9 sd-col-sm-9 sd-col-md-9 sd-col-lg-9 docutils">
+<p>Density of solar wind ions with charge <span class="math notranslate nohighlight">\(q+\)</span> (cm<span class="math notranslate nohighlight">\(^{-3}\)</span>)</p>
+</div>
+<div class="sd-col sd-d-flex-column sd-col-3 sd-col-xs-3 sd-col-sm-3 sd-col-md-3 sd-col-lg-3 docutils">
+<p><span class="math notranslate nohighlight">\(v_{\text{X}^{q+}}\)</span></p>
+</div>
+<div class="sd-col sd-d-flex-column sd-col-9 sd-col-xs-9 sd-col-sm-9 sd-col-md-9 sd-col-lg-9 docutils">
+<p>Plasma (ion) velocity (cm s<span class="math notranslate nohighlight">\(^{-1}\)</span>)</p>
+</div>
+<div class="sd-col sd-d-flex-column sd-col-3 sd-col-xs-3 sd-col-sm-3 sd-col-md-3 sd-col-lg-3 docutils">
+<p><span class="math notranslate nohighlight">\(\sigma_{\text{X}^{q+},M}\)</span></p>
+</div>
+<div class="sd-col sd-d-flex-column sd-col-9 sd-col-xs-9 sd-col-sm-9 sd-col-md-9 sd-col-lg-9 docutils">
+<p>Cross-section for charge exchange between <span class="math notranslate nohighlight">\(\text{X}^{q+}\)</span> and <span class="math notranslate nohighlight">\(M\)</span> (cm<span class="math notranslate nohighlight">\(^2\)</span>)</p>
+</div>
+<div class="sd-col sd-d-flex-column sd-col-3 sd-col-xs-3 sd-col-sm-3 sd-col-md-3 sd-col-lg-3 docutils">
+<p><span class="math notranslate nohighlight">\(Y_{\text{X}^{(q-1)+}}\)</span></p>
+</div>
+<div class="sd-col sd-d-flex-column sd-col-9 sd-col-xs-9 sd-col-sm-9 sd-col-md-9 sd-col-lg-9 docutils">
+<p>Energy of emitted line weighted by its emission probability (eV)</p>
+</div>
+</div>
+</div>
+<p>We can integrate this emissivity along a specific Line Of Sight (LOS) to obtain the intensity of each looking direction in <span class="math notranslate nohighlight">\(eV cm^{-2} s^{-1} sr^{-1}\)</span>. We also assume isotropic emission and divide by <span class="math notranslate nohighlight">\(4\pi\)</span> to get the emissivity in a particular direction.</p>
+<div class="math notranslate nohighlight">
+\[
     I = \frac{1}{4\pi} \int_{LOS} Q\,ds
-\end{eqnarray}
-Calculating this quantity for each pixel's \ac{LOS} of the imager, we can construct a synthetic image of the expected \ac{SXI} data. This does not take into account the contribution from background sources nor the response of the instrument.
+\]</div>
+<p>Calculating this quantity for each pixel’s LOS of the imager, we can construct a synthetic image of the expected SXI data. This does not take into account the contribution from background sources nor the response of the instrument.</p>
 </section>
 </section>
 </section>
@@ -597,6 +683,11 @@ Calculating this quantity for each pixel's \ac{LOS} of the imager, we can constr
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#in-situ-satellite-measurements">In-situ satellite measurements</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#coordinate-system">Coordinate system</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#empirical-models">Empirical models</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#imaging-the-magnetopause">Imaging the magnetopause</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#charge-exchange">Charge exchange</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#smile-mission">SMILE mission</a></li>
 </ul>
 </li>
 </ul>
