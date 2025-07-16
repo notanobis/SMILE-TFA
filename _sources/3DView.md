@@ -1,6 +1,10 @@
+---
+title: Extracting the maximum intensity curve from the image
+---
+
 # Extracting the maximum intensity curve from the image
 
-As suspected from \autoref{fig:lines} the extraction of the maximum intensity arc is not as trivial as in the smooth-gradient MHD case. This will not change when introducing the \ac{SXI} \ac{FOV} and the satellite's \ac{POV}, but it will improve since the instrument never points directly to the cusps, while image processing techniques can also be applied to extract continuous arcs.
+The extraction of the maximum intensity arc is not as trivial as in the smooth-gradient MHD case. This will not change when introducing the \ac{SXI} \ac{FOV} and the satellite's \ac{POV}, but it will improve since the instrument never points directly to the cusps, while image processing techniques can also be applied to extract continuous arcs.
 
 ## Constructing the images
 

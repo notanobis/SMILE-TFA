@@ -1,3 +1,6 @@
+---
+title: Earth's Magnetopause
+---
 
 # Earth's Magnetopause
 

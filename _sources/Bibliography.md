@@ -1,3 +1,6 @@
+---
+title: Bibliography
+---
 # Bibliography
 
 ```{bibliography}

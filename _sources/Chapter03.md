@@ -1,3 +1,7 @@
+---
+title: Tangent Fitting
+---
+
 (ch:TF)=
 # Tangent Fitting
 

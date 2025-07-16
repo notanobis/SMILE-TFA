@@ -1,3 +1,7 @@
+---
+title: Previous work - Fitting Methods
+---
+
 # Previous work: Fitting methods
 
 When attempting to extract three-dimensional information from a two- dimensional image, one must make a set of assumptions to account for this loss of information. In this end, three notable techniques have been proposed to reconstruct the magnetopause using soft X-ray imaging.

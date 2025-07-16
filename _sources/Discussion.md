@@ -1,3 +1,7 @@
+---
+title: Discussion and Future developments
+---
+
 (discussion)=
 # Discussion and Future developments
 

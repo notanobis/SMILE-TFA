@@ -1,3 +1,6 @@
+---
+title: Locating the Earth's magnetopause through X-ray imaging
+---
 # Locating the Earth's magnetopause through X-ray imaging
 
 Despite the development of several empirical magnetopause models based on statistical analyses of in-situ crossings, capturing the global dynamics of the magnetopause remains a significant challenge. Current work discusses new steps in the modeling of the X-ray emission produced in the Earth's magnetosheath due to the Solar Wind Charge eXchange (SWCX) processes. Initially discovered and explained for comets {cite}`cravens1997`, this emission, produced by highly charged solar wind ions (e.g. $O^{7+}$), has also been observed from interplanetary gas, planets, terrestrial magnetosheath, etc. {cite}`robertson2003`. SWCX emission in the Earth's magnetosheath will be the target of the future joint ESA and CAS space mission called **SMILE (Solar wind Magnetosphere Ionosphere Link Explorer)**.

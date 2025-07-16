@@ -1,3 +1,6 @@
+---
+title: Detecting the magntopause
+---
 
 # Detecting the magnetopause
 Understanding the shape and location of the magnetopause is crucial to explaining the dynamics and processes of geophysical plasmas, and particularly the response of the magnetosphere to the solar wind. How does the subsolar point change with the dynamic and magnetic pressure of the solar wind? How does the IMF affect the position of the cusps, and what can this indicate for the magnetic reconnection that takes place to form them? With which processes can this collisionless plasma interact with obstacles and display fluid like behavior?

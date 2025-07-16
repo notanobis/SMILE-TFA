@@ -1,3 +1,6 @@
+---
+title: Characterizing the tangent hypothesis
+---
 (section: tangent_hypothesis)=
 # Characterizing the tangent hypothesis
 
