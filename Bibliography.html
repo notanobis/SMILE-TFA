@@ -32,9 +32,10 @@
     <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
     <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=574bf7fa" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
@@ -58,9 +59,11 @@
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'Bibliography';</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="Characterizing the tangent hypothesis" href="TangentHypothesis.html" />
+    <link rel="next" title="Test" href="test.html" />
+    <link rel="prev" title="Discussion and Future developments" href="Discussion.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -192,7 +195,14 @@
 <li class="toctree-l2"><a class="reference internal" href="TangentHypothesis.html">Characterizing the tangent hypothesis</a></li>
 </ul><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary>
 </details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="Chapter03.html">Tangent Fitting</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="TangentFitting.html">The method</a></li>
+<li class="toctree-l2"><a class="reference internal" href="BenchmarkingTF.html">Benchmarking the fitting method</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Discussion.html">Discussion and Future developments</a></li>
+</ul><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary>
+</details></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Bibliography</a></li>
+<li class="toctree-l1"><a class="reference internal" href="test.html">Test</a></li>
 </ul>
 
     </div>
@@ -406,6 +416,10 @@ document.write(`
 <span class="label"><span class="fn-bracket">[</span>Cra97<span class="fn-bracket">]</span></span>
 <p>T. E. Cravens. Comet hyakutake x-ray source: charge transfer of solar wind heavy ions. <em>Geophysical Research Letters</em>, 24(1):105–108, 1997. <a class="reference external" href="https://doi.org/https://doi.org/10.1029/96GL03780">doi:https://doi.org/10.1029/96GL03780</a>.</p>
 </div>
+<div class="citation" id="id13" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>Hou62<span class="fn-bracket">]</span></span>
+<p>P V.C. Hough. Method and means for recognizing complex patterns. 12 1962. US Patent 3,069,654. URL: <a class="reference external" href="https://www.osti.gov/biblio/4746348">https://www.osti.gov/biblio/4746348</a>.</p>
+</div>
 <div class="citation" id="id22" role="doc-biblioentry">
 <span class="label"><span class="fn-bracket">[</span>JSW+19<span class="fn-bracket">]</span></span>
 <p>Anders M. Jorgensen, Tianran Sun, Chi Wang, Lei Dai, Steven Sembay, Fei Wei, Yihong Guo, and Ronglan Xu. Boundary detection in three dimensions with application to the SMILE mission: the effect of photon noise. <em>Journal of Geophysical Research: Space Physics</em>, 124(6):4365–4383, 2019. URL: <a class="reference external" href="https://agupubs.onlinelibrary.wiley.com/doi/10.1029/2018JA025919">https://agupubs.onlinelibrary.wiley.com/doi/10.1029/2018JA025919</a> (visited on 2025-06-11), <a class="reference external" href="https://doi.org/10.1029/2018JA025919">doi:10.1029/2018JA025919</a>.</p>
@@ -464,7 +478,7 @@ document.write(`
 </div>
 <div class="citation" id="id14" role="doc-biblioentry">
 <span class="label"><span class="fn-bracket">[</span>WCS+25<span class="fn-bracket">]</span></span>
-<p>S. J. Wharton, J. A. Carter, S. Sembay, Y. Soobiah, S. Nitti, and T. R. Sun. Modeling the magnetospheric 3d x‐ray emission from SWCX using a cusp‐magnetosheath emissivity model. <em>Journal of Geophysical Research: Space Physics</em>, 130(2):e2024JA033307, 2025. URL: <a class="reference external" href="https://agupubs.onlinelibrary.wiley.com/doi/10.1029/2024JA033307">https://agupubs.onlinelibrary.wiley.com/doi/10.1029/2024JA033307</a> (visited on 2025-06-07), <a class="reference external" href="https://doi.org/10.1029/2024JA033307">doi:10.1029/2024JA033307</a>.</p>
+<p>S. J. Wharton, J. A. Carter, S. Sembay, Y. Soobiah, S. Nitti, and T. R. Sun. Modeling the magnetospheric 3d x-ray emission from SWCX using a cusp‐magnetosheath emissivity model. <em>Journal of Geophysical Research: Space Physics</em>, 130(2):e2024JA033307, 2025. URL: <a class="reference external" href="https://agupubs.onlinelibrary.wiley.com/doi/10.1029/2024JA033307">https://agupubs.onlinelibrary.wiley.com/doi/10.1029/2024JA033307</a> (visited on 2025-06-07), <a class="reference external" href="https://doi.org/10.1029/2024JA033307">doi:10.1029/2024JA033307</a>.</p>
 </div>
 <div class="citation" id="id21" role="doc-biblioentry">
 <span class="label"><span class="fn-bracket">[</span>XKM+24<span class="fn-bracket">]</span></span>
@@ -505,13 +519,22 @@ document.write(`
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="TangentHypothesis.html"
+       href="Discussion.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Characterizing the tangent hypothesis</p>
+        <p class="prev-next-title">Discussion and Future developments</p>
       </div>
+    </a>
+    <a class="right-next"
+       href="test.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Test</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
     </a>
 </div>
                 </footer>

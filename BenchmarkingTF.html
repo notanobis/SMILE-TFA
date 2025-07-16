@@ -1,0 +1,561 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Benchmarking the fitting method &#8212; SMILE-TFA</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=574bf7fa" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'BenchmarkingTF';</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Discussion and Future developments" href="Discussion.html" />
+    <link rel="prev" title="The method" href="TangentFitting.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="README.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/ESA_SMILE_missionlogo_patch.png" class="logo__image only-light" alt="SMILE-TFA - Home"/>
+    <script>document.write(`<img src="_static/ESA_SMILE_missionlogo_patch.png" class="logo__image only-dark" alt="SMILE-TFA - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="README.html">
+                    About this work
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="Abstract.html">Locating the Earth’s magnetopause through X-ray imaging</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="Introduction.html">Introduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Magnetopause.html">Earth’s Magnetopause</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Detecting.html">Detecting the magnetopause</a></li>
+<li class="toctree-l2"><a class="reference internal" href="FittingMethods.html">Previous work: Fitting methods</a></li>
+</ul><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Tangent Hypothesis</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="Chapter02.html">The tangent hypothesis</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="MagSurface.html">Extracting the magnetopause surface from the simulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="MaxIntensityArc.html">Extracting the maximum intensity curve from the image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="TangentHypothesis.html">Characterizing the tangent hypothesis</a></li>
+</ul><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Tangent Fitting</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="Chapter03.html">Tangent Fitting</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="TangentFitting.html">The method</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Benchmarking the fitting method</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Discussion.html">Discussion and Future developments</a></li>
+</ul><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="Bibliography.html">Bibliography</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/notanobis/SMILE-TFA" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/notanobis/SMILE-TFA/issues/new?title=Issue%20on%20page%20%2FBenchmarkingTF.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/BenchmarkingTF.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Benchmarking the fitting method</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#image-fitted-shue-to-cube-fitted-shue">Image-fitted Shue to cube-fitted Shue</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#characterization-through-maximum-intensity-curve">Characterization through maximum intensity curve</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="benchmarking-the-fitting-method">
+<h1>Benchmarking the fitting method<a class="headerlink" href="#benchmarking-the-fitting-method" title="Link to this heading">#</a></h1>
+<p>A measure of the error of this method is necessary, both for the characterization of the method itself, but also for an in-orbit metric of its accuracy. We will attempt the first through comparison with the simulation and the latter through the image data alone.</p>
+<section id="image-fitted-shue-to-cube-fitted-shue">
+<span id="shue-to-shue-cube"></span><h2>Image-fitted Shue to cube-fitted Shue<a class="headerlink" href="#image-fitted-shue-to-cube-fitted-shue" title="Link to this heading">#</a></h2>
+<p>We can characterize the method by benchmarking it to the expected position of the magnetopause according to the simulation cube. As we saw in \autoref{section:extract_magnetopause}, extracting the true magnetopause from the cube is not as simple as it appears, the main obstacles being the inhomogeneous behavior of the test particles, but more importantly the ambiguity of defining such a surface consistently. We can, however, run a simple test by comparing the fitted Shue surface to the Shue surface that can best describe the 3D simulation data - a model fitted directly to the cube. For simplicity, we will use the parameters that were fitted in \autoref{subsec:shue-fit} - <span class="math notranslate nohighlight">\(r_0 = 7.82 \, RE\)</span> and <span class="math notranslate nohighlight">\(\alpha = 0.386\)</span>.</p>
+<p>Running the Hough method for a full orbit, we can get the evolution of the estimated parameters, as well as their error compared to the initial model. We remind the reader that the simulation is a steady state instance and therefore the variability of the detected parameters is attributed solely to the viewing angle. \autoref{fig:r0} shows the evolution of the estimated subsolar distance <span class="math notranslate nohighlight">\(r_0\)</span> with time, for a full summer orbit of August 2025.</p>
+<p>In \autoref{fig:r0} strong variation is observed depending on the position of the satellite. The clipping of the <span class="math notranslate nohighlight">\(r_0\)</span> values is the result of the discretization of the parameter space in a grid. The green dotted lines, indicating low error detection, are correlated with \ac{POV}s where the image arc appears symmetrical. The indentation of the cusps is responsible for this seeming asymmetry we observe in the snapshots of the red dotted lines of \autoref{fig:r0}. This is to be expected since the Shue model is symmetrical and does not describe any indentation, and therefore cannot capture these shapes. This is reflected in the evolution of the error shown in \autoref{fig:RMSE_shue}, where in this orbit the satellite sees increasingly the cusp as it approaches the magnetopause. A visualization of the images throughout the orbit is provided in the appendix, \autoref{fig:Augpictures}.</p>
+<p>Since, we are mainly interested in the subsolar distance estimation, it is useful to plot the deviation of <span class="math notranslate nohighlight">\(r_0\)</span> from the initial parameter, as in \autoref{fig:r0a_error}. We notice that for the symmetric cases, we get error close to <span class="math notranslate nohighlight">\(0.5\, RE\)</span> which is the \ac{SXI} requirement. This has a non-negligible contribution from the discretization of the parameter space and can be improved through the deployment of fitting schemes as will be discussed in \autoref{discussion}. Evidently, another important contribution in this error is the simplicity of the model itself, and can be improved by using more sophisticated models such as the Lin or the Liu model. However, these first test shows that although we used a sparsely sampled parameter space and a simplistic model, we can still get information about the subsolar distance with an error close to the requirement. We therefore expect the improvements suggested here to lead to increased accuracy.</p>
+<p>Contrary to the subsolar distance, the flaring parameter is more challenging to be determined through this method. This is logical, since the asymmetry of the image arc would be interpreted as increased or decreased flaring in a symmetric model. To understand the capabilities of this method in regard to other parameters, we shall run this tests using more descriptive empirical models.</p>
+</section>
+<section id="characterization-through-maximum-intensity-curve">
+<h2>Characterization through maximum intensity curve<a class="headerlink" href="#characterization-through-maximum-intensity-curve" title="Link to this heading">#</a></h2>
+<p>Although we expect the simulation to be representative of the magnetopause to some extent, we also expect to be surprised. Having a metric to characterize our measurement without a simulation dependency is crucial for the analysis of the real data. We can achieve this by benchmarking the fitted curve to the maximum intensity arc of the image. Thus, we can have a metric of the error of the fit, but also of the agreement of the empirical model to the true shape of the magnetopause.</p>
+<p>The latter is particularly important, since it is challenging to derive the global shape of the magnetopause from in-situ measurements alone - meaning that there is still disagreement on its shape and its response to the solar wind. Using a non-representative empirical surface would automatically result in different projected curve geometries, that could not capture the maximum arc shape, no matter the fitting process. The error therefore, between the fitted models through the Hough method and the maximum intensity arc can be used as a metric to characterize the empirical model themselves.</p>
+<p>The evolution of this metric for the August orbit is shown in \autoref{fig:shue-arc}. Here we have contribution both from the arc extraction problems that we were facing in \autoref{max_int_arc}, and from the fitting errors we analyzed above. Better image processing is crucial for this metric to return a reliable estimation of the empirical model error alone. This can be seen in the first snapshot of \autoref{fig:r0}, where there seems to be a good fit of the model, but the maximum intensity arc extraction fails. However, cases like the symmetric view of \autoref{43} combined with the extraction of the intended arc, return promising results.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="TangentFitting.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">The method</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="Discussion.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Discussion and Future developments</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#image-fitted-shue-to-cube-fitted-shue">Image-fitted Shue to cube-fitted Shue</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#characterization-through-maximum-intensity-curve">Characterization through maximum intensity curve</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Panayota Boskou
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

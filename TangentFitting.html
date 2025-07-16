@@ -1,0 +1,570 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>The method &#8212; SMILE-TFA</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=574bf7fa" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'TangentFitting';</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Benchmarking the fitting method" href="BenchmarkingTF.html" />
+    <link rel="prev" title="Tangent Fitting" href="Chapter03.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="README.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/ESA_SMILE_missionlogo_patch.png" class="logo__image only-light" alt="SMILE-TFA - Home"/>
+    <script>document.write(`<img src="_static/ESA_SMILE_missionlogo_patch.png" class="logo__image only-dark" alt="SMILE-TFA - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="README.html">
+                    About this work
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="Abstract.html">Locating the Earth’s magnetopause through X-ray imaging</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="Introduction.html">Introduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Magnetopause.html">Earth’s Magnetopause</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Detecting.html">Detecting the magnetopause</a></li>
+<li class="toctree-l2"><a class="reference internal" href="FittingMethods.html">Previous work: Fitting methods</a></li>
+</ul><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Tangent Hypothesis</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="Chapter02.html">The tangent hypothesis</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="MagSurface.html">Extracting the magnetopause surface from the simulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="MaxIntensityArc.html">Extracting the maximum intensity curve from the image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="TangentHypothesis.html">Characterizing the tangent hypothesis</a></li>
+</ul><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Tangent Fitting</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="Chapter03.html">Tangent Fitting</a><ul class="current">
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">The method</a></li>
+<li class="toctree-l2"><a class="reference internal" href="BenchmarkingTF.html">Benchmarking the fitting method</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Discussion.html">Discussion and Future developments</a></li>
+</ul><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="Bibliography.html">Bibliography</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/notanobis/SMILE-TFA" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/notanobis/SMILE-TFA/issues/new?title=Issue%20on%20page%20%2FTangentFitting.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/TangentFitting.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>The method</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="the-method">
+<h1>The method<a class="headerlink" href="#the-method" title="Link to this heading">#</a></h1>
+<p>The method that will be described in this section was inspired by a feature extraction technique used in image processing - the Hough Transform. The original Hough transform was developed to detect lines in an image, in order to support the detection of charged particles using bubble chambers <span id="id1">[<a class="reference internal" href="Bibliography.html#id13" title="P V.C. Hough. Method and means for recognizing complex patterns. 12 1962. US Patent 3,069,654. URL: https://www.osti.gov/biblio/4746348.">Hough, 1962</a>]</span>. Since then, it has been generalized to detect more shapes and has become a standard method in image processing and feature extraction.</p>
+<aside class="margin sidebar">
+<p class="sidebar-title"></p>
+<p>The Hough Transform is a feature extraction technique used in image analysis to find imperfect instances of shapes by a voting procedure in parameter space, from which object candidates are obtained as local maxima in a so-called accumulator space.</p>
+</aside>
+<p>The generalized Hough transform, normally needs an analytical function that can be discretized in order to transform from image to parameter space and vise-versa. As we will see below, deriving an analytical solution for the projection of complex 3D surfaces is not possible in most cases. Here, we develop a Hough-like voting method, by introducing a numerical approach to this projection problem.</p>
+<p>We will demonstrate the methodology using the simplest empirical model, the Shue model. We generate a set of Shue surfaces for a range of the model’s parameters, <span class="math notranslate nohighlight">\(r_0\)</span> and <span class="math notranslate nohighlight">\(\alpha\)</span>. To do this, we convert the Shue model to a 3D surface in spherical coordinates by rotating over the symmetry axis (x) with the <span class="math notranslate nohighlight">\(\phi\)</span> angle. Due to its symmetrical nature, this results in the same expression:</p>
+<div class="math notranslate nohighlight">
+\[r(\theta,\phi) = r_0 \left( \frac{2}{1 + \cos \theta} \right)^\alpha\]</div>
+<p>For each of these surfaces we compute the tangent point to the satellite through a semi-analytical approach. We then convert to cartesian coordinates, thus parametrizing the surface with respect to <span class="math notranslate nohighlight">\(\theta\)</span> and <span class="math notranslate nohighlight">\(\phi\)</span>.</p>
+<div class="math notranslate nohighlight">
+\[ x = r cos\theta = r_0 \left( \frac{2}{1 + \cos \theta} \right)^\alpha \cos\theta\]</div>
+<div class="math notranslate nohighlight">
+\[y = r sin\theta cos \phi = r_0 \left( \frac{2}{1 + \cos \theta} \right)^\alpha \sin \theta \cos \phi \]</div>
+<div class="math notranslate nohighlight">
+\[ z = r sin\theta sin\phi = r_0 \left( \frac{2}{1 + \cos \theta} \right)^\alpha \sin \theta \sin \phi \]</div>
+<p>Or in parametrized vector form:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+R(\theta,\phi) &amp;= \left( r_0 \left( \frac{2}{1 + \cos \theta} \right)^\alpha \cos\theta \right) \hat{i} \quad + \left( r_0 \left( \frac{2}{1 + \cos \theta} \right)^\alpha \sin \theta \cos \phi \right) \hat{j} \\
+&amp;\quad + \left( r_0 \left( \frac{2}{1 + \cos \theta} \right)^\alpha \sin \theta \sin \phi \right) \hat{k}
+\end{split}\]</div>
+<p>Having a parametrized surface, we can compute the normal vector function for each point, through the cross product of the partial derivative of this parametrized function, with respect to each parameter.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+R_{\theta} = \frac{\partial R}{\partial \theta}= r_0 \left( \frac{2}{1 + \cos \theta} \right)^\alpha &amp;\Bigg[
+\sin \theta \frac{(a - 1) \cos \theta - 1}{\cos \theta + 1} \, \hat{i} \\
+&amp;\quad + \cos \phi \left( \cos \theta + \frac{\sin^2 \theta \, a}{1 + \cos \theta} \right) \, \hat{j} \\
+&amp;\quad + \sin \phi \left( \cos \theta + \frac{\sin^2 \theta \, a}{1 + \cos \theta} \right) \, \hat{k}
+\Bigg]
+\end{split}\]</div>
+<div class="math notranslate nohighlight">
+\[R_{\phi} = \frac{\partial R}{\partial \phi } = r_0 \left( \frac{2}{1 + \cos \theta} \right)^\alpha \sin \theta\left( - \sin \phi \hat{j} + \cos \phi\hat{k}\right) \]</div>
+<p>Therefore, the normal vector function can be expressed as in Equation <a class="reference internal" href="#equation-eq-normal">(8)</a></p>
+<div class="math notranslate nohighlight" id="equation-eq-normal">
+<span class="eqno">(8)<a class="headerlink" href="#equation-eq-normal" title="Link to this equation">#</a></span>\[
+    \eta = R_{\theta} \times R_{\phi} = r_{shue}^2 \sin \theta \left [\left( \cos \theta + \frac{\sin^2 \theta a}{1 + \cos \theta } \right)(\cos^2 \phi +\sin^2 \phi) \hat{i} \right] + \dots \hat{j} + \dots \hat{k}
+\]</div>
+<p>We can now find the tangent direction in the FOV of the satellite by requesting that the normal vector and the vector that connects each point of the surface to the satellite, are perpendicular to each other. This gives us a set of <span class="math notranslate nohighlight">\((\theta,\phi)\)</span> - a curve in 3D space. The tangent curve is given in GSE coordinates by Equation <a class="reference internal" href="#equation-eq-tangent">(9)</a>, when solving for <span class="math notranslate nohighlight">\((x, y, z)\)</span>.</p>
+<div class="math notranslate nohighlight" id="equation-eq-tangent">
+<span class="eqno">(9)<a class="headerlink" href="#equation-eq-tangent" title="Link to this equation">#</a></span>\[
+    \hat{ \eta } \cdot \vec{ r_{sat}} = 0 \implies (x_{sat}-x) r_0^2 \left( \frac{2}{1 + \cos \theta} \right)^{2\alpha} \sin \theta \left( \cos \theta + \frac{\sin^2 \theta a}{1 + \cos \theta } \right) + \dots  = 0
+\]</div>
+<p>This is unsolvable analytically, or with series expansion, and therefore requires that we solve it numerically for each curve and each satellite \ac{POV}. It would be valuable to compare this with a fully numerical calculation of the normal vector function, as described in \autoref{numerical_surface_projection}, and optimize the projection process. In both cases the result is a set of points in the \ac{GSE} frame. By applying a coordinate transformation from GSE to the SXI frame, as explained in \autoref{numerical_surface_projection}, we get a set of discretized curves, that correspond to the set of initial conditions of the Shue models. We interpolate the curves inside the FOV and rasterize them to the pixel grid of the image. A visualization of this process is shown in \autoref{fig:tangent_points_projection}.</p>
+<figure class="align-right" id="id2">
+<img alt="_images/tangent.png" src="_images/tangent.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 13 </span><span class="caption-text">Tangent points of Shue surface in SXI image frame.</span><a class="headerlink" href="#id2" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
+<p>For each curve in the image coordinates, we calculate the intensity of the image along the curve and save its mean value in an array element. This gives us a measure of how prominent and bright this curve is in the image. We can now use this metric as a voting scheme between the curves by moving to the parameter space. Each curve and mean intensity correspond to specific initial parameters <span class="math notranslate nohighlight">\(\alpha\)</span> and <span class="math notranslate nohighlight">\(r_0\)</span>. We can construct a parameter matrix with the values of the mean intensity over each curve. The visualization of this matrix in a contour plot is shown in \autoref{fig:hough_matrix}. In this figure, the maximum value in parameter space is noted with the red dot. The coordinates of this point, correspond to the model parameters that return the brightest projection in the image. Moving back to image space, we plot only the curve that correspond to these parameters in \autoref{fig:fitted_curve}, denoted with the blue line.</p>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="Chapter03.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Tangent Fitting</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="BenchmarkingTF.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Benchmarking the fitting method</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Panayota Boskou
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

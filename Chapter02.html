@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>The tangent hypothesis &#8212; SMILE-TFA</title>
+    <title>Extracting the magnetopause surface from the simulation &#8212; SMILE-TFA</title>
   
   
   
@@ -35,6 +35,7 @@
     <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=574bf7fa" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
@@ -60,9 +61,10 @@
     <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'Chapter02';</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Extracting the magnetopause surface from the simulation" href="MagSurface.html" />
+    <link rel="next" title="LaTeP model: Emissivity cube" href="LatepCube.html" />
     <link rel="prev" title="Previous work: Fitting methods" href="FittingMethods.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -181,7 +183,8 @@
                 </a>
             </li>
         </ul>
-        <ul class="current nav bd-sidenav">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="Abstract.html">Locating the Earth’s magnetopause through X-ray imaging</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="Introduction.html">Introduction</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="Magnetopause.html">Earth’s Magnetopause</a></li>
@@ -189,11 +192,26 @@
 <li class="toctree-l2"><a class="reference internal" href="FittingMethods.html">Previous work: Fitting methods</a></li>
 </ul><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary>
 </details></li>
-<li class="toctree-l1 current active has-children"><a class="current reference internal" href="#">The tangent hypothesis</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="MagSurface.html">Extracting the magnetopause surface from the simulation</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Tangent Hypothesis</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="current reference internal" href="#">Extracting the magnetopause surface from the simulation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="LatepCube.html">LaTeP model: Emissivity cube</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ShueToSlice.html">Shue model fitted to slices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="MagSurface.html">Radial extraction of full magnetopause</a></li>
+<li class="toctree-l2"><a class="reference internal" href="FittingModels.html">Fitting models to surface</a></li>
 <li class="toctree-l2"><a class="reference internal" href="MaxIntensityArc.html">Extracting the maximum intensity curve from the image</a></li>
 <li class="toctree-l2"><a class="reference internal" href="TangentHypothesis.html">Characterizing the tangent hypothesis</a></li>
 </ul><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Tangent Fitting</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="Chapter03.html">Tangent Fitting</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="TangentFitting.html">The method</a></li>
+<li class="toctree-l2"><a class="reference internal" href="BenchmarkingTF.html">Benchmarking the fitting method</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Discussion.html">Discussion and Future developments</a></li>
+</ul><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary>
 </details></li>
 <li class="toctree-l1"><a class="reference internal" href="Bibliography.html">Bibliography</a></li>
 </ul>
@@ -379,7 +397,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>The tangent hypothesis</h1>
+    <h1>Extracting the magnetopause surface from the simulation</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -393,15 +411,16 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="the-tangent-hypothesis">
-<span id="ch-th"></span><h1>The tangent hypothesis<a class="headerlink" href="#the-tangent-hypothesis" title="Link to this heading">#</a></h1>
-<p>Although, the question of the validity of the tangent hypothesis has been tackled by previous studies, further characterization is still necessary in order to derive the limits of the tangent fitting approach. In this chapter we will study how this translates to the X-ray emissivity that has been simulated by the LaTeP model, taking into account the evolution of the orbit and attitude of the satellite. Unlike the single point approach of A. Read <span id="id1">[<a class="reference internal" href="Bibliography.html#id10" title="Andrew Read. On the apparent line-of-sight alignment of the peak x-ray intensity of the magnetosheath and the tangent to the magnetopause, as viewed by SMILE-SXI. Earth and Planetary Physics, 8(1):155–172, 2024. doi:10.26464/epp2023062.">Read, 2024</a>]</span>, we will attempt extracting the full maximum intensity arc of the integrated images and compare this with the projection of the magnetopause tangent that has been extracted from the simulation cubes.</p>
+  <p>Although, the question of the validity of the tangent hypothesis has been tackled by previous studies, further characterization is still necessary in order to derive the limits of the tangent fitting approach. In this chapter we will study how this translates to the X-ray emissivity that has been simulated by the LaTeP model, taking into account the evolution of the orbit and attitude of the satellite. Unlike the single point approach of A. Read <span id="id1">[<a class="reference internal" href="Bibliography.html#id10" title="Andrew Read. On the apparent line-of-sight alignment of the peak x-ray intensity of the magnetosheath and the tangent to the magnetopause, as viewed by SMILE-SXI. Earth and Planetary Physics, 8(1):155–172, 2024. doi:10.26464/epp2023062.">Read, 2024</a>]</span>, we will attempt extracting the full maximum intensity arc of the integrated images and compare this with the projection of the magnetopause tangent that has been extracted from the simulation cubes.</p>
 <p>The Tangent Fitting Approach is based on the hypothesis that the maximum intensity arc of the SXI images, correspond to the tangent direction of the magnetopause surface. To verify this claim, we will:</p>
 <ol class="arabic simple">
 <li><p>Extract the magnetopause surface directly from the emissivity cubes.</p></li>
 <li><p>Project its tangent points to the SXI imager’s FOV.</p></li>
 <li><p>Extract the maximum intensity arc and compare it to the projection.</p></li>
 </ol>
+<section class="tex2jax_ignore mathjax_ignore" id="extracting-the-magnetopause-surface-from-the-simulation">
+<span id="ch-th"></span><h1>Extracting the magnetopause surface from the simulation<a class="headerlink" href="#extracting-the-magnetopause-surface-from-the-simulation" title="Link to this heading">#</a></h1>
+<p>The extraction of the magnetopause location from the simulation requires that we understand the information that the output cubes can provide, as well as the various ways the magnetopause can be defined and derived from this information. This can be done either utilizing the electromagnetic fields of the MHD input that was given to the LaTeP model, either the X-ray production itself in the MHD or the LaTeP case.</p>
 <div class="toctree-wrapper compound">
 </div>
 </section>
@@ -446,11 +465,11 @@ document.write(`
       </div>
     </a>
     <a class="right-next"
-       href="MagSurface.html"
+       href="LatepCube.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Extracting the magnetopause surface from the simulation</p>
+        <p class="prev-next-title">LaTeP model: Emissivity cube</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
