@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Characterizing the tangent hypothesis &#8212; SMILE-TFA</title>
+    <title>Results: Characterizing the Tangent Hypothesis &#8212; SMILE-TFA</title>
   
   
   
@@ -65,7 +65,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Tangent Fitting" href="Chapter03.html" />
-    <link rel="prev" title="Extracting the maximum intensity curve from the image" href="MaxIntensityArc.html" />
+    <link rel="prev" title="Characterizing the tangent hypothesis" href="TH.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -195,10 +195,8 @@
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Tangent Hypothesis</span></p>
 <ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active has-children"><a class="reference internal" href="Chapter02.html">The tangent hypothesis</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="MagSurface.html">Extracting the magnetopause surface from the simulation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="MaxIntensityArc.html">Extracting the maximum intensity curve from the image</a></li>
-<li class="toctree-l2 current active"><a class="current reference internal" href="#">Characterizing the tangent hypothesis</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="TH.html">Characterizing the tangent hypothesis</a><ul class="current">
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Results: Characterizing the Tangent Hypothesis</a></li>
 </ul><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary>
 </details></li>
 </ul>
@@ -383,9 +381,7 @@ document.write(`
   </button>
 `);
 </script>
-<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <span class="fa-solid fa-list"></span>
-</button>
+
 </div></div>
       
     </div>
@@ -396,20 +392,11 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Characterizing the tangent hypothesis</h1>
+    <h1>Results: Characterizing the Tangent Hypothesis</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
             
-            <div>
-                <h2> Contents </h2>
-            </div>
-            <nav aria-label="Page">
-                <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#projecting-the-surface">Projecting the surface</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#results-characterizing-the-tangent-hypothesis">Results: Characterizing the Tangent Hypothesis</a></li>
-</ul>
-            </nav>
         </div>
     </div>
 </div>
@@ -419,82 +406,8 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="characterizing-the-tangent-hypothesis">
-<span id="section-tangent-hypothesis"></span><h1>Characterizing the tangent hypothesis<a class="headerlink" href="#characterizing-the-tangent-hypothesis" title="Link to this heading">#</a></h1>
-<p>We now have a diagnostic of the maximum intensity arc of the image as well as the maximum gradient. We can compare these arcs with the projection of the tangent direction of the magnetopause surface we have extracted from the simulation, to understand if we can derive a correlation.</p>
-<section id="projecting-the-surface">
-<span id="numerical-surface-projection"></span><h2>Projecting the surface<a class="headerlink" href="#projecting-the-surface" title="Link to this heading">#</a></h2>
-<p>Since we have extracted the numerical surface in spherical coordinates, we can also find the points that correspond to the tangent direction and project them into the \ac{FOV} of the instrument. Let’s suppose that for a particular image, the satellite is located at the position <span class="math notranslate nohighlight">\(\vec{r}_{sat}=(x_{sat}, y_{sat}, z_{sat})\)</span> in the \ac{GSE} system. The tangent points of the surface for this location will satisfy the condition:</p>
-<div class="math notranslate nohighlight" id="equation-eq-tangent-eq">
-<span class="eqno">(7)<a class="headerlink" href="#equation-eq-tangent-eq" title="Link to this equation">#</a></span>\[
-    \vec{n} \cdot (\vec{r}_{point}-\vec{r}_{sat} )= 0
-\]</div>
-<p>where <span class="math notranslate nohighlight">\(\vec{r}_{point}\)</span> is the position of each point of the numerical surface and <span class="math notranslate nohighlight">\(\vec{n}\)</span> is the normal vector of the surface for each point, in the GSE system. We can get <span class="math notranslate nohighlight">\(\vec{r}_{point}\)</span> by simply applying the transformation from the spherical system to the cartesian as defined in <a class="reference internal" href="Detecting.html#coordinate"><span class="std std-ref">Coordinate system</span></a>.
-To get the normal vectors, we calculate the gradient of the surface with respect to <span class="math notranslate nohighlight">\(\theta\)</span> and <span class="math notranslate nohighlight">\(\phi\)</span> and normalize the corresponding vectors. We can calculate the normals for each point through their cross product:</p>
-<div class="math notranslate nohighlight">
-\[
-    \vec{n} = \frac{\partial \vec{r}}{\partial \theta} \times \frac{\partial \vec{r}}{\partial \phi}
-\]</div>
-<p>To get the tangent curve, we simply solve Equation <a class="reference internal" href="#equation-eq-tangent-eq">(7)</a> numerically, to get the points that satisfy it. In our case, we applied a simple mask with an arbitrary threshold of <span class="math notranslate nohighlight">\(0.05^\circ\)</span> tolerance, as a first approximate and fast solution.</p>
-<p>\begin{figure}[bth]
-\myfloatalign</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>\subfloat[Calculation of tangent points to satellite.]
-{
-\label{fig:schematic}
-\includegraphics[width=0.45\textwidth]{gfx/projection/tangent_points.png}} 
-\quad
-\subfloat[Tangent points in GSE.]
-{
-\label{fig:tangent_points}
-\includegraphics[width=0.45\textwidth]{gfx/projection/3D.png}} 
-\quad
-
-\caption{Extraction of tangent point to satellite for a numerical surface.}  
-\label{fig:tangent}
-</pre></div>
-</div>
-<p>\end{figure}</p>
-<p>The orientation of the satellite is described by three vectors, giving each base vector of the satellite coordinate system, expressed in the \ac{GSE} frame. To move from one system to another, it is sufficient to define the rotation matrix through these vectors and apply a translation according to the position of the satellite, meaning the origin of the satellite’s coordinate system. We construct the rotation matrix:</p>
-<div class="math notranslate nohighlight">
-\[\begin{split}
-    R = \begin{bmatrix} | &amp; | &amp; | \\ \mathbf{e}_x^{sat} &amp; \mathbf{e}_y^{sat} &amp; \mathbf{e}_z^{sat} \\ | &amp; | &amp; | \end{bmatrix}
-\end{split}\]</div>
-<p>The relation between a vector in the GSE frame and the same vector in the satellite frame is:</p>
-<div class="math notranslate nohighlight">
-\[
-    \vec{r}_{GSE} = R \cdot \vec{r}_{SF} + \vec{t}
-\]</div>
-<p>where <span class="math notranslate nohighlight">\(r_{SF}\)</span> is the vector of a point in the satellite frame and <span class="math notranslate nohighlight">\(\vec{t}\)</span> is the translation vector. Therefore, the transformation of a point in \ac{GSE} to the satellite frame is performed by the following operation:</p>
-<div class="math notranslate nohighlight">
-\[
-    \vec{v}_{sat} = R^\top \cdot (\vec{v}_{GSE} - \vec{t})
-\]</div>
-<p>In order to project this in the \ac{SXI} coordinates we need to compute the angle of each point from the z axis (boresight) along the x and y direction of the satellite frame:</p>
-<div class="math notranslate nohighlight">
-\[
-    azimuth = \arctan{\frac{x}{z}}
-\]</div>
-<div class="math notranslate nohighlight">
-\[
-    elevation = \arctan{\frac{y}{z}}
-\]</div>
-<p>And limit this to the \ac{FOV} of the imager, with <span class="math notranslate nohighlight">\(azimuth \in [-7.8,7.7]^\circ\)</span> and <span class="math notranslate nohighlight">\(elevation\in[-13.2,13.2]^\circ\)</span>. We can also define a coordinate transformation from the \ac{SXI} degree coordinates to the indexes of the image, by mapping these angles to grid indices <span class="math notranslate nohighlight">\(i_{\text{az}}\)</span> and <span class="math notranslate nohighlight">\(i_{\text{el}}\)</span>:</p>
-<div class="math notranslate nohighlight">
-\[
-    i_{\text{az}} = \text{round} \left( \frac{\theta_{\text{az}} - \text{Az}{\min}}{\text{Az}{\max} - \text{Az}{\min}} \cdot (N{\text{az}} - 1) \right)
-\]</div>
-<div class="math notranslate nohighlight">
-\[
-    i_{\text{el}} = \text{round} \left( \frac{\theta_{\text{el}} - \text{El}{\min}}{\text{El}{\max} - \text{El}{\min}} \cdot (N{\text{el}} - 1) \right)
-\]</div>
-<p>where <span class="math notranslate nohighlight">\(N_{\text{az}}\)</span> and <span class="math notranslate nohighlight">\(N_{\text{el}}\)</span> are the number of azimuth and elevation grid points, respectively. To ensure the indices stay within valid bounds we also clip to the minimum of the grid:</p>
-<div class="math notranslate nohighlight">
-\[i_{\text{az}} = \min\left(\max\left(i_{\text{az}}, 0\right), N_{\text{az}} - 1\right)\]</div>
-<div class="math notranslate nohighlight">
-\[i_{\text{el}} = \min\left(\max\left(i_{\text{el}}, 0\right), N_{\text{el}} - 1\right)\]</div>
-</section>
-<section id="results-characterizing-the-tangent-hypothesis">
-<span id="tangent-results"></span><h2>Results: Characterizing the Tangent Hypothesis<a class="headerlink" href="#results-characterizing-the-tangent-hypothesis" title="Link to this heading">#</a></h2>
+  <section class="tex2jax_ignore mathjax_ignore" id="results-characterizing-the-tangent-hypothesis">
+<span id="tangent-results"></span><h1>Results: Characterizing the Tangent Hypothesis<a class="headerlink" href="#results-characterizing-the-tangent-hypothesis" title="Link to this heading">#</a></h1>
 <p>We can now derive diagnostics about the correlation of the maximum intensity curve of the image and the projected tangent points of the surface. We do this by calculating the \ac{RMSE} between the two curves of each image. By taking a sequence of images over some key orbits we can understand how this error evolves depending on the geometry of observation. We run this test for a full orbit (<span class="math notranslate nohighlight">\(T = 50.3 \,hours\)</span>) per month, from June 2025 to May 2026. As described in \autoref{SMILE}, the orbit has an inclination of <span class="math notranslate nohighlight">\(73^\circ\)</span>, however the orientation of this inclination precesses and thus the geometry of observation changes seasonally. This in turn affects the projection of the magnetopause to the \ac{FOV} as well as the tracing of the maximum intensity arc. We will look into this seasonal dependency of the tangent hypothesis, and will point out its limitations.</p>
 <p>\begin{figure}[bth]
 \myfloatalign
@@ -603,7 +516,6 @@ To get the normal vectors, we calculate the gradient of the surface with respect
 <p>\citeauthor{nguyen4} re-enforces this disagreement by concluding that the Lin model overestimates the identation of the cusps \cite{nguyen4}, when for the case of our extracted surface, every model severely underestimates it. In the last paper of his series, he explains the selection criteria for the crossings in the cusp region. He indicates the existence of two barriers - the inner and the outer cusp - and chooses the latter to perform the statistical analysis. This may be correlated with the second maximum emissivity of the 3D cube in that region, and further tests on the surface extraction shall be performed to understand how the empirical models correlate with the simulation results.
 Further metrics shall also be tested, emphasizing the dependency on the electromagnetic fields instead of the emission. The extraction of the magnetopause through the current sheet would be of particular interest, since its theoretical shape seems to better align with the empirical models. Future efforts shall concentrate on extracting the outer boundary, rejecting the inner cusp and defining coherently the magnetopause surface.</p>
 </section>
-</section>
 
     <script type="text/x-thebe-config">
     {
@@ -636,12 +548,12 @@ Further metrics shall also be tested, emphasizing the dependency on the electrom
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="MaxIntensityArc.html"
+       href="TH.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Extracting the maximum intensity curve from the image</p>
+        <p class="prev-next-title">Characterizing the tangent hypothesis</p>
       </div>
     </a>
     <a class="right-next"
@@ -659,22 +571,6 @@ Further metrics shall also be tested, emphasizing the dependency on the electrom
             </div>
             
             
-              
-                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
-
-
-  <div class="sidebar-secondary-item">
-  <div class="page-toc tocsection onthispage">
-    <i class="fa-solid fa-list"></i> Contents
-  </div>
-  <nav class="bd-toc-nav page-toc">
-    <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#projecting-the-surface">Projecting the surface</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#results-characterizing-the-tangent-hypothesis">Results: Characterizing the Tangent Hypothesis</a></li>
-</ul>
-  </nav></div>
-
-</div></div>
               
             
           </div>

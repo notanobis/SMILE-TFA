@@ -65,7 +65,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="The method" href="TangentFitting.html" />
-    <link rel="prev" title="Characterizing the tangent hypothesis" href="TangentHypothesis.html" />
+    <link rel="prev" title="Results: Characterizing the Tangent Hypothesis" href="TangentHypothesis.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -195,10 +195,21 @@
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Tangent Hypothesis</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1 has-children"><a class="reference internal" href="Chapter02.html">The tangent hypothesis</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="MagSurface.html">Extracting the magnetopause surface from the simulation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="MaxIntensityArc.html">Extracting the maximum intensity curve from the image</a></li>
-<li class="toctree-l2"><a class="reference internal" href="TangentHypothesis.html">Characterizing the tangent hypothesis</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="Chapter02.html">Extracting the magnetopause surface from the simulation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="LatepCube.html">LaTeP model: Emissivity cube</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ShueToSlice.html">Shue model fitted to slices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="MagSurface.html">Radial extraction of full magnetopause</a></li>
+<li class="toctree-l2"><a class="reference internal" href="FittingModels.html">Fitting models to surface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="MHDsurface.html">Extracting the magnetopause from the MHD emissivity</a></li>
+</ul><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="3DView.html">Extracting the maximum intensity curve from the image</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="MaxIntensityArc.html">Image processing</a></li>
+</ul><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="TH.html">Characterizing the tangent hypothesis</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Projection.html">Projecting the surface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="TangentHypothesis.html">Results: Characterizing the Tangent Hypothesis</a></li>
 </ul><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary>
 </details></li>
 </ul>
@@ -410,7 +421,7 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="tangent-fitting">
 <span id="ch-tf"></span><h1>Tangent Fitting<a class="headerlink" href="#tangent-fitting" title="Link to this heading">#</a></h1>
-<p>In this chapter, we will develop a methodology to fit empirical models to the maximum intensity arc of the image, under the assumption that the tangent hypothesis holds true. As we saw in <a class="reference internal" href="Chapter02.html#ch-th"><span class="std std-ref">The tangent hypothesis</span></a>, this depends strongly on the orbit and corresponding viewing angles of the satellite. We suppose here that this method will be utilized under the conditions dictated by the hypothesis and its limits. In this subset of cases, complete characterization of the method, shall also take into account the error propagation of the tangent hypothesis.</p>
+<p>In this chapter, we will develop a methodology to fit empirical models to the maximum intensity arc of the image, under the assumption that the tangent hypothesis holds true. As we saw in <a class="reference internal" href="Chapter02.html#ch-th"><span class="std std-ref">Extracting the magnetopause surface from the simulation</span></a>, this depends strongly on the orbit and corresponding viewing angles of the satellite. We suppose here that this method will be utilized under the conditions dictated by the hypothesis and its limits. In this subset of cases, complete characterization of the method, shall also take into account the error propagation of the tangent hypothesis.</p>
 <p>When trying to extract 3D information from a 2D image, we need to make some assumptions to account for the loss of information from the integration over the third axis. In the tangent fitting approach we attempt to reconstruct this information by assuming a particular shape for the magnetopause - an empirical model. A first approach could be, to trace the maximum intensity arc and then try to fit the model parameters to the arc, for that particular POV. However, we already saw in <a class="reference internal" href="MaxIntensityArc.html#max-int-arc"><span class="std std-ref">Image processing</span></a> that extracting a clean curve that follows the intended shape is not a simple extraction of the maximum intensity per row. Quite a few filters, as well as limits of steps were introduced to improve the detection, while the extraction still fails in certain viewing angles. We should also remember that the images that we are analyzing do not include any instrumental noise, background contributions or binning of the resolution. A more realistic image of what we expect the instrument to see, including background contribution, instrumental noise and resolution, is shown in <a class="reference internal" href="#fig-sxi-image"><span class="std std-numref">Fig. 12</span></a>. The SXI team has developed the relevant tools, not only to simulate the expected noise and background, but also to subtract it from the final images and aid in their processing.</p>
 <figure class="align-default" id="fig-sxi-image">
 <img alt="_images/SXI_image.png" src="_images/SXI_image.png" />
@@ -459,7 +470,7 @@ document.write(`
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Characterizing the tangent hypothesis</p>
+        <p class="prev-next-title">Results: Characterizing the Tangent Hypothesis</p>
       </div>
     </a>
     <a class="right-next"
