@@ -4,6 +4,14 @@ from scipy.interpolate import RegularGridInterpolator
 from scipy.interpolate import interpn 
 
 
+from astropy.io.votable import parse
+import glob
+# from scipy.interpolate import interp1d
+# from scipy.optimize import fsolve
+# import sympy as sp
+# from sympy.vector import CoordSys3D
+
+
 
 #Constants
 Re = 6371.0 # km

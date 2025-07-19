@@ -10,10 +10,15 @@ Introduction
     1. [Earth’s Magnetopause](https://notanobis.github.io/SMILE-TFA/Magnetopause.html)
     2. [Detecting the magnetopause](https://notanobis.github.io/SMILE-TFA/Detecting.html)
     3. [Previous work: Fitting methods](https://notanobis.github.io/SMILE-TFA/FittingMethods.html)
-3. [Tangent Hypothesis](https://notanobis.github.io/SMILE-TFA/Chapter02.html)
+Tangent Hypothesis
+1. [Extracting the magnetopause surface from the simulation](https://notanobis.github.io/SMILE-TFA/Chapter02.html)
     1. [LaTeP model: Emissivity cube](https://notanobis.github.io/SMILE-TFA/LatepCube.html): `LatepCube.ipynb`
     2. [Shue model fitted to slices](https://notanobis.github.io/SMILE-TFA/ShueToSlice.html): `ShueToSlice.ipynb`
     3. [Radial extraction of full magnetopause](https://notanobis.github.io/SMILE-TFA/MagSurface.html): `MagSurface.ipynb`
     4. [Fitting models to surface](https://notanobis.github.io/SMILE-TFA/FittingModels.html): `FittingModels.ipynb`
     5. [Extracting the magnetopause from the MHD emissivity](https://notanobis.github.io/SMILE-TFA/MHDsurface.html): `MHDsurface.ipynb`
-4. [Extracting the maximum intensity curve from the image](https://notanobis.github.io/SMILE-TFA/3DView.html#)
+2. [Extracting the maximum intensity curve from the image](https://notanobis.github.io/SMILE-TFA/3DView.html#)
+    1. [Image processing](https://notanobis.github.io/SMILE-TFA/MaxIntensityArc.html): `MaxIntensityArc.ipynb`
+3. [Characterizing the tangent hypothesis](https://notanobis.github.io/SMILE-TFA/TH.html)
+    1. [Projecting the Surface](https://notanobis.github.io/SMILE-TFA/Projection.html): `Pojection.ipynb`
+    2. [Results: Characterizing the Tangent Hypothesis](https://notanobis.github.io/SMILE-TFA/TangentHypothesis.html): `TangentHypothesis.ipynb`
