@@ -40,7 +40,7 @@ class Images:
     def __init__(self, model = 'shue', folder_name = '01.01.2026-03.01.2026', images_subfolder = 'latep', xml_positions = 'satellite_pos_att'):
         self.model = model
         self.positions, self.vx, self.vy, self.vz = self.read_satellite_pos_att(folder_name, xml_positions)
-        self.images, az_image, el_image, xmls = self.read_images(folder_name, images_subfolder)
+        self.images, az_image, el_image, self.xmls = self.read_images(folder_name, images_subfolder)
         self.Az, self.El = np.meshgrid(az_image, el_image)
 
     def read_images(self,folder_name, subfolder_name):
@@ -105,7 +105,7 @@ class Images:
             print("Model not yet implemented.")
         return n.dot(R_shue - satellite_pos_vector)
 
-    def solve_tangent_GSE(r0, a, theta, phi, tangent_eq_num):
+    def solve_tangent_GSE(self,r0, a, theta, phi, tangent_eq_num):
         """
         Solve the tangent equation in GSE coordinates
         """
