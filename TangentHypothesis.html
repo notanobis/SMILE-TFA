@@ -28,14 +28,14 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=a5519fdd" />
     <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
     <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
-    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=574bf7fa" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=fbdbc292" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
@@ -65,7 +65,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Tangent Fitting" href="Chapter03.html" />
-    <link rel="prev" title="Characterizing the tangent hypothesis" href="TH.html" />
+    <link rel="prev" title="Projecting the surface" href="Projection.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -195,7 +195,20 @@
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Tangent Hypothesis</span></p>
 <ul class="current nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="Chapter02.html">Extracting the magnetopause surface from the simulation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="LatepCube.html">LaTeP model: Emissivity cube</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ShueToSlice.html">Shue model fitted to slices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="MagSurface.html">Radial extraction of full magnetopause</a></li>
+<li class="toctree-l2"><a class="reference internal" href="FittingModels.html">Fitting models to surface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="MHDsurface.html">Extracting the magnetopause from the MHD emissivity</a></li>
+</ul><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="3DView.html">Extracting the maximum intensity curve from the image</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="MaxIntensityArc.html">Image processing</a></li>
+</ul><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary>
+</details></li>
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="TH.html">Characterizing the tangent hypothesis</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="Projection.html">Projecting the surface</a></li>
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">Results: Characterizing the Tangent Hypothesis</a></li>
 </ul><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary>
 </details></li>
@@ -381,7 +394,9 @@ document.write(`
   </button>
 `);
 </script>
-
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
 </div></div>
       
     </div>
@@ -397,6 +412,16 @@ document.write(`
     <div id="print-main-content">
         <div id="jb-print-toc">
             
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretation">Interpretation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#quantitative-orbit-corellation">Quantitative orbit corellation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#discussion-definition-of-the-magnetopause">Discussion: Definition of the magnetopause</a></li>
+</ul>
+            </nav>
         </div>
     </div>
 </div>
@@ -408,113 +433,315 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="results-characterizing-the-tangent-hypothesis">
 <span id="tangent-results"></span><h1>Results: Characterizing the Tangent Hypothesis<a class="headerlink" href="#results-characterizing-the-tangent-hypothesis" title="Link to this heading">#</a></h1>
-<p>We can now derive diagnostics about the correlation of the maximum intensity curve of the image and the projected tangent points of the surface. We do this by calculating the \ac{RMSE} between the two curves of each image. By taking a sequence of images over some key orbits we can understand how this error evolves depending on the geometry of observation. We run this test for a full orbit (<span class="math notranslate nohighlight">\(T = 50.3 \,hours\)</span>) per month, from June 2025 to May 2026. As described in \autoref{SMILE}, the orbit has an inclination of <span class="math notranslate nohighlight">\(73^\circ\)</span>, however the orientation of this inclination precesses and thus the geometry of observation changes seasonally. This in turn affects the projection of the magnetopause to the \ac{FOV} as well as the tracing of the maximum intensity arc. We will look into this seasonal dependency of the tangent hypothesis, and will point out its limitations.</p>
-<p>\begin{figure}[bth]
-\myfloatalign
-\includegraphics[width=\textwidth]{gfx/tangent_hypothesis/June_RMSE.png}
-\quad
-\subfloat[Index 02]{\label{fig:jun02}
-\includegraphics[width=0.2\textwidth]{gfx/tangent_hypothesis/02June.png}}
-\quad
-\subfloat[Index 50]{\label{fig:jun50}
-\includegraphics[width=0.2\textwidth]{gfx/tangent_hypothesis/50June.png}}
-\quad
-\subfloat[Index 86]{\label{fig:jun86}
-\includegraphics[width=0.2\textwidth]{gfx/tangent_hypothesis/86June.png}}
-\quad
-\subfloat[Index 99]{\label{fig:jun99}
-\includegraphics[width=0.2\textwidth]{gfx/tangent_hypothesis/99June.png}}
-\quad
-\caption{Evolution of RMSE over time elapsed from 2 June 2025 00:00 UTC and key snapshots. Magnetopause projection is indicated in blue while the red curve indicates the detected maximum intensity arc.}</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>\label{fig:JuneRMSE}
+<p>We can now derive diagnostics about the correlation of the maximum intensity curve of the image and the projected tangent points of the surface. We do this by calculating the RMSE between the two curves of each image. By taking a sequence of images over some key orbits we can understand how this error evolves depending on the geometry of observation. We run this test for a full orbit (<span class="math notranslate nohighlight">\(T = 50.3 \,hours\)</span>) per month, from June 2025 to May 2026. As described in <a class="reference internal" href="Detecting.html#smile"><span class="std std-ref">SMILE mission</span></a>, the orbit has an inclination of <span class="math notranslate nohighlight">\(73^\circ\)</span>, however the orientation of this inclination precesses and thus the geometry of observation changes seasonally. This in turn affects the projection of the magnetopause to the FOV as well as the tracing of the maximum intensity arc. We will look into this seasonal dependency of the tangent hypothesis, and will point out its limitations.</p>
+<p>You can choose which folder-orbit you would like to analyze from the list below, or export your own data from 3DView and store them in a custom file:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># choose a month</span>
+<span class="n">jun_2025</span> <span class="o">=</span> <span class="s2">&quot;01.06.2025-03.06.2025&quot;</span>
+<span class="n">jul_2025</span> <span class="o">=</span> <span class="s2">&quot;02.07.2025-04.07.2025&quot;</span>
+<span class="n">aug_2025</span> <span class="o">=</span> <span class="s2">&quot;01.08.2025-03.08.2025&quot;</span>
+<span class="n">sept_2025</span> <span class="o">=</span> <span class="s2">&quot;01.09.2025-03.09.2025&quot;</span>
+<span class="n">oct_2025</span> <span class="o">=</span> <span class="s2">&quot;01.10.2025-03.10.2025&quot;</span>
+<span class="n">nov_2025</span> <span class="o">=</span> <span class="s2">&quot;01.11.2025-03.11.2025&quot;</span>
+<span class="n">dec_2025</span> <span class="o">=</span> <span class="s2">&quot;01.12.2025-03.12.2025&quot;</span>
+<span class="n">jan_2026</span> <span class="o">=</span> <span class="s2">&quot;01.01.2026-03.01.2026&quot;</span>
+<span class="n">feb_2026</span> <span class="o">=</span> <span class="s2">&quot;01.02.2026-03.02.2026&quot;</span>
+<span class="n">mar_2026</span> <span class="o">=</span> <span class="s2">&quot;01.03.2026-03.03.2026&quot;</span>
+<span class="n">apr_2026</span> <span class="o">=</span> <span class="s2">&quot;01.04.2026-03.04.2026&quot;</span>
+<span class="n">may_2026</span> <span class="o">=</span> <span class="s2">&quot;01.05.2026-03.05.2026&quot;</span>
 </pre></div>
 </div>
-<p>\end{figure}</p>
-<p>In \autoref{fig:JuneRMSE} we see the evolution of the \ac{RMSE} over a summer orbit in June 2025. The agreement between the projection of the magnetopause surface, indicated with the blue points, and the maximum intensity arc of the image, indicated with the red line, is close to 0.1 RE for most of the orbit, going sufficiently below the 0.5 RE error that was set as a requirement for the \ac{SXI} instrument. An example of a good agreement is shown in the snapshot of \autoref{fig:jun50} and \autoref{fig:jun99}. We also observe cases where the error peaks, as in \autoref{fig:jun02}, where although the projection seems correct, the extraction of the maximum intensity line fails to capture the intended curve. Finally, we show an example of the satellite entering the magnetopause in \autoref{fig:jun86}, where no curve can be detected since the emissivity inside the magnetosphere is zero. In such cases we discard the measurement since this is a clear limitation of the \ac{TFA}.</p>
-<p>\begin{figure}[bth]
-\myfloatalign
-\includegraphics[width=\textwidth]{gfx/tangent_hypothesis/Nov_RMSE.png}
-\quad
-\subfloat[Index 23]{
-\includegraphics[width=0.2\textwidth]{gfx/tangent_hypothesis/23Nov.png}}
-\quad
-\subfloat[Index 50]{\label{fig:50nov}
-\includegraphics[width=0.2\textwidth]{gfx/tangent_hypothesis/50Nov.png}}
-\quad
-\subfloat[Index 62]{\label{fig:62nov}
-\includegraphics[width=0.2\textwidth]{gfx/tangent_hypothesis/62Nov.png}}
-\quad
-\subfloat[Index 90]{\label{fig:90nov}
-\includegraphics[width=0.2\textwidth]{gfx/tangent_hypothesis/90Nov.png}}
-\quad
-\caption{Evolution of RMSE over time elapsed from 1st November 2025 00:00 UTC and key snapshots.}</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>\label{fig:NovRMSE}
+</div>
+</div>
+<p>The script below encapsulates all the operations discussed in the previous sections</p>
+<div class="cell tag_hide-input docutils container">
+<details class="hide above-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell source</span>
+<span class="expanded">Hide code cell source</span>
+</summary>
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Convert satellite positions to spherical coordinates (r, theta, phi)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">cartesian_to_spherical_coords</span><span class="p">(</span><span class="n">xyz</span><span class="p">):</span>
+    <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span> <span class="o">=</span> <span class="n">xyz</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">xyz</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">xyz</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">y</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">z</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="n">x</span> <span class="o">/</span> <span class="n">r</span><span class="p">)</span>  <span class="c1"># polar angle</span>
+    <span class="n">phi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>    <span class="c1"># azimuthal angle</span>
+    <span class="k">return</span> <span class="n">r</span><span class="p">,</span> <span class="n">theta</span><span class="p">,</span> <span class="n">phi</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">TangentFitting</span><span class="w"> </span><span class="kn">import</span> <span class="n">Images</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">orbit</span><span class="p">(</span><span class="n">month</span><span class="p">):</span>
+    <span class="c1"># Select orbit</span>
+    <span class="n">img</span> <span class="o">=</span> <span class="n">Images</span><span class="p">(</span><span class="n">folder_name</span> <span class="o">=</span> <span class="n">month</span><span class="p">)</span>
+
+    <span class="n">az_max</span> <span class="o">=</span> <span class="n">img</span><span class="o">.</span><span class="n">Az</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">az_min</span> <span class="o">=</span> <span class="n">img</span><span class="o">.</span><span class="n">Az</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+    <span class="n">el_max</span> <span class="o">=</span> <span class="n">img</span><span class="o">.</span><span class="n">El</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">el_min</span> <span class="o">=</span> <span class="n">img</span><span class="o">.</span><span class="n">El</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="mi">10</span>  <span class="c1"># n rows and n columns</span>
+
+    <span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">14</span><span class="p">))</span>  <span class="c1"># Bigger figure for clarity</span>
+    <span class="n">RMSE</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n</span><span class="o">*</span><span class="n">n</span><span class="p">)</span>
+    <span class="n">z_sat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n</span><span class="o">*</span><span class="n">n</span><span class="p">)</span>
+    <span class="n">std_z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n</span><span class="o">*</span><span class="n">n</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">n</span> <span class="o">*</span> <span class="n">n</span><span class="p">)):</span>
+        <span class="n">row</span> <span class="o">=</span> <span class="n">i</span> <span class="o">//</span> <span class="n">n</span>
+        <span class="n">col</span> <span class="o">=</span> <span class="n">i</span> <span class="o">%</span> <span class="n">n</span>
+        <span class="n">ax</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">]</span>
+        <span class="n">img</span><span class="o">.</span><span class="n">choose_image</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+        <span class="c1"># Apply filter to the image</span>
+        <span class="n">img_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">getdata</span><span class="p">(</span><span class="n">img</span><span class="o">.</span><span class="n">image</span><span class="p">))</span>
+        <span class="n">equalized_image</span> <span class="o">=</span> <span class="n">exposure</span><span class="o">.</span><span class="n">equalize_hist</span><span class="p">(</span><span class="n">img_array</span><span class="p">)</span>
+        <span class="n">smoothed_eq_image</span> <span class="o">=</span> <span class="n">filters</span><span class="o">.</span><span class="n">gaussian</span><span class="p">(</span><span class="n">equalized_image</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">sobel</span> <span class="o">=</span> <span class="n">filters</span><span class="o">.</span><span class="n">sobel</span><span class="p">(</span><span class="n">img_array</span><span class="p">)</span>
+
+        <span class="c1"># Find maximum intensity curve</span>
+        <span class="n">max_x</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">y_vals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">img_array</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">y_vals</span><span class="p">:</span>
+            <span class="n">row</span> <span class="o">=</span> <span class="n">smoothed_eq_image</span><span class="p">[</span><span class="n">y</span><span class="p">,</span> <span class="p">:]</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">row</span><span class="p">)</span>
+            <span class="n">max_x</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">max_x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">max_x</span><span class="p">)</span>
+        <span class="n">max_x_filtered</span> <span class="o">=</span> <span class="p">[</span><span class="n">max_x</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+        <span class="n">y_filtered</span> <span class="o">=</span> <span class="p">[</span><span class="n">y_vals</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">max_x</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">max_x</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">-</span> <span class="n">max_x_filtered</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="o">&lt;=</span> <span class="mi">3</span><span class="p">:</span>  <span class="c1"># Set tolerance for jumps</span>
+                <span class="n">max_x_filtered</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">max_x</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
+                <span class="n">y_filtered</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">y_vals</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
+        <span class="n">threshold</span> <span class="o">=</span> <span class="mf">0.2</span>  <span class="c1"># threshold for intensity of the curve (inside magnetopause low)</span>
+        <span class="n">curve_intensity</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">img_array</span><span class="p">[</span><span class="n">y_vals</span><span class="p">,</span> <span class="n">max_x</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">curve_intensity</span> <span class="o">&lt;</span> <span class="mf">0.3</span><span class="p">:</span>
+            <span class="n">y_filtered</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">max_x_filtered</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">y_filtered</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">20</span><span class="p">:</span>
+            <span class="n">y_filtered</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">max_x_filtered</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1">#Extract tangent points of cube magneotpause surface</span>
+        <span class="n">az_cube</span><span class="p">,</span> <span class="n">el_cube</span><span class="p">,</span> <span class="n">z_distance</span> <span class="o">=</span> <span class="n">img</span><span class="o">.</span><span class="n">surface_tangent_SXI</span><span class="p">(</span><span class="n">rmax_surface</span><span class="p">,</span> <span class="n">Theta</span><span class="p">[:,</span><span class="mi">0</span><span class="p">,:],</span> <span class="n">Phi</span><span class="p">[:,</span><span class="mi">0</span><span class="p">,:])</span>
+        <span class="n">az_cube</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">degrees</span><span class="p">(</span><span class="n">az_cube</span><span class="p">)</span>
+        <span class="n">el_cube</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">degrees</span><span class="p">(</span><span class="n">el_cube</span><span class="p">)</span>
+        <span class="c1"># Convert to Az/El indices</span>
+        <span class="n">az_ind</span> <span class="o">=</span> <span class="p">((</span><span class="n">az_cube</span> <span class="o">-</span> <span class="n">az_min</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">az_max</span> <span class="o">-</span> <span class="n">az_min</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">img</span><span class="o">.</span><span class="n">Az</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">el_ind</span> <span class="o">=</span> <span class="p">((</span><span class="n">el_cube</span> <span class="o">-</span> <span class="n">el_min</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">el_max</span> <span class="o">-</span> <span class="n">el_min</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">img</span><span class="o">.</span><span class="n">El</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">az_ind</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">az_ind</span><span class="o">.</span><span class="n">round</span><span class="p">()</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="n">img</span><span class="o">.</span><span class="n">Az</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">el_ind</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">el_ind</span><span class="o">.</span><span class="n">round</span><span class="p">()</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="n">img</span><span class="o">.</span><span class="n">El</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">image_at_tangent_points</span> <span class="o">=</span> <span class="n">img</span><span class="o">.</span><span class="n">Az</span><span class="p">[</span><span class="n">y_filtered</span><span class="p">,</span> <span class="n">max_x_filtered</span><span class="p">]</span>
+        <span class="n">image_at_Imax</span> <span class="o">=</span> <span class="n">img</span><span class="o">.</span><span class="n">Az</span><span class="p">[</span><span class="n">el_ind</span><span class="p">,</span> <span class="n">az_ind</span><span class="p">]</span>
+
+        <span class="c1"># Match the number of points — truncate to the shortest length</span>
+        <span class="n">N</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">image_at_tangent_points</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">image_at_Imax</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">N</span><span class="o">&gt;</span><span class="mi">20</span><span class="p">:</span>
+            <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span> 
+            <span class="n">Daz2</span><span class="o">=</span><span class="mi">0</span>
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">el_ind</span><span class="p">)):</span>
+                <span class="n">j</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y_filtered</span><span class="p">)</span> <span class="o">==</span> <span class="n">el_ind</span><span class="p">[</span><span class="n">k</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">j</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
+                    <span class="n">j</span> <span class="o">=</span> <span class="n">j</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="n">Daz2</span> <span class="o">+=</span> <span class="p">(</span><span class="n">img</span><span class="o">.</span><span class="n">Az</span><span class="p">[</span><span class="n">el_ind</span><span class="p">[</span><span class="n">k</span><span class="p">],</span><span class="n">az_ind</span><span class="p">[</span><span class="n">k</span><span class="p">]]</span><span class="o">-</span><span class="n">img</span><span class="o">.</span><span class="n">Az</span><span class="p">[</span><span class="n">y_filtered</span><span class="p">[</span><span class="n">j</span><span class="p">],</span><span class="n">max_x_filtered</span><span class="p">[</span><span class="n">j</span><span class="p">]])</span><span class="o">**</span><span class="mi">2</span>
+                    <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">continue</span>
+            <span class="n">RMSE</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">Daz2</span><span class="o">/</span><span class="n">count</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">RMSE</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="kc">None</span>
+        
+        <span class="n">z_sat</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">z_distance</span><span class="p">)</span>
+        <span class="n">std_z</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">z_distance</span><span class="p">)</span>
+
+        <span class="c1"># Plot</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">pcolormesh</span><span class="p">(</span><span class="n">img</span><span class="o">.</span><span class="n">Az</span><span class="p">,</span> <span class="n">img</span><span class="o">.</span><span class="n">El</span><span class="p">,</span><span class="n">img</span><span class="o">.</span><span class="n">image</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">az_cube</span><span class="p">,</span> <span class="n">el_cube</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>  <span class="c1"># Hide axes for a cleaner look</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">RMSE</span><span class="p">[</span><span class="n">i</span><span class="p">]):</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">. , RMSE = - &quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">. , RMSE = </span><span class="si">{</span><span class="n">RMSE</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">$^\circ$&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">img</span><span class="o">.</span><span class="n">Az</span><span class="p">[</span><span class="n">y_filtered</span><span class="p">,</span><span class="n">max_x_filtered</span><span class="p">],</span><span class="n">img</span><span class="o">.</span><span class="n">El</span><span class="p">[</span><span class="n">y_filtered</span><span class="p">,</span><span class="n">max_x_filtered</span><span class="p">]</span> <span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">1.5</span><span class="p">)</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>  
+
+    <span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+    <span class="c1">### RMSE - Oct 2025</span>
+    <span class="c1"># Error in degrees and in RE</span>
+    <span class="n">Res_deg</span> <span class="o">=</span> <span class="n">img</span><span class="o">.</span><span class="n">Az</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">img</span><span class="o">.</span><span class="n">Az</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">Res</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="n">Res_deg</span><span class="p">)</span> 
+    <span class="n">RMSE_px</span> <span class="o">=</span> <span class="n">RMSE</span> <span class="o">/</span> <span class="n">Res_deg</span>
+    <span class="n">dx</span> <span class="o">=</span> <span class="n">z_sat</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">tan</span><span class="p">(</span><span class="n">Res</span><span class="p">)</span>
+    <span class="n">std_dx</span> <span class="o">=</span> <span class="n">std_z</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">tan</span><span class="p">(</span><span class="n">Res</span><span class="p">)</span>
+    <span class="n">RMSE_RE</span> <span class="o">=</span> <span class="n">dx</span> <span class="o">*</span> <span class="n">RMSE_px</span>
+    <span class="n">std_RE</span> <span class="o">=</span> <span class="n">RMSE_px</span> <span class="o">*</span> <span class="n">std_dx</span>
+
+    <span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span> <span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">RMSE</span><span class="p">,</span> <span class="s1">&#39;o-&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;RMSE [deg]&#39;</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="n">palette</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+    <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;RMSE [deg]&#39;</span><span class="p">)</span>
+    <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;RMSE in Degrees&#39;</span><span class="p">)</span>
+    <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+    <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">RMSE_RE</span><span class="p">,</span> <span class="s1">&#39;o-&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">palette</span><span class="p">(</span><span class="mi">7</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;RMSE [RE]&#39;</span><span class="p">)</span>
+    <span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">errorbar</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">RMSE_RE</span><span class="p">)),</span> <span class="n">RMSE_RE</span><span class="p">,</span> <span class="n">yerr</span><span class="o">=</span><span class="n">std_RE</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">palette</span><span class="p">(</span><span class="mi">7</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Errors due to RE conversion&#39;</span><span class="p">)</span>
+    <span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Elapsed time [hours] - Index&#39;</span><span class="p">)</span>
+    <span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;RMSE [RE]&#39;</span><span class="p">)</span>
+    <span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;RMSE in RE&#39;</span><span class="p">)</span>
+    <span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+    <span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+    <span class="c1"># axs[1].set_ylim(0,2)</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+    <span class="n">r_sat</span><span class="p">,</span> <span class="n">theta_sat</span><span class="p">,</span> <span class="n">phi_sat</span> <span class="o">=</span> <span class="n">cartesian_to_spherical_coords</span><span class="p">(</span><span class="n">img</span><span class="o">.</span><span class="n">positions</span><span class="p">)</span>
+    <span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>  <span class="c1"># Bigger figure for clarity</span>
+    <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">r_sat</span><span class="p">,</span> <span class="n">RMSE_RE</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="n">palette</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+    <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;RMSE[RE] vs Satellite r[RE]&quot;</span><span class="p">)</span>
+    <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;r[RE]&quot;</span><span class="p">)</span>
+    <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;RMSE[RE]&quot;</span><span class="p">)</span>
+
+    <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">degrees</span><span class="p">(</span><span class="n">theta_sat</span><span class="p">),</span> <span class="n">RMSE_RE</span><span class="p">,</span><span class="n">color</span> <span class="o">=</span> <span class="n">palette</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+    <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;RMSE[RE] vs Satellite Theta[deg]&quot;</span><span class="p">)</span>
+    <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Theta[deg]&quot;</span><span class="p">)</span>
+    <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;RMSE[RE]&quot;</span><span class="p">)</span>
+
+    <span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">degrees</span><span class="p">(</span><span class="n">phi_sat</span><span class="p">),</span> <span class="n">RMSE_RE</span><span class="p">,</span><span class="n">color</span> <span class="o">=</span> <span class="n">palette</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+    <span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;RMSE[RE] vs Satellite Phi[deg]&quot;</span><span class="p">)</span>
+    <span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Phi[deg]&quot;</span><span class="p">)</span>
+    <span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;RMSE[RE]&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">projection</span><span class="o">=</span><span class="s1">&#39;3d&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">img</span><span class="o">.</span><span class="n">positions</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">img</span><span class="o">.</span><span class="n">positions</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">img</span><span class="o">.</span><span class="n">positions</span><span class="p">[:,</span><span class="mi">2</span><span class="p">],</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Satellite Position&#39;</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="n">palette</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">palette</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Earth Center&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;X [RE]&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Y [RE]&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_zlabel</span><span class="p">(</span><span class="s1">&#39;Z [RE]&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span>
+
+    <span class="k">return</span> <span class="n">RMSE_RE</span><span class="p">,</span> <span class="n">r_sat</span><span class="p">,</span> <span class="n">phi_sat</span><span class="p">,</span> <span class="n">theta_sat</span>
 </pre></div>
 </div>
-<p>\end{figure}</p>
-<p>Moving to the winter months, we no longer have problems with tracing the maximum intensity line, however certain \ac{POV}s show a clear problem with the magnetopause surface and its projection to the \ac{FOV}. \autoref{fig:50nov} and \autoref{fig:62nov} show two cases where the projection shows no correlation with the expected shape. The inner arc is a projection of the indentation of the cusps. Our grid is quite sparse for such a rapid identation, leading to not representative gradients of the surface, at the point of the discontinuity. However, this also shows our inability to correlate the projection of the cusps with a distinct geometric feature of the images. Although the cusps are highly luminous, they are also localized, meaning that their emission is not integrated over a significant portion of the \ac{LOS}. This results in structures that are noticeable in the integrated image, but not prominent or consistent enough to allow for the correlation of their projection with their position. In any case, the concept of the tangent hypothesis has its foundation on the integration of a relatively homogeneous emission over the maximum path - excluding thus bright but localized features.</p>
-<p>The outer arc projection seen in \autoref{fig:50nov} is more difficult to interpret, and the orbit of the satellite during the winter months should be taken into account. To understand this projection, we shall take a look at the viewing angle of the 3D magnetopause surface, as shown in the summary of the projection problem in \autoref{fig:POV}. The interpretation of the inner arc clearly agrees with the projection of cusps here. The outer tangent to the surface however, seems to severely overestimate the position of the maximum intensity arc. This can be explained by going back to the conclusion \citeauthor*{andi_2024} reached in his paper, where he examined a spherical homogeneously emitting surface and found the tangent hypothesis to hold true. However, when he introduced gradients to the emission, making some regions more luminous than others, the maximum intensity arc consistently underestimated the position of the tangent arc \cite{andi_2024}. It is also known that the subsolar point will be significantly more luminous than higher latitudes, due to the flux of the solar wind. The contribution from the integration of the high latitude emission is not enough to counter the emission gradient near the subsolar point, leading to the underestimation of the tangent position when the satellite exceeds a certain latitude. This is reflected in the correlation of this phenomenon with the winter orbits (\autoref{fig:orbitNov}), as well as with the polar angle of the position of the satellite. We show this correlation in \autoref{theta-RMSE}, and we will further discuss it below.</p>
-<p>\begin{figure}[bth]
-\myfloatalign
-\includegraphics[width=\textwidth]{gfx/tangent_hypothesis/Apr_RMSE.png}
-\quad
-\subfloat[Index 40]{
-\includegraphics[width=0.2\textwidth]{gfx/tangent_hypothesis/40Apr.png}}
-\quad
-\subfloat[Index 58]{
-\includegraphics[width=0.2\textwidth]{gfx/tangent_hypothesis/58Apr.png}}
-\quad
-\subfloat[Index 85]{ \label{fig:85aug}
-\includegraphics[width=0.2\textwidth]{gfx/tangent_hypothesis/85Apr.png}}
-\quad
-\subfloat[Index 95]{
-\includegraphics[width=0.2\textwidth]{gfx/tangent_hypothesis/95Apr.png}}
-\quad
-\caption{Evolution of RMSE over time elapsed from 1st April 2026 00:00 UTC and key snapshots.}</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>\label{fig:AprRMSE}
+</div>
+</details>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;June 2025&quot;</span><span class="p">)</span>
+<span class="n">RMSE_RE_jun</span><span class="p">,</span> <span class="n">r_sat_jun</span><span class="p">,</span> <span class="n">phi_sat_jun</span><span class="p">,</span> <span class="n">theta_sat_jun</span> <span class="o">=</span> <span class="n">orbit</span><span class="p">(</span><span class="n">jun_2025</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>\end{figure}</p>
-<p>Looking into another summer orbit, during April 2026 (\autoref{fig:AprRMSE}), we observe similar behavior with June 2025, where the projection of the surface displays no surprising components, however the extraction of the maximum intensity arc oftentimes fails. This is strongly correlated with the inclination during these months and the resulting \ac{POV}s. \autoref{fig:POV} shows the corresponding viewing angles of the 3D surface for arc extraction problem. The contribution to the intensity of every part of the surface, makes it difficult to track a single and distinct maximum intensity arc. This is clearly reflected in the integrated image of \autoref{fig:85aug}, where the previously distinct arc is no longer a thin line. A representative orbit during the summer months is shown in \autoref{fig:orbitApr}, where X is the axis towards the sun in the \ac{GSE} system.</p>
-<p>\begin{figure}
-\centering
-\includegraphics[width=0.85\textwidth]{gfx/tangent_hypothesis/projections.png}
-\caption{Viewing direction correlated with surface projection and image processing problems}
-\label{fig:POV}
-\end{figure}</p>
-<p>\begin{figure}[bth]
-\myfloatalign
-\subfloat[June 2025]{
-\includegraphics[width=0.3\textwidth]{gfx/tangent_hypothesis/June_orbit.png}}
-\quad
-\subfloat[November 2025]{\label{fig:orbitNov}
-\includegraphics[width=0.3\textwidth]{gfx/tangent_hypothesis/Nov_orbit.png}}
-\quad
-\subfloat[April 2026]{\label{fig:orbitApr}
-\includegraphics[width=0.3\textwidth]{gfx/tangent_hypothesis/Apr_orbit.png}}
-\quad
-\caption{Orbit precession and corresponding viewing angles for June, November and April.}
-\label{fig:orbits}
-\end{figure}</p>
-<p>While, correlating the above orbits, as well the orbits for each month that are not explicitly discussed here, we see a clear dependency on the polar angle of the satellite’s position. In \autoref{theta-RMSE} we notice that the error rapidly increases when the satellite is in the nightside, while there is no detection below <span class="math notranslate nohighlight">\(50^\circ\)</span> polar angle. The latter is to be expected, as we approach and enter the magnetopause for lower angles. We discussed previously the bias that the emission gradients could impose on the detection of the tangent direction. Here we see that for angles larger than <span class="math notranslate nohighlight">\(90^\circ\)</span> - when the satellite is in the nightside - this bias becomes rapidly important and the tangent hypothesis fails.</p>
-<p>\begin{figure}[bth]
-\centering
-\myfloatalign
-\subfloat[RMSE dependency to the <span class="math notranslate nohighlight">\(\theta\)</span> angle of the satellite position over a year of orbits.]
-{\label{theta-RMSE}
-\includegraphics[width=0.6\textwidth]{gfx/tangent_hypothesis/theta-RMSE.png}}
-\quad
-\subfloat[High satellite <span class="math notranslate nohighlight">\(\theta\)</span> angle viewing geometry.]{
-\raisebox{0.7cm}{
-\label{Oct3Dview}
-\includegraphics[width=0.25\textwidth]{gfx/tangent_hypothesis/3DView.png}}}
-\caption{Orbital dependency of RMSE over a year.}
-\label{fig:theta_sat-RMSE}
-\end{figure}</p>
-<p>Looking into \autoref{fig:theta_sat-RMSE}, we see that this bias is not only attributed to the physical gradients, but also to the simulation restrictions. The simulation cube is restricted to <span class="math notranslate nohighlight">\(z\in[-10,10]\, RE\)</span>, meaning that any emission outside this range is not captured in the integrated images. At the same time the magnetopause surface is constructed directly from the emission data of the simulation cube, meaning that the projected surface is limited in <span class="math notranslate nohighlight">\(\theta\in[-65,65]^\circ\)</span>. For a full characterization of the high latitude angles, a simulation box to encapsulate all satellite positions and orbits will be necessary.</p>
-<p>We pointed out earlier that we cannot extract meaningful information from the projection of the cusps in the image using the \ac{TFA}. In other words, the use of a magnetopause model with strong cusp indentation does not represent the curve of the maximum intensity, that we want to fit. This opens the conversation on the definition of the magnetopause surface and the disagreement with the extracted surface, that we noticed in \autoref{fitting_models}. When trying to fit empirical models, it was evident that their shape could not describe the discontinuous surface of the maximum intensity, nor the discontinuity predicted by the pressure equilibrium equation \autoref{pressure_eq}.</p>
-<p>\citeauthor{nguyen4} re-enforces this disagreement by concluding that the Lin model overestimates the identation of the cusps \cite{nguyen4}, when for the case of our extracted surface, every model severely underestimates it. In the last paper of his series, he explains the selection criteria for the crossings in the cusp region. He indicates the existence of two barriers - the inner and the outer cusp - and chooses the latter to perform the statistical analysis. This may be correlated with the second maximum emissivity of the 3D cube in that region, and further tests on the surface extraction shall be performed to understand how the empirical models correlate with the simulation results.
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>June 2025
+</pre></div>
+</div>
+<img alt="_images/578dac2a91a58e6cf5e28d88383b7d8028f81728265d1c19202ab46595824dbc.png" src="_images/578dac2a91a58e6cf5e28d88383b7d8028f81728265d1c19202ab46595824dbc.png" />
+<img alt="_images/9eb5809fb1bb1bf297b7ea143881ebfecdc3f3ed1a552bb851c333fa2920bc29.png" src="_images/9eb5809fb1bb1bf297b7ea143881ebfecdc3f3ed1a552bb851c333fa2920bc29.png" />
+<img alt="_images/284a2517d8e37e3a4176de8da706a75dcdfe77e148e61c13a94c2b4b85a94916.png" src="_images/284a2517d8e37e3a4176de8da706a75dcdfe77e148e61c13a94c2b4b85a94916.png" />
+<img alt="_images/1a177a25de54ae5776f37b07a4dfe03e2a3e0e3210d3b16b51d23c2c235144b2.png" src="_images/1a177a25de54ae5776f37b07a4dfe03e2a3e0e3210d3b16b51d23c2c235144b2.png" />
+</div>
+</div>
+<section id="interpretation">
+<h2>Interpretation<a class="headerlink" href="#interpretation" title="Link to this heading">#</a></h2>
+<p>In the June orbit we see the evolution of the RMSE, which shows agreement between the projection of the magnetopause surface, indicated with the blue points, and the maximum intensity arc of the image, indicated with the red line, is close to 0.1 RE for most of the orbit, going sufficiently below the 0.5 RE error that was set as a requirement for the SXI instrument. We also observe cases where the error peaks, where although the projection seems correct, the extraction of the maximum intensity line fails to capture the intended curve. Finally, when the satellite enters the magnetopause, no curve can be detected since the emissivity inside the magnetosphere is zero. In such cases we discard the measurement since this is a clear limitation of the TFA.</p>
+<p>Moving to the winter months, we no longer have problems with tracing the maximum intensity line, however certain POVs show a clear problem with the magnetopause surface and its projection to the FOV. For November’s obit there are cases where the projection shows no correlation with the expected shape. The inner arc is a projection of the indentation of the cusps. Our grid is quite sparse for such a rapid identation, leading to not representative gradients of the surface, at the point of the discontinuity. However, this also shows our inability to correlate the projection of the cusps with a distinct geometric feature of the images. Although the cusps are highly luminous, they are also localized, meaning that their emission is not integrated over a significant portion of the LOS. This results in structures that are noticeable in the integrated image, but not prominent or consistent enough to allow for the correlation of their projection with their position. In any case, the concept of the tangent hypothesis has its foundation on the integration of a relatively homogeneous emission over the maximum path - excluding thus bright but localized features.</p>
+<p>The outer arc projection seen in some November snapshots is more difficult to interpret, and the orbit of the satellite during the winter months should be taken into account. To understand this projection, we shall take a look at the viewing angle of the 3D magnetopause surface, as shown in the summary of the projection problem in <a class="reference internal" href="#fig-pov"><span class="std std-numref">Fig. 16</span></a>. The interpretation of the inner arc clearly agrees with the projection of cusps here. The outer tangent to the surface however, seems to severely overestimate the position of the maximum intensity arc. This can be explained by going back to the conclusion <span id="id1">[<a class="reference internal" href="Bibliography.html#id10" title="Andrew Read. On the apparent line-of-sight alignment of the peak x-ray intensity of the magnetosheath and the tangent to the magnetopause, as viewed by SMILE-SXI. Earth and Planetary Physics, 8(1):155–172, 2024. doi:10.26464/epp2023062.">Read, 2024</a>]</span> reached in his paper, where he examined a spherical homogeneously emitting surface and found the tangent hypothesis to hold true. However, when he introduced gradients to the emission, making some regions more luminous than others, the maximum intensity arc consistently underestimated the position of the tangent arc. It is also known that the subsolar point will be significantly more luminous than higher latitudes, due to the flux of the solar wind. The contribution from the integration of the high latitude emission is not enough to counter the emission gradient near the subsolar point, leading to the underestimation of the tangent position when the satellite exceeds a certain latitude. This is reflected in the correlation of this phenomenon with the winter orbits, as well as with the polar angle of the position of the satellite. We show this correlation in <a class="reference internal" href="#theta-rmse"><span class="std std-numref">Fig. 17</span></a>, and we will further discuss it below.</p>
+<figure class="align-default" id="fig-pov">
+<img alt="_images/image.png" src="_images/image.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 16 </span><span class="caption-text">Projection and arc extraction problems.</span><a class="headerlink" href="#fig-pov" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
+<p>Looking into another summer orbit, during April 2026, we observe similar behavior with June 2025, where the projection of the surface displays no surprising components, however the extraction of the maximum intensity arc oftentimes fails. This is strongly correlated with the inclination during these months and the resulting POVs. <a class="reference internal" href="#fig-pov"><span class="std std-ref">Projection and arc extraction problems.</span></a> shows the corresponding viewing angles of the 3D surface for arc extraction problem. The contribution to the intensity of every part of the surface, makes it difficult to track a single and distinct maximum intensity arc. This is clearly reflected in the August snapshots, where the previously distinct arc is no longer a thin line.</p>
+</section>
+<section id="quantitative-orbit-corellation">
+<h2>Quantitative orbit corellation<a class="headerlink" href="#quantitative-orbit-corellation" title="Link to this heading">#</a></h2>
+<p>We can run this for orbits covering a full year and correlate the orbit evolution with the validity of the tangent hypothesis:</p>
+<div class="cell tag_remove-output docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;June 2025&quot;</span><span class="p">)</span>
+<span class="n">RMSE_RE_jun</span><span class="p">,</span> <span class="n">r_sat_jun</span><span class="p">,</span> <span class="n">phi_sat_jun</span><span class="p">,</span> <span class="n">theta_sat_jun</span> <span class="o">=</span> <span class="n">orbit</span><span class="p">(</span><span class="n">jun_2025</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;July 2025&quot;</span><span class="p">)</span>
+<span class="n">RMSE_RE_jul</span><span class="p">,</span> <span class="n">r_sat_jul</span><span class="p">,</span> <span class="n">phi_sat_jul</span><span class="p">,</span> <span class="n">theta_sat_jul</span> <span class="o">=</span> <span class="n">orbit</span><span class="p">(</span><span class="n">jul_2025</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;August 2025&quot;</span><span class="p">)</span>
+<span class="n">RMSE_RE_aug</span><span class="p">,</span> <span class="n">r_sat_aug</span><span class="p">,</span> <span class="n">phi_sat_aug</span><span class="p">,</span> <span class="n">theta_sat_aug</span> <span class="o">=</span> <span class="n">orbit</span><span class="p">(</span><span class="n">aug_2025</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;September 2025&quot;</span><span class="p">)</span>
+<span class="n">RMSE_RE_sept</span><span class="p">,</span> <span class="n">r_sat_sept</span><span class="p">,</span> <span class="n">phi_sat_sept</span><span class="p">,</span> <span class="n">theta_sat_sept</span> <span class="o">=</span> <span class="n">orbit</span><span class="p">(</span><span class="n">sept_2025</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;October 2025&quot;</span><span class="p">)</span>
+<span class="n">RMSE_RE_oct</span><span class="p">,</span> <span class="n">r_sat_oct</span><span class="p">,</span> <span class="n">phi_sat_oct</span><span class="p">,</span> <span class="n">theta_sat_oct</span> <span class="o">=</span> <span class="n">orbit</span><span class="p">(</span><span class="n">oct_2025</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;November 2025&quot;</span><span class="p">)</span>
+<span class="n">RMSE_RE_nov</span><span class="p">,</span> <span class="n">r_sat_nov</span><span class="p">,</span> <span class="n">phi_sat_nov</span><span class="p">,</span> <span class="n">theta_sat_nov</span> <span class="o">=</span> <span class="n">orbit</span><span class="p">(</span><span class="n">nov_2025</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;December 2025&quot;</span><span class="p">)</span>
+<span class="n">RMSE_RE_dec</span><span class="p">,</span> <span class="n">r_sat_dec</span><span class="p">,</span> <span class="n">phi_sat_dec</span><span class="p">,</span> <span class="n">theta_sat_dec</span> <span class="o">=</span> <span class="n">orbit</span><span class="p">(</span><span class="n">dec_2025</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;January 2026&quot;</span><span class="p">)</span>
+<span class="n">RMSE_RE_jan</span><span class="p">,</span> <span class="n">r_sat_jan</span><span class="p">,</span> <span class="n">phi_sat_jan</span><span class="p">,</span> <span class="n">theta_sat_jan</span> <span class="o">=</span> <span class="n">orbit</span><span class="p">(</span><span class="n">jan_2026</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;February 2026&quot;</span><span class="p">)</span>
+<span class="n">RMSE_RE_feb</span><span class="p">,</span> <span class="n">r_sat_feb</span><span class="p">,</span> <span class="n">phi_sat_feb</span><span class="p">,</span> <span class="n">theta_sat_feb</span> <span class="o">=</span> <span class="n">orbit</span><span class="p">(</span><span class="n">feb_2026</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;March 2026&quot;</span><span class="p">)</span>
+<span class="n">RMSE_RE_mar</span><span class="p">,</span> <span class="n">r_sat_mar</span><span class="p">,</span> <span class="n">phi_sat_mar</span><span class="p">,</span> <span class="n">theta_sat_mar</span> <span class="o">=</span> <span class="n">orbit</span><span class="p">(</span><span class="n">mar_2026</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;April 2026&quot;</span><span class="p">)</span>
+<span class="n">RMSE_RE_apr</span><span class="p">,</span> <span class="n">r_sat_apr</span><span class="p">,</span> <span class="n">phi_sat_apr</span><span class="p">,</span> <span class="n">theta_sat_apr</span> <span class="o">=</span> <span class="n">orbit</span><span class="p">(</span><span class="n">apr_2026</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;May 2026&quot;</span><span class="p">)</span>
+<span class="n">RMSE_RE_may</span><span class="p">,</span> <span class="n">r_sat_may</span><span class="p">,</span> <span class="n">phi_sat_may</span><span class="p">,</span> <span class="n">theta_sat_may</span> <span class="o">=</span> <span class="n">orbit</span><span class="p">(</span><span class="n">may_2026</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<figure class="align-right" id="theta-rmse">
+<a class="reference internal image-reference" href="_images/3DView1.png"><img alt="_images/3DView1.png" src="_images/3DView1.png" style="width: 372.8px; height: 430.40000000000003px;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Fig. 17 </span><span class="caption-text">High satellite <span class="math notranslate nohighlight">\(\theta\)</span> angle viewing geometry.</span><a class="headerlink" href="#theta-rmse" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
+<p>While, correlating the above orbits, as well the orbits for each month that are not explicitly discussed here, we see a clear dependency on the polar angle of the satellite’s position. We notice that the error rapidly increases when the satellite is in the nightside, while there is no detection below <span class="math notranslate nohighlight">\(50^\circ\)</span> polar angle. The latter is to be expected, as we approach and enter the magnetopause for lower angles. We discussed previously the bias that the emission gradients could impose on the detection of the tangent direction. Here we see that for angles larger than <span class="math notranslate nohighlight">\(90^\circ\)</span> - when the satellite is in the nightside - this bias becomes rapidly important and the tangent hypothesis fails.</p>
+<p>By examining the simulation cube range, we see that this bias is not only attributed to the physical gradients, but also to the simulation restrictions. The simulation cube is restricted to <span class="math notranslate nohighlight">\(z\in[-10,10]\, RE\)</span>, meaning that any emission outside this range is not captured in the integrated images. At the same time the magnetopause surface is constructed directly from the emission data of the simulation cube, meaning that the projected surface is limited in <span class="math notranslate nohighlight">\(\theta\in[-65,65]^\circ\)</span>. For a full characterization of the high latitude angles, a simulation box to encapsulate all satellite positions and orbits will be necessary.</p>
+<div class="cell tag_hide-input docutils container">
+<details class="hide above-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell source</span>
+<span class="expanded">Hide code cell source</span>
+</summary>
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">degrees</span><span class="p">(</span><span class="n">theta_sat_jun</span><span class="p">),</span> <span class="n">RMSE_RE_jun</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;June 2025&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">palette</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">degrees</span><span class="p">(</span><span class="n">theta_sat_jul</span><span class="p">),</span> <span class="n">RMSE_RE_jul</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;July 2025&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">palette</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">degrees</span><span class="p">(</span><span class="n">theta_sat_aug</span><span class="p">),</span> <span class="n">RMSE_RE_aug</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;August 2025&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">palette</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">degrees</span><span class="p">(</span><span class="n">theta_sat_sept</span><span class="p">),</span> <span class="n">RMSE_RE_sept</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;September 2025&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">palette</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">degrees</span><span class="p">(</span><span class="n">theta_sat_oct</span><span class="p">),</span> <span class="n">RMSE_RE_oct</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;October 2025&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">palette</span><span class="p">(</span><span class="mi">4</span><span class="p">),</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">degrees</span><span class="p">(</span><span class="n">theta_sat_nov</span><span class="p">),</span> <span class="n">RMSE_RE_nov</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;November 2025&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">palette</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">degrees</span><span class="p">(</span><span class="n">theta_sat_dec</span><span class="p">),</span> <span class="n">RMSE_RE_dec</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;December 2025&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">palette</span><span class="p">(</span><span class="mi">6</span><span class="p">),</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">degrees</span><span class="p">(</span><span class="n">theta_sat_jan</span><span class="p">),</span> <span class="n">RMSE_RE_jan</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;January 2026&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">palette</span><span class="p">(</span><span class="mi">7</span><span class="p">),</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">degrees</span><span class="p">(</span><span class="n">theta_sat_feb</span><span class="p">),</span> <span class="n">RMSE_RE_feb</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;February 2026&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">palette</span><span class="p">(</span><span class="mi">8</span><span class="p">),</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">degrees</span><span class="p">(</span><span class="n">theta_sat_mar</span><span class="p">),</span> <span class="n">RMSE_RE_mar</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;March 2026&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">palette</span><span class="p">(</span><span class="mi">9</span><span class="p">),</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">degrees</span><span class="p">(</span><span class="n">theta_sat_apr</span><span class="p">),</span> <span class="n">RMSE_RE_apr</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;April 2026&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">palette</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">degrees</span><span class="p">(</span><span class="n">theta_sat_may</span><span class="p">),</span> <span class="n">RMSE_RE_may</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;May 2026&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">palette</span><span class="p">(</span><span class="mi">11</span><span class="p">),</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Month&quot;</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="s1">&#39;upper left&#39;</span><span class="p">,</span> <span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="mf">1.05</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;RMSE[RE] vs Satellite Theta[deg]&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;$\Theta[^\circ]$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;RMSE[RE]&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</details>
+<div class="cell_output docutils container">
+<img alt="_images/32bf2555c59b3416d504debb8d011f4541de2df784b6abd2e96832bdcd44001a.png" src="_images/32bf2555c59b3416d504debb8d011f4541de2df784b6abd2e96832bdcd44001a.png" />
+</div>
+</div>
+</section>
+<section id="discussion-definition-of-the-magnetopause">
+<span id="definition-probelms"></span><h2>Discussion: Definition of the magnetopause<a class="headerlink" href="#discussion-definition-of-the-magnetopause" title="Link to this heading">#</a></h2>
+<p>We pointed out earlier that we cannot extract meaningful information from the projection of the cusps in the image using the TFA. In other words, the use of a magnetopause model with strong cusp indentation does not represent the curve of the maximum intensity, that we want to fit. This opens the conversation on the definition of the magnetopause surface and the disagreement with the extracted surface, that we noticed in <a class="reference internal" href="FittingModels.html#fitting-models"><span class="std std-ref">Fitting models to surface</span></a>. When trying to fit empirical models, it was evident that their shape could not describe the discontinuous surface of the maximum intensity, nor the discontinuity predicted by the pressure equilibrium equation <a class="reference internal" href="Magnetopause.html#equation-pressure-eq">(1)</a>.</p>
+<p><span id="id2">[<a class="reference internal" href="Bibliography.html#id5" title="G. Nguyen, N. Aunai, B. Michotte De Welle, A. Jeandet, B. Lavraud, and D. Fontaine. Massive multi‐mission statistical study and analytical modeling of the earth's magnetopause: 4. on the near‐cusp magnetopause indentation. Journal of Geophysical Research: Space Physics, 2022. doi:10.1029/2021ja029776.">Nguyen <em>et al.</em>, 2022</a>]</span> re-enforces this disagreement by concluding that the Lin model overestimates the identation of the cusps, when for the case of our extracted surface, every model severely underestimates it. In the last paper of his series, he explains the selection criteria for the crossings in the cusp region. He indicates the existence of two barriers - the inner and the outer cusp - and chooses the latter to perform the statistical analysis. This may be correlated with the second maximum emissivity of the 3D cube in that region, and further tests on the surface extraction shall be performed to understand how the empirical models correlate with the simulation results.
 Further metrics shall also be tested, emphasizing the dependency on the electromagnetic fields instead of the emission. The extraction of the magnetopause through the current sheet would be of particular interest, since its theoretical shape seems to better align with the empirical models. Future efforts shall concentrate on extracting the outer boundary, rejecting the inner cusp and defining coherently the magnetopause surface.</p>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -548,12 +775,12 @@ Further metrics shall also be tested, emphasizing the dependency on the electrom
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="TH.html"
+       href="Projection.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Characterizing the tangent hypothesis</p>
+        <p class="prev-next-title">Projecting the surface</p>
       </div>
     </a>
     <a class="right-next"
@@ -571,6 +798,23 @@ Further metrics shall also be tested, emphasizing the dependency on the electrom
             </div>
             
             
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretation">Interpretation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#quantitative-orbit-corellation">Quantitative orbit corellation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#discussion-definition-of-the-magnetopause">Discussion: Definition of the magnetopause</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>

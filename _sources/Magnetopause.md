@@ -21,7 +21,7 @@ $$
 We can visualize these jumps, through the typical changes in plasma moments across a tangential discontinuity, in \autoref{fig:tangential_discontinuity}. The continuity of the total pressure across the discontinuity defines a surface of total pressure balance between the two contacting plasmas with no mass or magnetic flux crossing the discontinuity from either side, while all other quantities can experience arbitrary changes. This implies, that as a tangential discontinuity the magnetopause is a surface of total pressure equilibrium between the solar wind magnetosheath plasma and the geomagnetic field confined in the magnetosphere. The \ac{IMF} is quite weak near the Earth and the magnetopsheric plasma thermal and dynamic pressures can be neglected compared with the pressure of the geomagnetic field. We can therefore, request pressure equilibrium between the dynamic pressure of the solar wind and magnetic pressure of the magnetosphere, as a first approximation.
 
 $$
-    2 \mu_0 \kappa n_{sw} m_i \left( \frac{\nabla S_{mp}}{|\nabla S_{mp}|} \cdot \mathbf{v}_{sw} \right)^2 
+2 \mu_0 \kappa n_{sw} m_i \left( \frac{\nabla S_{mp}}{|\nabla S_{mp}|} \cdot \mathbf{v}_{sw} \right)^2 
 = \left( \frac{\nabla S_{mp}}{|\nabla S_{mp}|} \times \mathbf{B} \right)^2
 $$(pressure_eq)
 

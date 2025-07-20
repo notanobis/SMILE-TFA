@@ -28,14 +28,14 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=a5519fdd" />
     <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
     <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
-    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=574bf7fa" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=fbdbc292" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
@@ -58,8 +58,6 @@
     <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
-    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
-    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '3DView';</script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -431,17 +429,25 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="extracting-the-maximum-intensity-curve-from-the-image">
 <h1>Extracting the maximum intensity curve from the image<a class="headerlink" href="#extracting-the-maximum-intensity-curve-from-the-image" title="Link to this heading">#</a></h1>
-<p>The extraction of the maximum intensity arc is not as trivial as in the smooth-gradient MHD case. This will not change when introducing the \ac{SXI} \ac{FOV} and the satellite’s \ac{POV}, but it will improve since the instrument never points directly to the cusps, while image processing techniques can also be applied to extract continuous arcs.</p>
+<p>The extraction of the maximum intensity arc is not as trivial as in the smooth-gradient MHD case. This will not change when introducing the SXI FOV and the satellite’s POV, but it will improve since the instrument never points directly to the cusps, while image processing techniques can also be applied to extract continuous arcs.</p>
 <section id="constructing-the-images">
 <h2>Constructing the images<a class="headerlink" href="#constructing-the-images" title="Link to this heading">#</a></h2>
-<p>To construct the synthetic images of the \ac{SXI} instrument, we use the \href{<a class="reference external" href="https://3dview.irap.omp.eu/">https://3dview.irap.omp.eu/</a>}{3DView}  open-source tool developed by CDPP \cite{3DView}. Through this tool we can simulate the orbit and attitude of the satellite for a specified interval, as well as the orientation and characteristics of the imaging system in relation to the satellite. We can directly import the emissivity cubes of the simulations, introduce the satellite and the \ac{FOV} of the imager, and compute the integrated flux over each pixel’s \ac{LOS}. We therefore get the integrated images from each \ac{POV} of the orbit, according to the \ac{FOV} and resolution of the imager, as shown in \autoref{3DView}. No simulated noise has been added to account for the detection system of the instrument or the background contribution. A typical synthetic image of the magnetopause, generated through this method, is shown in \autoref{fig:typical_image}.</p>
+<figure class="align-right" id="typical">
+<a class="reference internal image-reference" href="_images/typical_image.png"><img alt="_images/typical_image.png" src="_images/typical_image.png" style="width: 290.5px; height: 226.5px;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Fig. 11 </span><span class="caption-text">Typical synthetic image.</span><a class="headerlink" href="#typical" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
+<p>To construct the synthetic images of the SXI instrument, we use the <a class="reference external" href="https://3dview.irap.omp.eu/">3DView</a> open-source tool developed by CDPP <span id="id1">[<a class="reference internal" href="Bibliography.html#id19" title="V. Génot, L. Beigbeder, D. Popescu, N. Dufourg, M. Gangloff, M. Bouchemit, S. Caussarieu, J.-P. Toniutti, J. Durand, R. Modolo, N. André, B. Cecconi, C. Jacquey, F. Pitout, A. Rouillard, R. Pinto, S. Erard, N. Jourdane, L. Leclercq, S. Hess, M. Khodachenko, T. Al-Ubaidi, M. Scherf, and E. Budnik. Science data visualization in planetary and heliospheric contexts with 3dview. Planetary and Space Science, 150:111-130, 2018. Enabling Open and Interoperable Access to Planetary Science and Heliophysics Databases and Tools. URL: https://www.sciencedirect.com/science/article/pii/S003206331630383X, doi:https://doi.org/10.1016/j.pss.2017.07.007.">Génot <em>et al.</em>, 2018</a>]</span>. Through this tool we can simulate the orbit and attitude of the satellite for a specified interval, as well as the orientation and characteristics of the imaging system in relation to the satellite. We can directly import the emissivity cubes of the simulations, introduce the satellite and the FOV of the imager, and compute the integrated flux over each pixel’s LOS. We therefore get the integrated images from each POV of the orbit, according to the FOV and resolution of the imager, as shown in <span id="id2">[<a class="reference internal" href="Bibliography.html#id19" title="V. Génot, L. Beigbeder, D. Popescu, N. Dufourg, M. Gangloff, M. Bouchemit, S. Caussarieu, J.-P. Toniutti, J. Durand, R. Modolo, N. André, B. Cecconi, C. Jacquey, F. Pitout, A. Rouillard, R. Pinto, S. Erard, N. Jourdane, L. Leclercq, S. Hess, M. Khodachenko, T. Al-Ubaidi, M. Scherf, and E. Budnik. Science data visualization in planetary and heliospheric contexts with 3dview. Planetary and Space Science, 150:111-130, 2018. Enabling Open and Interoperable Access to Planetary Science and Heliophysics Databases and Tools. URL: https://www.sciencedirect.com/science/article/pii/S003206331630383X, doi:https://doi.org/10.1016/j.pss.2017.07.007.">Génot <em>et al.</em>, 2018</a>]</span>. No simulated noise has been added to account for the detection system of the instrument or the background contribution. A typical synthetic image of the magnetopause, generated through this method, is shown in <a class="reference internal" href="#typical"><span class="std std-numref">Fig. 11</span></a></p>
 <figure class="align-default" id="dview">
 <img alt="_images/3DView.png" src="_images/3DView.png" />
 <figcaption>
-<p><span class="caption-number">Fig. 11 </span><span class="caption-text">3D View CDPP software</span><a class="headerlink" href="#dview" title="Link to this image">#</a></p>
+<p><span class="caption-number">Fig. 12 </span><span class="caption-text">3D View CDPP software</span><a class="headerlink" href="#dview" title="Link to this image">#</a></p>
 </figcaption>
 </figure>
-<p>Along with the images, we can export XML files that contain information about the position and orientation of the satellite, for each time-step. This will be particularly useful in \autoref{section: tangent_hypothesis}.</p>
+<p>Along with the images, we can export XML files that contain information about the position and orientation of the satellite, for each time-step. This will be particularly useful in <a class="reference internal" href="TH.html#section-tangent-hypothesis"><span class="std std-ref">Characterizing the tangent hypothesis</span></a>.</p>
+<p>You can find the class <code class="docutils literal notranslate"><span class="pre">Images</span></code> along with methods for reading the images (<code class="docutils literal notranslate"><span class="pre">read_images</span></code>) and the positions (<code class="docutils literal notranslate"><span class="pre">read_satellite_pos_att</span></code>) under the <code class="docutils literal notranslate"><span class="pre">TangentFitting.py</span></code> script.</p>
 </section>
 <div class="toctree-wrapper compound">
 </div>

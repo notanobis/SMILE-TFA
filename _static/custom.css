@@ -20,3 +20,7 @@ html[data-theme=dark]  div.cell_output img{
 html[data-theme="dark"] div.highlight pre {
     background-color: #000000 !important;
 }
+
+.theme-switch-button {
+    display: none !important;
+}

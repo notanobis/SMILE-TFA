@@ -28,14 +28,14 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=a5519fdd" />
     <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
     <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
-    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=574bf7fa" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=fbdbc292" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
@@ -421,36 +421,77 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="projecting-the-surface">
 <span id="numerical-surface-projection"></span><h1>Projecting the surface<a class="headerlink" href="#projecting-the-surface" title="Link to this heading">#</a></h1>
-<p>Since we have extracted the numerical surface in spherical coordinates, we can also find the points that correspond to the tangent direction and project them into the \ac{FOV} of the instrument. Let’s suppose that for a particular image, the satellite is located at the position <span class="math notranslate nohighlight">\(\vec{r}_{sat}=(x_{sat}, y_{sat}, z_{sat})\)</span> in the \ac{GSE} system. The tangent points of the surface for this location will satisfy the condition:</p>
+<p>Since we have extracted the numerical surface in spherical coordinates, we can also find the points that correspond to the tangent direction and project them into the FOV of the instrument. Let’s suppose that for a particular image, the satellite is located at the position <span class="math notranslate nohighlight">\(\vec{r}_{sat}=(x_{sat}, y_{sat}, z_{sat})\)</span> in the GSE system. The tangent points of the surface for this location will satisfy the condition:</p>
 <div class="math notranslate nohighlight" id="equation-eq-tangent-eq">
 <span class="eqno">(7)<a class="headerlink" href="#equation-eq-tangent-eq" title="Link to this equation">#</a></span>\[
-    \vec{n} \cdot (\vec{r}_{point}-\vec{r}_{sat} )= 0
+\vec{n} \cdot (\vec{r}_{point}-\vec{r}_{sat} )= 0
 \]</div>
-<p>where <span class="math notranslate nohighlight">\(\vec{r}_{point}\)</span> is the position of each point of the numerical surface and <span class="math notranslate nohighlight">\(\vec{n}\)</span> is the normal vector of the surface for each point, in the GSE system. We can get <span class="math notranslate nohighlight">\(\vec{r}_{point}\)</span> by simply applying the transformation from the spherical system to the cartesian as defined in <a class="reference internal" href="Detecting.html#coordinate"><span class="std std-ref">Coordinate system</span></a>.
-To get the normal vectors, we calculate the gradient of the surface with respect to <span class="math notranslate nohighlight">\(\theta\)</span> and <span class="math notranslate nohighlight">\(\phi\)</span> and normalize the corresponding vectors. We can calculate the normals for each point through their cross product:</p>
+<p>where <span class="math notranslate nohighlight">\(\vec{r}_{point}\)</span> is the position of each point of the numerical surface and <span class="math notranslate nohighlight">\(\vec{n}\)</span> is the normal vector of the surface for each point, in the GSE system. We can get <span class="math notranslate nohighlight">\(\vec{r}_{point}\)</span> by simply applying the transformation from the spherical system to the cartesian as defined in <a class="reference internal" href="Detecting.html#coordinate"><span class="std std-ref">Coordinate system</span></a>.</p>
+<figure class="align-right" id="fig-schematic">
+<a class="reference internal image-reference" href="_images/tangent_points.png"><img alt="_images/tangent_points.png" src="_images/tangent_points.png" style="width: 338.0px; height: 328.0px;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Fig. 14 </span><span class="caption-text">Tangent points in GSE.</span><a class="headerlink" href="#fig-schematic" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
+<p>To get the normal vectors, we calculate the gradient of the surface with respect to <span class="math notranslate nohighlight">\(\theta\)</span> and <span class="math notranslate nohighlight">\(\phi\)</span> and normalize the corresponding vectors. We can calculate the normals for each point through their cross product:</p>
 <div class="math notranslate nohighlight">
 \[
     \vec{n} = \frac{\partial \vec{r}}{\partial \theta} \times \frac{\partial \vec{r}}{\partial \phi}
 \]</div>
 <p>To get the tangent curve, we simply solve Equation <a class="reference internal" href="#equation-eq-tangent-eq">(7)</a> numerically, to get the points that satisfy it. In our case, we applied a simple mask with an arbitrary threshold of <span class="math notranslate nohighlight">\(0.05^\circ\)</span> tolerance, as a first approximate and fast solution.</p>
-<p>\begin{figure}[bth]
-\myfloatalign</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>\subfloat[Calculation of tangent points to satellite.]
-{
-\label{fig:schematic}
-\includegraphics[width=0.45\textwidth]{gfx/projection/tangent_points.png}} 
-\quad
-\subfloat[Tangent points in GSE.]
-{
-\label{fig:tangent_points}
-\includegraphics[width=0.45\textwidth]{gfx/projection/3D.png}} 
-\quad
+<p>This is defined in the function <code class="docutils literal notranslate"><span class="pre">tangent_points</span></code> of the <code class="docutils literal notranslate"><span class="pre">TangentFitting.py</span></code> script, where we find the normal vector for each point of the grid of the surface, calculate the vectors from the satellite to the grid points, and return the ones that have a dot product lower than the desired tolerance.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">tangent_points</span><span class="p">(</span><span class="n">R_numerical</span><span class="p">,</span> <span class="n">Theta</span><span class="p">,</span> <span class="n">Phi</span><span class="p">,</span> <span class="n">satellite_pos</span><span class="p">):</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">R_numerical</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">Theta</span><span class="p">)</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">R_numerical</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">Theta</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">Phi</span><span class="p">)</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="n">R_numerical</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">Theta</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">Phi</span><span class="p">)</span>
 
-\caption{Extraction of tangent point to satellite for a numerical surface.}  
-\label{fig:tangent}
+    <span class="n">dx_dtheta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">Theta</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">dy_dtheta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">Theta</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">dz_dtheta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">Theta</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="n">dx_dphi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">Phi</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">dy_dphi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">Phi</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">dz_dphi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">Phi</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">dtheta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">dx_dtheta</span><span class="p">,</span><span class="n">dy_dtheta</span><span class="p">,</span><span class="n">dz_dtheta</span><span class="p">),</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">dphi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">dx_dphi</span><span class="p">,</span> <span class="n">dy_dphi</span><span class="p">,</span> <span class="n">dz_dphi</span><span class="p">),</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">normals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span><span class="n">dtheta</span><span class="p">,</span> <span class="n">dphi</span><span class="p">)</span>
+    <span class="n">norms</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">normals</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">keepdims</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">normals</span> <span class="o">/=</span> <span class="n">norms</span>    
+
+    <span class="n">x_sat</span> <span class="o">=</span> <span class="n">x</span> <span class="o">-</span> <span class="n">satellite_pos</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">y_sat</span> <span class="o">=</span> <span class="n">y</span> <span class="o">-</span> <span class="n">satellite_pos</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">z_sat</span> <span class="o">=</span> <span class="n">z</span> <span class="o">-</span> <span class="n">satellite_pos</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+    <span class="n">vec_to_sat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">x_sat</span><span class="p">,</span> <span class="n">y_sat</span><span class="p">,</span> <span class="n">z_sat</span><span class="p">),</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># shape: (n_theta, n_phi, 3)</span>
+    <span class="n">norm_vec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">vec_to_sat</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">keepdims</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">vec_to_sat_unit</span> <span class="o">=</span> <span class="n">vec_to_sat</span> <span class="o">/</span> <span class="n">norm_vec</span>  <span class="c1"># shape: (n_theta, n_phi, 3)</span>
+
+    <span class="n">dot_product_num</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">normals</span> <span class="o">*</span> <span class="n">vec_to_sat_unit</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># shape: (n_theta, n_phi)</span>
+    <span class="c1"># dot_product_num = normals[..., 0] * x_sat + normals[..., 1] * y_sat + normals[..., 2] * z_sat</span>
+
+    <span class="n">tolerance</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="mf">0.05</span><span class="p">)</span>  <span class="c1"># e.g. 5 degrees grazing</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">dot_product_num</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span> <span class="o">-</span> <span class="n">tolerance</span><span class="p">)</span>
+    <span class="c1"># mask = np.abs(dot_product_num) &lt; 0.1</span>
+    <span class="n">x_sol</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span>
+    <span class="n">y_sol</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span>
+    <span class="n">z_sol</span> <span class="o">=</span> <span class="n">z</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">x_sol</span><span class="p">,</span> <span class="n">y_sol</span><span class="p">,</span> <span class="n">z_sol</span>
 </pre></div>
 </div>
-<p>\end{figure}</p>
+</div>
+</div>
+<figure class="align-left" id="fig-tangent-points">
+<a class="reference internal image-reference" href="_images/3D.png"><img alt="_images/3D.png" src="_images/3D.png" style="width: 391.2px; height: 273.59999999999997px;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Fig. 15 </span><span class="caption-text">Extraction of tangent point to satellite for a numerical surface.</span><a class="headerlink" href="#fig-tangent-points" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
 <p>The orientation of the satellite is described by three vectors, giving each base vector of the satellite coordinate system, expressed in the \ac{GSE} frame. To move from one system to another, it is sufficient to define the rotation matrix through these vectors and apply a translation according to the position of the satellite, meaning the origin of the satellite’s coordinate system. We construct the rotation matrix:</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
@@ -461,12 +502,26 @@ To get the normal vectors, we calculate the gradient of the surface with respect
 \[
     \vec{r}_{GSE} = R \cdot \vec{r}_{SF} + \vec{t}
 \]</div>
-<p>where <span class="math notranslate nohighlight">\(r_{SF}\)</span> is the vector of a point in the satellite frame and <span class="math notranslate nohighlight">\(\vec{t}\)</span> is the translation vector. Therefore, the transformation of a point in \ac{GSE} to the satellite frame is performed by the following operation:</p>
+<p>where <span class="math notranslate nohighlight">\(r_{SF}\)</span> is the vector of a point in the satellite frame and <span class="math notranslate nohighlight">\(\vec{t}\)</span> is the translation vector. Therefore, the transformation of a point in GSE to the satellite frame is performed by the following operation:</p>
 <div class="math notranslate nohighlight">
 \[
     \vec{v}_{sat} = R^\top \cdot (\vec{v}_{GSE} - \vec{t})
 \]</div>
-<p>In order to project this in the \ac{SXI} coordinates we need to compute the angle of each point from the z axis (boresight) along the x and y direction of the satellite frame:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">GSE_to_Sat</span><span class="p">(</span><span class="n">x_GSE</span><span class="p">,</span> <span class="n">y_GSE</span><span class="p">,</span> <span class="n">z_GSE</span><span class="p">,</span> <span class="n">satellite_pos</span><span class="p">,</span> <span class="n">vx</span><span class="p">,</span> <span class="n">vy</span><span class="p">,</span> <span class="n">vz</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convert GSE coordinates to satellite coordinates</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">R</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">vx</span><span class="p">,</span> <span class="n">vy</span><span class="p">,</span> <span class="n">vz</span><span class="p">])</span>
+    <span class="n">GSE_vector</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">x_GSE</span><span class="p">,</span> <span class="n">y_GSE</span><span class="p">,</span> <span class="n">z_GSE</span><span class="p">])</span> <span class="o">-</span> <span class="n">satellite_pos</span>
+    <span class="n">sat_vector</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">R</span><span class="p">,</span> <span class="n">GSE_vector</span><span class="o">.</span><span class="n">T</span> <span class="p">)</span>  <span class="c1"># Perform matrix multiplication</span>
+    <span class="k">return</span> <span class="n">sat_vector</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">sat_vector</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">sat_vector</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>In order to project this in the SXI coordinates we need to compute the angle of each point from the z axis (boresight) along the x and y direction of the satellite frame:</p>
 <div class="math notranslate nohighlight">
 \[
     azimuth = \arctan{\frac{x}{z}}
@@ -475,7 +530,31 @@ To get the normal vectors, we calculate the gradient of the surface with respect
 \[
     elevation = \arctan{\frac{y}{z}}
 \]</div>
-<p>And limit this to the \ac{FOV} of the imager, with <span class="math notranslate nohighlight">\(azimuth \in [-7.8,7.7]^\circ\)</span> and <span class="math notranslate nohighlight">\(elevation\in[-13.2,13.2]^\circ\)</span>. We can also define a coordinate transformation from the \ac{SXI} degree coordinates to the indexes of the image, by mapping these angles to grid indices <span class="math notranslate nohighlight">\(i_{\text{az}}\)</span> and <span class="math notranslate nohighlight">\(i_{\text{el}}\)</span>:</p>
+<p>And limit this to the FOV of the imager, with <span class="math notranslate nohighlight">\(azimuth \in [-7.8,7.7]^\circ\)</span> and <span class="math notranslate nohighlight">\(elevation\in[-13.2,13.2]^\circ\)</span>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">Sat_to_SXI</span><span class="p">(</span><span class="n">x_sat</span><span class="p">,</span> <span class="n">y_sat</span><span class="p">,</span> <span class="n">z_sat</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convert satellite coordinates to SXI FOV angles.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">azim</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">x_sat</span><span class="p">,</span> <span class="n">z_sat</span><span class="p">)</span>  <span class="c1"># X-Z plane: up/down</span>
+    <span class="n">elev</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="o">-</span><span class="n">y_sat</span><span class="p">,</span> <span class="n">z_sat</span><span class="p">)</span>  <span class="c1"># Y-Z plane: left/right</span>
+
+    <span class="c1"># FOV limits</span>
+    <span class="n">azim_mask</span> <span class="o">=</span> <span class="p">(</span><span class="n">azim</span> <span class="o">&gt;=</span> <span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="o">-</span><span class="mf">7.8</span><span class="p">))</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">azim</span><span class="o">&lt;=</span> <span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="mf">7.7</span><span class="p">))</span>
+    <span class="n">elev_mask</span> <span class="o">=</span> <span class="p">(</span><span class="n">elev</span> <span class="o">&gt;=</span> <span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="o">-</span><span class="mf">13.2</span><span class="p">))</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">elev</span> <span class="o">&lt;=</span> <span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="mf">13.2</span><span class="p">))</span>
+    <span class="c1"># Combine masks: keep values inside either azim or elev FOV</span>
+    <span class="n">fov_mask</span> <span class="o">=</span> <span class="n">azim_mask</span> <span class="o">&amp;</span> <span class="n">elev_mask</span>  <span class="c1"># &lt;- this means inside both FOV limits</span>
+    <span class="c1"># Apply mask</span>
+    <span class="n">azim</span> <span class="o">=</span> <span class="n">azim</span><span class="p">[</span><span class="n">fov_mask</span><span class="p">]</span>
+    <span class="n">elev</span> <span class="o">=</span> <span class="n">elev</span><span class="p">[</span><span class="n">fov_mask</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">azim</span><span class="p">,</span> <span class="n">elev</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>We can also define a coordinate transformation from the SXI degree coordinates to the indexes of the image, by mapping these angles to grid indices <span class="math notranslate nohighlight">\(i_{\text{az}}\)</span> and <span class="math notranslate nohighlight">\(i_{\text{el}}\)</span>:</p>
 <div class="math notranslate nohighlight">
 \[
     i_{\text{az}} = \text{round} \left( \frac{\theta_{\text{az}} - \text{Az}{\min}}{\text{Az}{\max} - \text{Az}{\min}} \cdot (N{\text{az}} - 1) \right)
@@ -489,6 +568,25 @@ To get the normal vectors, we calculate the gradient of the surface with respect
 \[i_{\text{az}} = \min\left(\max\left(i_{\text{az}}, 0\right), N_{\text{az}} - 1\right)\]</div>
 <div class="math notranslate nohighlight">
 \[i_{\text{el}} = \min\left(\max\left(i_{\text{el}}, 0\right), N_{\text{el}} - 1\right)\]</div>
+<p>The complete algorithm for the projection of the surface to the FOV is encapsulated in the funtion <code class="docutils literal notranslate"><span class="pre">surface_tangent_SXI</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">surface_tangent_SXI</span><span class="p">(</span><span class="n">R_numerical</span><span class="p">,</span><span class="n">Theta</span><span class="p">,</span><span class="n">Phi</span><span class="p">,</span> <span class="n">Az</span><span class="p">,</span> <span class="n">El</span><span class="p">,</span> <span class="n">satellite_pos</span><span class="p">,</span> <span class="n">vx</span><span class="p">,</span> <span class="n">vy</span><span class="p">,</span> <span class="n">vz</span><span class="p">):</span>
+    <span class="c1"># Solve the tangent equation in GSE</span>
+    <span class="n">x_tangent_GSE</span><span class="p">,</span> <span class="n">y_tangent_GSE</span><span class="p">,</span> <span class="n">z_tangent_GSE</span> <span class="o">=</span> <span class="n">tangent_points</span><span class="p">(</span><span class="n">R_numerical</span><span class="p">,</span> <span class="n">Theta</span><span class="p">,</span> <span class="n">Phi</span><span class="p">,</span> <span class="n">satellite_pos</span><span class="p">)</span>
+    <span class="c1"># Convert GSE coordinates to satellite coordinates</span>
+    <span class="n">x_tangent_sat</span> <span class="p">,</span> <span class="n">y_tangent_sat</span><span class="p">,</span> <span class="n">z_tangent_sat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">x_tangent_GSE</span><span class="p">))),</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">x_tangent_GSE</span><span class="p">))),</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">x_tangent_GSE</span><span class="p">)))</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x_tangent_GSE</span><span class="p">)):</span>
+        <span class="n">x_tangent_sat</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">y_tangent_sat</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">z_tangent_sat</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">GSE_to_Sat</span><span class="p">(</span><span class="n">x_tangent_GSE</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">y_tangent_GSE</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">z_tangent_GSE</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">satellite_pos</span><span class="p">,</span> <span class="n">vx</span><span class="p">,</span> <span class="n">vy</span><span class="p">,</span> <span class="n">vz</span><span class="p">)</span>
+    <span class="c1"># Convert satellite coordinates to SXI FOV angles</span>
+    <span class="n">azim_SXI</span><span class="p">,</span> <span class="n">elev_SXI</span> <span class="o">=</span> <span class="n">Sat_to_SXI</span><span class="p">(</span><span class="n">x_tangent_sat</span><span class="p">,</span> <span class="n">y_tangent_sat</span><span class="p">,</span> <span class="n">z_tangent_sat</span><span class="p">)</span>
+    <span class="c1"># interpolate the azimuth and elevation angles to the image grid</span>
+    <span class="n">az_ind</span><span class="p">,</span> <span class="n">el_ind</span> <span class="o">=</span> <span class="n">interpolate</span><span class="p">(</span><span class="n">azim_SXI</span><span class="p">,</span> <span class="n">elev_SXI</span><span class="p">,</span> <span class="n">Az</span><span class="p">,</span> <span class="n">El</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">azim_SXI</span><span class="p">,</span> <span class="n">elev_SXI</span><span class="p">,</span> <span class="n">z_tangent_sat</span>
+</pre></div>
+</div>
+</div>
+</div>
 </section>
 
     <script type="text/x-thebe-config">

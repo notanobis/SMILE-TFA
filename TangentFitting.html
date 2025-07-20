@@ -28,14 +28,14 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=a5519fdd" />
     <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
     <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
-    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=574bf7fa" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=fbdbc292" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
@@ -437,6 +437,27 @@ document.write(`
 \[y = r sin\theta cos \phi = r_0 \left( \frac{2}{1 + \cos \theta} \right)^\alpha \sin \theta \cos \phi \]</div>
 <div class="math notranslate nohighlight">
 \[ z = r sin\theta sin\phi = r_0 \left( \frac{2}{1 + \cos \theta} \right)^\alpha \sin \theta \sin \phi \]</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">shue_analytical</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns the analytical expression for the Shue model in polar coordinates </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">r0_symb</span> <span class="o">*</span> <span class="p">(</span><span class="mi">2</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">sp</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta</span><span class="p">)))</span><span class="o">**</span><span class="n">a_symb</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">shue_analytical_GSE</span><span class="p">():</span>
+    <span class="n">shue</span> <span class="o">=</span> <span class="n">shue_analytical</span><span class="p">()</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">shue</span> <span class="o">*</span> <span class="n">sp</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">shue</span> <span class="o">*</span> <span class="n">sp</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span> <span class="o">*</span> <span class="n">sp</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">phi</span><span class="p">)</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="n">shue</span> <span class="o">*</span> <span class="n">sp</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span> <span class="o">*</span> <span class="n">sp</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">phi</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span>
+
+<span class="n">shue_num</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">lambdify</span><span class="p">((</span><span class="n">theta</span><span class="p">,</span> <span class="n">phi</span><span class="p">,</span> <span class="n">a_symb</span><span class="p">,</span> <span class="n">r0_symb</span><span class="p">),</span> <span class="n">shue_analytical</span><span class="p">(),</span> <span class="n">modules</span><span class="o">=</span><span class="s1">&#39;numpy&#39;</span><span class="p">)</span>
+<span class="n">shue_GSE_num</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">lambdify</span><span class="p">((</span><span class="n">theta</span><span class="p">,</span><span class="n">phi</span><span class="p">,</span><span class="n">a_symb</span><span class="p">,</span><span class="n">r0_symb</span><span class="p">),</span> <span class="n">shue_analytical_GSE</span><span class="p">(),</span> <span class="n">modules</span><span class="o">=</span><span class="s1">&#39;numpy&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
 <p>Or in parametrized vector form:</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
@@ -459,19 +480,93 @@ R_{\theta} = \frac{\partial R}{\partial \theta}= r_0 \left( \frac{2}{1 + \cos \t
 <span class="eqno">(8)<a class="headerlink" href="#equation-eq-normal" title="Link to this equation">#</a></span>\[
     \eta = R_{\theta} \times R_{\phi} = r_{shue}^2 \sin \theta \left [\left( \cos \theta + \frac{\sin^2 \theta a}{1 + \cos \theta } \right)(\cos^2 \phi +\sin^2 \phi) \hat{i} \right] + \dots \hat{j} + \dots \hat{k}
 \]</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">tangent_equation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Return the dot product - equation = 0 which is the condition for the tangent points</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">==</span> <span class="s2">&quot;shue&quot;</span><span class="p">:</span>
+        <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span> <span class="o">=</span> <span class="n">shue_analytical_GSE</span><span class="p">()</span>
+        <span class="n">R_shue</span> <span class="o">=</span> <span class="n">x</span><span class="o">*</span><span class="n">N</span><span class="o">.</span><span class="n">i</span> <span class="o">+</span> <span class="n">y</span><span class="o">*</span><span class="n">N</span><span class="o">.</span><span class="n">j</span> <span class="o">+</span> <span class="n">z</span><span class="o">*</span><span class="n">N</span><span class="o">.</span><span class="n">k</span>
+        <span class="n">satellite_pos_vector</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">N</span><span class="o">.</span><span class="n">i</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">N</span><span class="o">.</span><span class="n">j</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="n">N</span><span class="o">.</span><span class="n">k</span>
+        <span class="n">R_theta</span> <span class="o">=</span> <span class="n">R_shue</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span><span class="o">.</span><span class="n">simplify</span><span class="p">()</span>
+        <span class="n">R_phi</span> <span class="o">=</span> <span class="n">R_shue</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">phi</span><span class="p">)</span><span class="o">.</span><span class="n">simplify</span><span class="p">()</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="n">R_theta</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span><span class="n">R_phi</span><span class="p">)</span><span class="o">.</span><span class="n">simplify</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Model not yet implemented.&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">n</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">R_shue</span> <span class="o">-</span> <span class="n">satellite_pos_vector</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
 <p>We can now find the tangent direction in the FOV of the satellite by requesting that the normal vector and the vector that connects each point of the surface to the satellite, are perpendicular to each other. This gives us a set of <span class="math notranslate nohighlight">\((\theta,\phi)\)</span> - a curve in 3D space. The tangent curve is given in GSE coordinates by Equation <a class="reference internal" href="#equation-eq-tangent">(9)</a>, when solving for <span class="math notranslate nohighlight">\((x, y, z)\)</span>.</p>
 <div class="math notranslate nohighlight" id="equation-eq-tangent">
 <span class="eqno">(9)<a class="headerlink" href="#equation-eq-tangent" title="Link to this equation">#</a></span>\[
     \hat{ \eta } \cdot \vec{ r_{sat}} = 0 \implies (x_{sat}-x) r_0^2 \left( \frac{2}{1 + \cos \theta} \right)^{2\alpha} \sin \theta \left( \cos \theta + \frac{\sin^2 \theta a}{1 + \cos \theta } \right) + \dots  = 0
 \]</div>
-<p>This is unsolvable analytically, or with series expansion, and therefore requires that we solve it numerically for each curve and each satellite \ac{POV}. It would be valuable to compare this with a fully numerical calculation of the normal vector function, as described in \autoref{numerical_surface_projection}, and optimize the projection process. In both cases the result is a set of points in the \ac{GSE} frame. By applying a coordinate transformation from GSE to the SXI frame, as explained in \autoref{numerical_surface_projection}, we get a set of discretized curves, that correspond to the set of initial conditions of the Shue models. We interpolate the curves inside the FOV and rasterize them to the pixel grid of the image. A visualization of this process is shown in \autoref{fig:tangent_points_projection}.</p>
-<figure class="align-right" id="id2">
-<img alt="_images/tangent.png" src="_images/tangent.png" />
+<p>This is unsolvable analytically, or with series expansion, and therefore requires that we solve it numerically for each curve and each satellite \ac{POV}. It would be valuable to compare this with a fully numerical calculation of the normal vector function, as described in \autoref{numerical_surface_projection}, and optimize the projection process.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">solve_tangent_GSE</span><span class="p">(</span><span class="n">r0</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">theta</span><span class="p">,</span> <span class="n">phi</span><span class="p">,</span> <span class="n">tangent_eq_num</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Solve the tangent equation in GSE coordinates</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">dot_product_num</span> <span class="o">=</span> <span class="n">tangent_eq_num</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="n">phi</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">r0</span><span class="p">)</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">dot_product_num</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">0.1</span>  
+    <span class="n">theta_sol</span> <span class="o">=</span> <span class="n">theta</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span>
+    <span class="n">phi_sol</span> <span class="o">=</span> <span class="n">phi</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span>
+    
+    <span class="n">r_sol</span> <span class="o">=</span> <span class="n">shue_num</span><span class="p">(</span><span class="n">theta_sol</span><span class="p">,</span> <span class="n">phi_sol</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">r0</span><span class="p">)</span> 
+
+    <span class="n">x_sol</span> <span class="o">=</span> <span class="n">r_sol</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta_sol</span><span class="p">)</span>
+    <span class="n">y_sol</span> <span class="o">=</span> <span class="n">r_sol</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta_sol</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">phi_sol</span><span class="p">)</span>
+    <span class="n">z_sol</span> <span class="o">=</span> <span class="n">r_sol</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta_sol</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">phi_sol</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">x_sol</span><span class="p">,</span> <span class="n">y_sol</span><span class="p">,</span> <span class="n">z_sol</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>In both cases the result is a set of points in the GSE frame. By applying a coordinate transformation from GSE to the SXI frame, as explained in <a class="reference internal" href="Projection.html#numerical-surface-projection"><span class="std std-ref">Projecting the surface</span></a>, we get a set of discretized curves, that correspond to the set of initial conditions of the Shue models. We interpolate the curves inside the FOV and rasterize them to the pixel grid of the image.</p>
+<figure class="align-right" id="fig-hough-matrix">
+<a class="reference internal image-reference" href="_images/Hough_matrix.png"><img alt="_images/Hough_matrix.png" src="_images/Hough_matrix.png" style="width: 224.8px; height: 181.20000000000002px;" />
+</a>
 <figcaption>
-<p><span class="caption-number">Fig. 13 </span><span class="caption-text">Tangent points of Shue surface in SXI image frame.</span><a class="headerlink" href="#id2" title="Link to this image">#</a></p>
+<p><span class="caption-number">Fig. 19 </span><span class="caption-text">Hough matrix</span><a class="headerlink" href="#fig-hough-matrix" title="Link to this image">#</a></p>
 </figcaption>
 </figure>
-<p>For each curve in the image coordinates, we calculate the intensity of the image along the curve and save its mean value in an array element. This gives us a measure of how prominent and bright this curve is in the image. We can now use this metric as a voting scheme between the curves by moving to the parameter space. Each curve and mean intensity correspond to specific initial parameters <span class="math notranslate nohighlight">\(\alpha\)</span> and <span class="math notranslate nohighlight">\(r_0\)</span>. We can construct a parameter matrix with the values of the mean intensity over each curve. The visualization of this matrix in a contour plot is shown in \autoref{fig:hough_matrix}. In this figure, the maximum value in parameter space is noted with the red dot. The coordinates of this point, correspond to the model parameters that return the brightest projection in the image. Moving back to image space, we plot only the curve that correspond to these parameters in \autoref{fig:fitted_curve}, denoted with the blue line.</p>
+<p>For each curve in the image coordinates, we calculate the intensity of the image along the curve and save its mean value in an array element. This gives us a measure of how prominent and bright this curve is in the image. We can now use this metric as a voting scheme between the curves by moving to the parameter space. Each curve and mean intensity correspond to specific initial parameters <span class="math notranslate nohighlight">\(\alpha\)</span> and <span class="math notranslate nohighlight">\(r_0\)</span>. We can construct a parameter matrix with the values of the mean intensity over each curve. The visualization of this matrix in a contour plot is shown in <a class="reference internal" href="#fig-hough-matrix"><span class="std std-numref">Fig. 19</span></a>. In this figure, the maximum value in parameter space is noted with the red dot. The coordinates of this point, correspond to the model parameters that return the brightest projection in the image. Moving back to image space, we can plot only the curve that correspond to these parameters, getting the best fitted Shue projection directly to the image.</p>
+<p>The algorithm of the Hough transform is encapsulated in the <code class="docutils literal notranslate"><span class="pre">hough</span></code> method of the <code class="docutils literal notranslate"><span class="pre">Images</span></code> class:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">hough</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r0_array</span><span class="p">,</span> <span class="n">a_array</span><span class="p">):</span>
+    <span class="c1">### Here we set an arbitrary limit to entering the magnetopause. With the complete satellite data we can do that by using the analyser&#39;s data to determine in which region we are in and wether we should process the image.</span>
+    <span class="n">d_satellite</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">d_satellite</span><span class="o">&lt;</span><span class="mi">7</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span><span class="p">,</span><span class="kc">None</span><span class="p">,</span><span class="kc">None</span>
+    <span class="c1"># Initialize the Hough matrix</span>
+    <span class="n">hough</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">r0_array</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">a_array</span><span class="p">)))</span>
+    <span class="n">normalized</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">image</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">image</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">image</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">image</span><span class="p">))</span>
+    <span class="n">tangent_eq_num</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">lambdify</span><span class="p">((</span><span class="n">theta</span><span class="p">,</span> <span class="n">phi</span><span class="p">,</span> <span class="n">a_symb</span><span class="p">,</span> <span class="n">r0_symb</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">tangent_equation</span><span class="p">(),</span> <span class="n">modules</span><span class="o">=</span><span class="s1">&#39;numpy&#39;</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">r0_array</span><span class="p">)):</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">a_array</span><span class="p">)):</span>
+            <span class="n">Theta</span><span class="p">,</span> <span class="n">Phi</span> <span class="o">=</span> <span class="n">Theta_grid</span><span class="p">,</span> <span class="n">Phi_grid</span>
+            <span class="c1"># Get tagent curve</span>
+            <span class="n">x_tangent_GSE</span><span class="p">,</span> <span class="n">y_tangent_GSE</span><span class="p">,</span> <span class="n">z_tangent_GSE</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">solve_tangent_GSE</span><span class="p">(</span><span class="n">r0_array</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">a_array</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="n">Theta</span><span class="p">,</span> <span class="n">Phi</span><span class="p">,</span> <span class="n">tangent_eq_num</span><span class="p">)</span>
+            <span class="n">x_tangent_sat</span> <span class="p">,</span> <span class="n">y_tangent_sat</span><span class="p">,</span> <span class="n">z_tangent_sat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">x_tangent_GSE</span><span class="p">))),</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">x_tangent_GSE</span><span class="p">))),</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">x_tangent_GSE</span><span class="p">)))</span>
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x_tangent_GSE</span><span class="p">)):</span>
+                <span class="n">x_tangent_sat</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="n">y_tangent_sat</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="n">z_tangent_sat</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">GSE_to_Sat</span><span class="p">(</span><span class="n">x_tangent_GSE</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="n">y_tangent_GSE</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="n">z_tangent_GSE</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
+            <span class="n">azim_SXI</span><span class="p">,</span> <span class="n">elev_SXI</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Sat_to_SXI</span><span class="p">(</span><span class="n">x_tangent_sat</span><span class="p">,</span> <span class="n">y_tangent_sat</span><span class="p">,</span> <span class="n">z_tangent_sat</span><span class="p">)</span>
+            <span class="n">az_ind</span><span class="p">,</span> <span class="n">el_ind</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">interpolate</span><span class="p">(</span><span class="n">azim_SXI</span><span class="p">,</span> <span class="n">elev_SXI</span><span class="p">)</span>
+            <span class="n">hough</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">normalized</span><span class="p">[</span><span class="n">el_ind</span><span class="p">,</span><span class="n">az_ind</span><span class="p">])</span>
+    <span class="n">max_index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unravel_index</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">hough</span><span class="p">),</span> <span class="n">hough</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">hough</span><span class="p">,</span> <span class="n">r0_array</span><span class="p">[</span><span class="n">max_index</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span> <span class="n">a_array</span><span class="p">[</span><span class="n">max_index</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+</pre></div>
+</div>
+</div>
+</div>
 </section>
 
     <script type="text/x-thebe-config">

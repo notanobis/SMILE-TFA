@@ -28,14 +28,14 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=a5519fdd" />
     <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
     <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
-    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=574bf7fa" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=fbdbc292" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
@@ -58,8 +58,6 @@
     <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
-    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
-    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'MaxIntensityArc';</script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -208,6 +206,7 @@
 </ul><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="TH.html">Characterizing the tangent hypothesis</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Projection.html">Projecting the surface</a></li>
 <li class="toctree-l2"><a class="reference internal" href="TangentHypothesis.html">Results: Characterizing the Tangent Hypothesis</a></li>
 </ul><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary>
 </details></li>
@@ -420,55 +419,89 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="image-processing">
 <span id="max-int-arc"></span><h1>Image processing<a class="headerlink" href="#image-processing" title="Link to this heading">#</a></h1>
-<p>Looking at the images, we notice that two arcs seem to form, the outer one being less distinct. We will refer to that as the second maxima arc, as this second peak is observed consistently when tracing the intensity evolution over the azimuth angles for each row as seen in \autoref{fig:intensity_azimuth}. This shall not be confused with the second emissivity maximum described in the previous section, where we were referring to the 3D structures of the emissivity.</p>
-<p>If we attempt to trace the maximum pixel per row-elevation angle, we will notice prominent jumps from the maximum intensity arc to the second maximum, especially towards the edges where the intensity of the inner arc drops relative to the outer one, as in \autoref{fig:jumps}. Attempts to discard the jumps directly proved unsuccessful since the limit in the azimuth step between rows simply slowly moved the curve to the outer arc.</p>
-<p>Another approach to discard the jumps and limit ourselves to the arcs of interest would be to fit a polynomial to the noisy line. When trying to fit a 2nd polynomial, we have 3 degrees of freedom and therefore a 3 dimensional parameter space.
-$<span class="math notranslate nohighlight">\(x = A(y-B)^2 + C\)</span><span class="math notranslate nohighlight">\(
-This is relatively fast but cannot take into account the asymmetry of the true arc (\autoref{fig:poly2nd}). If we introduce a \)</span>y^3$ term, this anisotropy can theoretically be fitted, although in practice the 3rd order term blows up, and the resulting curve rarely converges (even with very small initial coefficients given, as in \autoref{fig:poly3rd} and \autoref{fig:poly3rd-fail}).</p>
-<p>\begin{figure}[bth]
-\myfloatalign</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>\subfloat[Second order polynomial.]
-{
-\label{fig:poly2nd}
-\includegraphics[width=0.3\textwidth]{gfx/max_arc/poly2nd.png}} 
-\quad
-\subfloat[Third order polynomial.]
-{
-\label{fig:poly3rd}
-\includegraphics[width=0.3\textwidth]{gfx/max_arc/poly3rd2.png}} 
-\quad
-\subfloat[Third order polynomial.]
-{
-\label{fig:poly3rd-fail}
-\includegraphics[width=0.3\textwidth]{gfx/max_arc/poly3rd.png}} 
-\quad
-
-\caption{Polynomials fitted to noisy maximum intensity arc.}  
-\label{fig:poly}
+<figure class="align-right" id="fig-intensity-azimuth">
+<a class="reference internal image-reference" href="_images/2ndmaxarc.png"><img alt="_images/2ndmaxarc.png" src="_images/2ndmaxarc.png" style="width: 283.5px; height: 195.5px;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Fig. 13 </span><span class="caption-text">Image intensity over azimuth, for a specific elevation row.</span><a class="headerlink" href="#fig-intensity-azimuth" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
+<p>Looking at the images, we notice that two arcs seem to form, the outer one being less distinct. We will refer to that as the second maxima arc, as this second peak is observed consistently when tracing the intensity evolution over the azimuth angles for each row as seen in <a class="reference internal" href="#fig-intensity-azimuth"><span class="std std-ref">Image intensity over azimuth, for a specific elevation row.</span></a>. This shall not be confused with the second emissivity maximum described in the previous section, where we were referring to the 3D structures of the emissivity.</p>
+<p>If we attempt to trace the maximum pixel per row-elevation angle, we will notice prominent jumps from the maximum intensity arc to the second maximum, especially towards the edges where the intensity of the inner arc drops relative to the outer one. Attempts to discard the jumps directly proved unsuccessful since the limit in the azimuth step between rows simply slowly moved the curve to the outer arc.</p>
+<p>Several approaches were taken in attempting to mitigate this. The failed attempts will not be showcased here (mainly because I deleted the code) but a descreption of them can be found in the MasterThesisPB.pdf.</p>
+<p>We can first load the images by initializing the <code class="docutils literal notranslate"><span class="pre">Image</span></code> object. From this we can get the images, the image coordinates (elevation, azimuth) and the positions and orientation of the satellite. For the maximum intensity arc extraction we will need only the images.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">TangentFitting</span><span class="w"> </span><span class="kn">import</span> <span class="n">Images</span>
+<span class="n">images</span> <span class="o">=</span> <span class="n">Images</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>\end{figure}</p>
-<p>Shortly, it is evident that not only is it a slow solution and without a measure of the error - but it is also difficult to implement while ensuring convergence and not overfitting. Thus, we move back to the maximum extraction for each line approach, where we need to discard the noise that causes the jumps.</p>
-<p>There are several image processing tools and libraries that can aide us in smoothing the image or increasing the contrast to reduce the noise and make some features more distinct. Here we increase the contrast of the images using the \href{<a class="reference external" href="https://scikit-image.org/docs/stable/api/skimage.html">https://scikit-image.org/docs/stable/api/skimage.html</a>}{skimage} library and apply a 1 sigma Gaussian filter to smooth the noise. We then find the maximum azimuth index for each elevation and discard the ones that have a jump larger than 2 indexes. In the pictures approaching the magnetopause random arcs are being detected, so we discard the filtered array that are smaller than 20 points (the rest have been discarded due to jumps), as well as the ones that have an average intensity smaller than 0.2 normalized, since low intensities are expected inside the magnetopause. The result is shown in \autoref{fig:contrast}.</p>
-<p>\begin{figure}[bth]
-\myfloatalign</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>\subfloat[Increased contrast and Gaussian filter.]
-{
-\label{fig:contrast}
-\includegraphics[width=0.45\textwidth]{gfx/max_arc/contrast_gaussian.png}} 
-\quad
-\subfloat[Edge detection filter.]
-{
-\label{fig:edge_sobel}
-\includegraphics[width=0.45\textwidth]{gfx/max_arc/sobel.png}} 
-\quad
+</div>
+</div>
+<p>There are several image processing tools and libraries that can aide us in smoothing the image or increasing the contrast to reduce the noise and make some features more distinct. Here we increase the contrast of the images using the <a class="reference external" href="https://scikit-image.org/docs/stable/api/skimage.html">skimage</a> library and apply a 1 sigma Gaussian filter to smooth the noise. We then find the maximum azimuth index for each elevation and discard the ones that have a jump larger than 2 indexes. In the pictures approaching the magnetopause random arcs are being detected, so we discard the filtered array that are smaller than 20 points (the rest have been discarded due to jumps), as well as the ones that have an average intensity smaller than 0.2 normalized, since low intensities are expected inside the magnetopause.</p>
+<p>We can apply a similar procedure to derive diagnostics about the maximum gradient arc as well. We do this by passing the images through an edge detection filter - <code class="docutils literal notranslate"><span class="pre">skimage.filters.sobel</span></code> - which by definition extracts the maximum gradients in an image.</p>
+<div class="cell tag_hide-input docutils container">
+<details class="hide above-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell source</span>
+<span class="expanded">Hide code cell source</span>
+</summary>
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Choose an image as an example</span>
+<span class="n">i</span> <span class="o">=</span> <span class="mi">77</span>
+<span class="c1"># Original, increased contrast, edge detection filter</span>
+<span class="n">img</span> <span class="o">=</span> <span class="n">images</span><span class="o">.</span><span class="n">images</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+<span class="n">img_contrast</span> <span class="o">=</span> <span class="n">exposure</span><span class="o">.</span><span class="n">equalize_hist</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">getdata</span><span class="p">(</span><span class="n">img</span><span class="p">)))</span>
+<span class="n">img_sobel</span> <span class="o">=</span> <span class="n">sobel</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
+<span class="n">captions</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Original image&#39;</span><span class="p">,</span> <span class="s1">&#39;Increased contrast&#39;</span><span class="p">,</span> <span class="s1">&#39;Edge detection filter&#39;</span><span class="p">]</span>
 
-\caption{Arc detection after different filters and imaging processing techniques have been applied.}  
-\label{fig:image_processing}
+<span class="c1"># Find maximum intensity arc, with limit on the maximum jump from row to row</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+<span class="n">count</span> <span class="o">=</span><span class="mi">0</span>
+
+<span class="k">for</span> <span class="n">image</span> <span class="ow">in</span> <span class="p">[</span><span class="n">img</span><span class="p">,</span> <span class="n">img_contrast</span><span class="p">,</span><span class="n">img_sobel</span><span class="p">]:</span>
+    <span class="n">max_x</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">y_vals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">image</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+    <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">y_vals</span><span class="p">:</span>
+        <span class="n">row</span> <span class="o">=</span> <span class="n">image</span><span class="p">[</span><span class="n">y</span><span class="p">,</span> <span class="p">:]</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">row</span><span class="p">)</span>
+        <span class="n">max_x</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">max_x_filtered</span> <span class="o">=</span> <span class="p">[</span><span class="n">max_x</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+    <span class="n">y_filtered</span> <span class="o">=</span> <span class="p">[</span><span class="n">y_vals</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+
+    <span class="c1"># Limit jump between rows</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">max_x</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">max_x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">max_x_filtered</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="o">&lt;=</span> <span class="mi">2</span><span class="p">:</span>  <span class="c1"># Set your tolerance here</span>
+            <span class="n">max_x_filtered</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">max_x</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="n">y_filtered</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">y_vals</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+
+    <span class="c1"># Limit minimum intensity of the curve (inside the magnetopause its low - discard this detection)</span>
+    <span class="n">threshold</span> <span class="o">=</span> <span class="mf">0.2</span>  
+    <span class="n">curve_intensity</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">img</span><span class="p">[</span><span class="n">y_vals</span><span class="p">,</span> <span class="n">max_x</span><span class="p">])</span>
+    <span class="k">if</span> <span class="n">curve_intensity</span> <span class="o">&lt;</span> <span class="mf">0.3</span><span class="p">:</span>
+        <span class="n">y_filtered</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">max_x_filtered</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">y_filtered</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">20</span><span class="p">:</span>
+        <span class="n">y_filtered</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">max_x_filtered</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="c1"># Plot</span>
+    <span class="n">axs</span><span class="p">[</span><span class="n">count</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">)</span>
+    <span class="n">axs</span><span class="p">[</span><span class="n">count</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">max_x_filtered</span><span class="p">,</span> <span class="n">y_filtered</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">1.5</span><span class="p">)</span>
+    <span class="n">axs</span><span class="p">[</span><span class="n">count</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">captions</span><span class="p">[</span><span class="n">count</span><span class="p">])</span>
+    <span class="n">count</span> <span class="o">+=</span><span class="mi">1</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>\end{figure}</p>
-<p>We can apply a similar procedure to derive diagnostics about the maximum gradient arc as well. We do this by passing the images through an edge detection filter - \textit{skimage.filters.sobel} - which by definition extracts the maximum gradients in an image. A typical image after this filter is shown in \autoref{fig:edge_sobel}.</p>
+</div>
+</details>
+<div class="cell_output docutils container">
+<img alt="_images/d26a35049cda3d882c1836e1715a72a334a90ef54fdc4b00c3d7a29eda57ab90.png" src="_images/d26a35049cda3d882c1836e1715a72a334a90ef54fdc4b00c3d7a29eda57ab90.png" />
+</div>
+</div>
 </section>
 
     <script type="text/x-thebe-config">
