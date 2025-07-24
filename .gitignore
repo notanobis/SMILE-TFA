@@ -24,3 +24,5 @@ images/
 *.md
 !README.md
 _static/
+Results/
+Data/dLaTep_data/
